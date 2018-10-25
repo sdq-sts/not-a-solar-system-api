@@ -1,5 +1,16 @@
 <template>
-  <div class="about">
-    <h1>This is an about page</h1>
+  <div>
+    <h1>ABOUT PAGE</h1>
+    <p>Protected by password</p>
   </div>
 </template>
+
+<script>
+export default {
+
+}
+</script>
+
+<style>
+
+</style>

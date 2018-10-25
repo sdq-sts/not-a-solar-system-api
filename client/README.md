@@ -1,4 +1,4 @@
-# client
+# Not a solar system front-end
 
 ## Project setup
 ```
