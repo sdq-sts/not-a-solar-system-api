@@ -2,7 +2,14 @@
   <v-container fluid fill-height class="pa-0">
     <v-layout align-center justify-center row fill-height>
       <v-flex xs3>
-        <LoginForm @submitLoginForm="submitLoginForm"/>
+        <v-layout row wrap>
+          <v-flex xs12>
+            <LoginForm @submitLoginForm="submitLoginForm"/>
+          </v-flex>
+          <v-flex xs12>
+            <p class="text-xs-center mt-3">Se você não possui uma conta, <router-link :to="{ name: registerLink }">crie uma aqui</router-link></p>
+          </v-flex>
+        </v-layout>
       </v-flex>
     </v-layout>
   </v-container>
@@ -13,6 +20,7 @@ import LoginForm from '@/components/LoginForm'
 
 export default {
   data: () => ({
+    registerLink: 'register'
   }),
 
   methods: {

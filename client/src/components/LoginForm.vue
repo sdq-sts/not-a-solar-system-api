@@ -33,10 +33,14 @@
         </v-layout>
       </v-card-text>
 
-      <v-card-actions>
-        <v-btn flat @click="clearForm">Limpar</v-btn>
+      <v-card-actions class="pl-3 pr-3 pb-3">
+        <v-btn
+          large
+          @click="clearForm"
+        >Limpar</v-btn>
         <v-spacer></v-spacer>
         <v-btn color="info"
+          large
           type="submit"
           @submit.prevent="submit(email, password)"
         >Login</v-btn>
@@ -51,6 +55,7 @@ export default {
     email: '',
     password: ''
   }),
+
   methods: {
     clearForm () {
       this.$refs.form.reset()

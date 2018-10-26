@@ -7,8 +7,7 @@ export const actions = {
   async submitLoginForm (ctx, payload) {
     const { commit } = ctx
     try {
-      const { nextUrl, ...userData } = payload
-      const { data } = await apiService.post('/auth', userData)
+      const { data } = await apiService.post('/auth', payload)
 
       setAuthCredentials(data)
       commit('set_isLoggedIn', true)
@@ -17,6 +16,16 @@ export const actions = {
     } catch (error) {
       handleAjaxErrors(error.response)
       return false
+    }
+  },
+
+  async submitRegisterForm (ctx, payload) {
+    try {
+      const result = await apiService.post('/users', payload)
+      return result
+    } catch (error) {
+      handleAjaxErrors(error)
+      return error
     }
   },
 

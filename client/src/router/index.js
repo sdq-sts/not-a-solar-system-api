@@ -15,6 +15,12 @@ const router = new Router({
       component: () => import(/* webpackChunkName: "home" */ '@/views/Home.vue')
     },
     {
+      path: '/registrar',
+      name: 'register',
+      meta: { requiresAuth: false },
+      component: () => import(/* webpackChunkName: "register" */ '@/views/Register.vue')
+    },
+    {
       path: '/login',
       name: 'login',
       meta: { requiresAuth: false },
