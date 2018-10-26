@@ -13,10 +13,10 @@ module.exports = () => ({
     const clientPath = path.join(__dirname, '../client/dist')
 
     app.set('port', process.env.PORT || 7777)
-    app.use(bodyParser.json())
     app.use(express.static(clientPath))
-    app.use(cors())
+    app.use(bodyParser.json())
     app.use(helmet())
+    app.use(cors())
     app.use(compression())
     app.use(morgan('dev'))
     app.use(authentication.initialize())

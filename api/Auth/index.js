@@ -23,8 +23,7 @@ module.exports = (app) => {
 
         res.json({
           id: user.id,
-          firstName: user.firstName,
-          lastName: user.lastName,
+          name: user.name,
           email: user.email,
           token
         })

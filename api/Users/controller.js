@@ -39,6 +39,17 @@ class UsersController {
     }
   }
 
+  async getSelf (req) {
+    const params = { _id: req.user.id }
+
+    try {
+      const user = await this.Users.findOne(params, '-password')
+      return defaultResponse(user)
+    } catch (error) {
+      return errorResponse(error.message)
+    }
+  }
+
   async update (req) {
     const params = { _id: req.params.id }
     const modifiedFields = { ...req.body }

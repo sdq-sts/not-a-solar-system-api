@@ -25,6 +25,16 @@ module.exports = (app) => {
         })
     })
 
+  router.get('/me',
+    app.auth.authenticate(),
+    (req, res) => {
+      userController.getSelf(req)
+        .then((response) => {
+          res.status(response.statusCode)
+          res.json(response.data)
+        })
+    })
+
   router.get('/:id',
     // app.auth.authenticate(),
     (req, res) => {
