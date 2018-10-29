@@ -1,20 +1,31 @@
 <template>
-  <v-container fluid fill-height class="pa-0">
+  <v-container fluid fill-height>
     <v-layout align-center justify-center row fill-height>
       <v-flex xs3>
-        <RegisterForm
-          @submitRegisterForm="submitRegisterForm"
-          @clearFormAlerts="clearFormAlerts"
-        />
+        <v-layout column fill-height>
+          <v-flex xs3>
+            <RegisterForm
+              @submitRegisterForm="submitRegisterForm"
+              @clearFormAlerts="clearFormAlerts"
+            />
+          </v-flex>
 
-        <v-alert
-          class="mt-2"
-          :value="alert"
-          :type="alertType"
-          transition="slide-y-reverse-transition"
-        >{{ alertText }}
-        </v-alert>
+          <v-flex xs3>
+            <v-alert
+              class="mt-2"
+              :value="alert"
+              :type="alertType"
+              transition="slide-y-reverse-transition"
+            >{{ alertText }}
+            </v-alert>
+          </v-flex>
+
+          <v-flex xs3>
+            <p class="text-xs-center mt-3">Se você já possui uma conta, <router-link :to="{ name: loginLink  }">faça o login aqui</router-link></p>
+          </v-flex>
+        </v-layout>
       </v-flex>
+
     </v-layout>
   </v-container>
 </template>
@@ -24,6 +35,7 @@ import RegisterForm from '@/components/RegisterForm'
 
 export default {
   data: () => ({
+    loginLink: 'login',
     alert: false,
     alertText: '',
     alertType: 'success'

@@ -84,7 +84,7 @@ export default {
     validForm: false,
     nameRules: [
       v => !!v || 'Campo obrigatório',
-      v => !!v ? v.length >= 3 : 'Nome deve ter pelo menos 3 caracteres'
+      v => v ? v.length >= 3 : 'Nome deve ter pelo menos 3 caracteres'
     ],
     emailRules: [
       v => !!v || 'Campo obrigatório',
@@ -92,9 +92,10 @@ export default {
     ],
     passwordRules: [
       v => !!v || 'Campo obrigatório',
-      v => !!v ? v.length >= 3 : 'Senha deve ter pelo menos 3 caracteres'
-    ],
+      v => v ? v.length >= 3 : 'Senha deve ter pelo menos 3 caracteres'
+    ]
   }),
+
   methods: {
     clearForm () {
       this.$refs.form.reset()
