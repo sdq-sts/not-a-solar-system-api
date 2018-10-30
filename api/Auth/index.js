@@ -20,13 +20,9 @@ module.exports = (app) => {
       if (user && validPassword) {
         const payload = { id: user.id, email: user.email }
         const token = jwt.encode(payload, config.jwtSecret)
+        const { id, name, email } = user
 
-        res.json({
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          token
-        })
+        res.json({ id, name, email, token })
       } else {
         res.sendStatus(HttpStatus.UNAUTHORIZED)
       }
