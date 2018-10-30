@@ -1,6 +1,6 @@
 const express = require('express')
 const HttpStatus = require('http-status')
-const jwt = require('jwt-simple')
+const jwt = require(`jsonwebtoken`)
 const { isValidPassword } = require('../../helpers/mongoose')
 const router = express.Router()
 
@@ -19,8 +19,9 @@ module.exports = (app) => {
 
       if (user && validPassword) {
         const payload = { id: user.id, email: user.email }
-        const token = jwt.encode(payload, config.jwtSecret)
+        const token = jwt.sign(payload, config.jwtSecret, { expiresIn: '12h' })
         const { id, name, email } = user
+        console.log(token)
 
         res.json({ id, name, email, token })
       } else {
