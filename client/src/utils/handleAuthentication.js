@@ -11,6 +11,7 @@ export const handleAuthentication = async (to, from, next) => {
 
     if (isTokenValid) {
       store.commit('set_isLoggedIn', true)
+      store.commit('set_jwt', jwt)
       next()
     } else {
       next({ name: 'login' })

@@ -1,4 +1,11 @@
 export const getters = {
+  jwt: (state) => state.jwt,
+  userId: (state) => state.userId,
+  company: (state) => state.company,
+  username: (state) => state.username,
+  userEmail: (state) => state.userEmail,
+  userAvatar: (state) => state.userAvatar,
   isLoggedIn: (state) => state.isLoggedIn,
-  jwt: (state) => state.jwt
+  appMainColor: (state) => state.appMainColor,
+  appTextColor: (state) => state.appTextColor
 }

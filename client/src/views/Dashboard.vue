@@ -1,14 +1,15 @@
 <template>
-  <div>
-    <h1>DASHBOARD PAGE</h1>
-    <p>Protected by password</p>
-
-    <v-btn @click="logout">Logout</v-btn>
-  </div>
+  <the-wrapper>
+    <router-view/>
+  </the-wrapper>
 </template>
 
 <script>
+import TheWrapper from '@/components/TheWrapper'
+
 export default {
+  components: { TheWrapper },
+
   data: () => ({}),
 
   methods: {

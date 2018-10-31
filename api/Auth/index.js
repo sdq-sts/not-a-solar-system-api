@@ -21,7 +21,6 @@ module.exports = (app) => {
         const payload = { id: user.id, email: user.email }
         const token = jwt.sign(payload, config.jwtSecret, { expiresIn: '12h' })
         const { id, name, email } = user
-        console.log(token)
 
         res.json({ id, name, email, token })
       } else {

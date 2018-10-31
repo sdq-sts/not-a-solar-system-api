@@ -6,6 +6,7 @@ import { handleAjaxErrors } from '@/utils/handleAjaxErrors'
 export const actions = {
   async submitLoginForm (ctx, payload) {
     const { commit } = ctx
+
     try {
       const { data } = await apiService.post('/auth', payload)
 
@@ -22,15 +23,16 @@ export const actions = {
   async submitRegisterForm (ctx, payload) {
     try {
       const result = await apiService.post('/users', payload)
+
       return result
     } catch (error) {
       handleAjaxErrors(error)
+
       return error
     }
   },
 
   logout (ctx) {
     resetAuthCredentials()
-    return Promise.resolve(true)
   }
 }
