@@ -5,27 +5,25 @@
         v-if="item.children"
         v-model="item.model"
         :key="item.text"
-        :prepend-icon="item.model ? item.icon : item['icon-alt']"
+        :prepend-icon="item.model ? item.prependIcon : item.prependIconAlt"
         append-icon=""
       >
         <v-list-tile slot="activator">
           <v-list-tile-content>
-            <v-list-tile-title>
-              {{ item.text }}
-            </v-list-tile-title>
+            <v-list-tile-title>{{ item.text }}</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
+
         <v-list-tile
           v-for="(child, i) in item.children"
           :key="i"
+          @click="() => changePath(child)"
         >
           <v-list-tile-action v-if="child.icon">
             <v-icon>{{ child.icon }}</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
-            <v-list-tile-title>
-              {{ child.text }}
-            </v-list-tile-title>
+            <v-list-tile-title>{{ child.text }}</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
       </v-list-group>
@@ -35,9 +33,7 @@
           <v-icon>{{ item.icon }}</v-icon>
         </v-list-tile-action>
         <v-list-tile-content>
-          <v-list-tile-title>
-            {{ item.text }}
-          </v-list-tile-title>
+          <v-list-tile-title>{{ item.text }}</v-list-tile-title>
         </v-list-tile-content>
       </v-list-tile>
     </template>
@@ -49,7 +45,15 @@ export default {
   data: () => ({
     items: [
       { icon: 'view_quilt', text: 'Dashboard', pathName: 'dashboard.index' },
-      { icon: 'view_agenda', text: 'Produtos', pathName: 'dashboard.products' }
+      {
+        prependIcon: 'keyboard_arrow_up',
+        prependIconAlt: 'keyboard_arrow_down',
+        text: 'Cadastro',
+        model: false,
+        children: [
+          { text: 'Produto', icon: 'view_module', pathName: 'register.product' }
+        ]
+      }
     ]
   }),
 

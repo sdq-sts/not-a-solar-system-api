@@ -7,7 +7,7 @@ export const initialState = () => ({
   isLoggedIn: false,
   jwt: '',
   appMainColor: 'blue darken-2',
-  appTextColor: 'white'
+  isDarkTheme: true
 })
 
 export const state = { ...initialState() }

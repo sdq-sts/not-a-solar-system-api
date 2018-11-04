@@ -43,9 +43,9 @@ const router = new Router({
           component: () => import(/* webpackChunkName: "dashboard.index" */ '@/views/DashboardIndex.vue')
         },
         {
-          path: '/produtos',
-          name: 'dashboard.products',
-          component: () => import(/* webpackChunkName: "dashboard.products" */ '@/views/DashboardProducts.vue')
+          path: '/cadastrar/produto',
+          name: 'register.product',
+          component: () => import(/* webpackChunkName: "register.products" */ '@/views/RegisterProduct.vue')
         }
       ]
     }

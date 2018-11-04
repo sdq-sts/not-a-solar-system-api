@@ -31,7 +31,7 @@
           :username="username"
           :userPictureUrl="avatar"
           :color="appMainColor"
-          :textColor="appTextColor"
+          :isDarkTheme="isDarkTheme"
           :logoutAction="logout"
         />
       </v-menu>
@@ -63,7 +63,7 @@ export default {
   }),
 
   computed: {
-    ...mapGetters(['company', 'username', 'userAvatar', 'appMainColor', 'appTextColor']),
+    ...mapGetters(['company', 'username', 'userAvatar', 'appMainColor', 'isDarkTheme']),
     avatar () {
       return this.userAvatar || defaultAvatar
     }

@@ -7,5 +7,5 @@ export const getters = {
   userAvatar: (state) => state.userAvatar,
   isLoggedIn: (state) => state.isLoggedIn,
   appMainColor: (state) => state.appMainColor,
-  appTextColor: (state) => state.appTextColor
+  isDarkTheme: (state) => state.isDarkTheme
 }

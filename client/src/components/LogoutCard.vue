@@ -6,17 +6,20 @@
           <div class="headline">{{ username }}</div>
         </v-card-title>
       </v-flex>
+
       <v-flex xs5 justify-center align-center>
         <div class="pr-3">
           <v-img :src="userPictureUrl" height="125px" contain></v-img>
         </div>
       </v-flex>
     </v-layout>
+
     <v-divider light></v-divider>
+
     <v-card-actions class="pa-3">
       <v-layout row wrap>
         <v-flex xs12>
-          <v-btn :class="`${textColor}--text mt-3`" :color="color" large block @click="logoutAction()">{{ logoutBtnText }}</v-btn>
+          <v-btn :dark="isDarkTheme" class="mt-3" :color="color" large block @click="logoutAction()">{{ logoutBtnText }}</v-btn>
         </v-flex>
       </v-layout>
     </v-card-actions>
@@ -54,9 +57,9 @@ export default {
       type: String,
       default: ''
     },
-    textColor: {
-      type: String,
-      default: 'black'
+    isDarkTheme: {
+      type: Boolean,
+      default: true
     }
   }
 }

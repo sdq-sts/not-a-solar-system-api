@@ -15,7 +15,7 @@
       <v-card-text >
         <v-layout row wrap>
            <v-flex xs12>
-            <v-text-field xs12
+            <v-text-field
               v-model="name"
               :rules="nameRules"
               tabindex="1"
@@ -27,7 +27,7 @@
           </v-flex>
 
           <v-flex xs12>
-            <v-text-field xs12
+            <v-text-field
               v-model="email"
               :rules="emailRules"
               required
@@ -39,7 +39,7 @@
           </v-flex>
 
           <v-flex xs12 >
-            <v-text-field xs12
+            <v-text-field
               :append-icon="showPassword ? 'visibility_off' : 'visibility'"
               :type="showPassword ? 'text' : 'password'"
               :rules="passwordRules"
