@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt')
 
-// User
+// User Model
 module.exports.userPreSave = async function (next) {
   try {
     this.password = await bcrypt.hash(this.password, 10)
@@ -33,4 +33,10 @@ module.exports.userPreUpdate = async function (next) {
 module.exports.isValidPassword = async function (password, hashedPassword) {
   const isValidPassword = await bcrypt.compare(password, hashedPassword)
   return isValidPassword
+}
+
+// Product Model
+module.exports.productPreUpdate = async function (next) {
+  this.getUpdate().$set.updatedAt = Date.now()
+  next()
 }

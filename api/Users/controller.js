@@ -74,6 +74,4 @@ class UsersController {
   }
 }
 
-// `Object.assign({}, { UsersController })` is considered a best practice,
-// because it doesn't allow object properties to be modified
 module.exports = Object.assign({}, { UsersController })
