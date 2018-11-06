@@ -32,6 +32,18 @@ export const actions = {
     }
   },
 
+  async submitRegisterProductForm (ctx, payload) {
+    try {
+      const result = await apiService.post('/products', payload)
+
+      return result
+    } catch (error) {
+      handleAjaxErrors(error)
+
+      return error
+    }
+  },
+
   logout (ctx) {
     resetAuthCredentials()
   }

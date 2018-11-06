@@ -9,6 +9,7 @@
         <v-layout row wrap>
           <v-flex xs12>
             <v-text-field
+              ref="nameInput"
               v-model="productName"
               :placeholder="placeholders.productName"
               :rules="rules.productName"
@@ -52,7 +53,7 @@
         <h2 class="header mb-4" v-text="text.details"></h2>
       </v-flex>
 
-      <v-flex xs6>
+      <v-flex xs3>
         <v-text-field
           type="number"
           v-model="weight"
@@ -62,7 +63,7 @@
         ></v-text-field>
       </v-flex>
 
-      <v-flex xs6>
+      <v-flex xs3>
         <v-text-field
           type="number"
           v-model="height"
@@ -72,7 +73,7 @@
         ></v-text-field>
       </v-flex>
 
-      <v-flex xs6>
+      <v-flex xs3>
         <v-text-field
           type="number"
           v-model="width"
@@ -82,7 +83,7 @@
         ></v-text-field>
       </v-flex>
 
-      <v-flex xs6>
+      <v-flex xs3>
         <v-text-field
           type="number"
           v-model="depth"
@@ -157,14 +158,14 @@
 
       <v-flex xs12>
         <v-switch
-          :label="labels.changeInStorage"
           v-model="changeInStorage"
+          :label="labels.changeInStorage"
           :color="color"
         ></v-switch>
 
         <v-switch
-          :label="labels.activeProduct"
           v-model="activeProduct"
+          :label="labels.activeProduct"
           :color="color"
         ></v-switch>
       </v-flex>
@@ -173,6 +174,7 @@
         <v-btn class="ma-0"
           :color="color"
           :dark="isDarkTheme"
+          :loading="loading"
           block
           large
           type="submit"
@@ -193,6 +195,14 @@ export default {
     isDarkTheme: {
       type: Boolean,
       default: true
+    },
+    loading: {
+      type: Boolean,
+      default: false
+    },
+    clearForm: {
+      type: Boolean,
+      default: false
     }
   },
 
@@ -249,22 +259,35 @@ export default {
     activeProduct: true
   }),
 
+  watch: {
+    clearForm: async function (v) {
+      if (v) {
+        await this.$refs.form.reset()
+        this.changeInStorage = true
+        this.activeProduct = true
+        this.$emit('formIsReset', true)
+        this.$refs.nameInput.focus()
+        window.scrollTo(0,0)
+      }
+    }
+  },
+
   methods: {
     registerProduct () {
       const data = {
-        product_name: this.productName,
-        internal_code: this.internalCode,
-        bar_code: this.barCode,
-        product_description: this.productDescription,
-        weight: Number(this.weight),
-        width: Number(this.width),
-        height: Number(this.height),
-        depth: Number(this.depth),
-        cost_price: Number(this.costPrice),
-        sale_price: Number(this.salePrice),
-        min_storage: Number(this.minStorage),
-        max_storage: Number(this.maxStorage),
-        current_storage: Number(this.currentStorage),
+        name: this.productName,
+        code: this.internalCode,
+        code: this.barCode,
+        description: this.productDescription,
+        weight: this.weight,
+        width: this.width,
+        height: this.height,
+        depth: this.depth,
+        cost_price: this.costPrice,
+        sale_price: this.salePrice,
+        min_storage: this.minStorage,
+        max_storage: this.maxStorage,
+        current_storage: this.currentStorage,
         change_storage: this.changeInStorage,
         is_active: this.activeProduct
       }
