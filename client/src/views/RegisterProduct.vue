@@ -11,16 +11,6 @@
           :clearForm="clearForm"
         />
       </v-flex>
-
-      <v-snackbar
-        v-model="snackbar"
-        multi-line="multi-line"
-        :right="true"
-        :bottom="true"
-        :timeout="2000"
-        :color="snackbarColor"
-      >{{ snackbarText }}
-      </v-snackbar>
     </v-layout>
   </v-container>
 </template>
@@ -50,22 +40,21 @@ export default {
   methods: {
     async submitRegisterProductForm (payload) {
       this.loading = true
-
-      try {
-        const result = await this.$store.dispatch('submitRegisterProductForm', payload)
-        console.log(result)
-        this.snackbarText = this.successText
-        this.snackbarColor = this.successColor
-        this.snackbar = true
-        this.loading = false
-        this.clearForm = true
-      } catch (error) {
-        this.snackbarText = this.failText
-        this.snackbarColor = this.failColor
-        this.snackbar = true
-        this.loading = false
-        console.log(error)
-      }
+      const result = await this.$store.dispatch('submitRegisterProductForm', payload)
+      result.status === 201 ? this.registerSuccess() : this.registerFail()
+    },
+    registerSuccess () {
+      const color = this.successColor
+      const text = this.successText
+      this.$store.dispatch('showSnackbar', { color, text })
+      this.clearForm = true
+      this.loading = false
+    },
+    registerFail () {
+      const color = this.failColor
+      const text = this.failText
+      this.$store.dispatch('showSnackbar', { color, text: `${text}` })
+      this.loading = false
     },
     changeState (v) {
       this.clearForm = false

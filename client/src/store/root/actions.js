@@ -44,6 +44,15 @@ export const actions = {
     }
   },
 
+  showSnackbar (ctx, payload) {
+    const { commit } = ctx
+    const { text, color } = payload
+
+    commit('set_snackbarText', text)
+    commit('set_snackbarColor', color)
+    commit('set_snackbar', true)
+  },
+
   logout (ctx) {
     resetAuthCredentials()
   }
