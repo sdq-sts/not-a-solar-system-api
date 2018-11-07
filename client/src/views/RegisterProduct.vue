@@ -56,7 +56,7 @@ export default {
       this.$store.dispatch('showSnackbar', { color, text: `${text}` })
       this.loading = false
     },
-    changeState (v) {
+    changeState () {
       this.clearForm = false
     }
   }

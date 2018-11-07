@@ -11,31 +11,28 @@
             <v-text-field
               ref="nameInput"
               v-model="productName"
-              :placeholder="placeholders.productName"
+              :label="labels.productName"
               :rules="rules.productName"
-              single-line
               autofocus
-              solo
+              outline
             ></v-text-field>
           </v-flex>
 
           <v-flex xs12>
             <v-text-field
               v-model="internalCode"
-              :placeholder="placeholders.internalCode"
+              :label="labels.internalCode"
               :rules="rules.internalCode"
-              single-line
-              solo
+              outline
             ></v-text-field>
           </v-flex>
 
           <v-flex xs12>
             <v-text-field
               v-model="barCode"
-              :placeholder="placeholders.barCode"
+              :label="labels.barCode"
               :rules="rules.barCode"
-              single-line
-              solo
+              outline
             ></v-text-field>
           </v-flex>
         </v-layout>
@@ -43,9 +40,9 @@
 
       <v-flex xs12>
         <v-textarea
-          :placeholder="placeholders.productDescription"
+          :label="labels.productDescription"
           v-model="productDescription"
-          solo
+          outline
         ></v-textarea>
       </v-flex>
 
@@ -57,9 +54,8 @@
         <v-text-field
           type="number"
           v-model="weight"
-          :placeholder="placeholders.weight"
-          single-line
-          solo
+          :label="labels.weight"
+          outline
         ></v-text-field>
       </v-flex>
 
@@ -67,9 +63,8 @@
         <v-text-field
           type="number"
           v-model="height"
-          :placeholder="placeholders.height"
-          single-line
-          solo
+          :label="labels.height"
+          outline
         ></v-text-field>
       </v-flex>
 
@@ -77,9 +72,8 @@
         <v-text-field
           type="number"
           v-model="width"
-          :placeholder="placeholders.width"
-          single-line
-          solo
+          :label="labels.width"
+          outline
         ></v-text-field>
       </v-flex>
 
@@ -87,9 +81,8 @@
         <v-text-field
           type="number"
           v-model="depth"
-          :placeholder="placeholders.depth"
-          single-line
-          solo
+          :label="labels.depth"
+          outline
         ></v-text-field>
       </v-flex>
 
@@ -101,10 +94,9 @@
         <v-text-field
           type="number"
           v-model="costPrice"
-          :placeholder="placeholders.costPrice"
+          :label="labels.costPrice"
           :rules="rules.costPrice"
-          single-line
-          solo
+          outline
         ></v-text-field>
       </v-flex>
 
@@ -112,10 +104,9 @@
         <v-text-field
           type="number"
           v-model="salePrice"
-          :placeholder="placeholders.salePrice"
+          :label="labels.salePrice"
           :rules="rules.salePrice"
-          single-line
-          solo
+          outline
         ></v-text-field>
       </v-flex>
 
@@ -127,10 +118,9 @@
         <v-text-field
           type="number"
           v-model="minStorage"
-          :placeholder="placeholders.minStorage"
+          :label="labels.minStorage"
           :rules="rules.minStorage"
-          single-line
-          solo
+          outline
         ></v-text-field>
       </v-flex>
 
@@ -138,10 +128,9 @@
         <v-text-field
           type="number"
           v-model="maxStorage"
-          :placeholder="placeholders.maxStorage"
+          :label="labels.maxStorage"
           :rules="rules.maxStorage"
-          single-line
-          solo
+          outline
         ></v-text-field>
       </v-flex>
 
@@ -149,10 +138,9 @@
         <v-text-field
           type="number"
           v-model="currentStorage"
-          :placeholder="placeholders.currentStorage"
+          :label="labels.currentStorage"
           :rules="rules.currentStorage"
-          single-line
-          solo
+          outline
         ></v-text-field>
       </v-flex>
 
@@ -170,16 +158,32 @@
         ></v-switch>
       </v-flex>
 
-      <v-flex xs3 offset-xs9 class="mb-5">
-        <v-btn class="ma-0"
-          :color="color"
-          :dark="isDarkTheme"
-          :loading="loading"
-          block
-          large
-          type="submit"
-          @submit.prevent="registerProduct"
-        >{{ text.register }}</v-btn>
+      <v-flex xs12 class="mb-5" justify-center>
+        <v-layout row wrap>
+          <v-flex xs3>
+            <v-btn class="ma-0"
+              tabindex="-1"
+              large
+              block
+              flat
+              @click="resetForm"
+            >{{ text.resetForm }}</v-btn>
+          </v-flex>
+
+          <v-spacer></v-spacer>
+
+          <v-flex xs3>
+            <v-btn class="ma-0"
+              :color="color"
+              :dark="isDarkTheme"
+              :loading="loading"
+              large
+              block
+              type="submit"
+              @submit.prevent="registerProduct"
+            >{{ text.register }}</v-btn>
+          </v-flex>
+        </v-layout>
       </v-flex>
     </v-layout>
   </v-form>
@@ -217,11 +221,12 @@ export default {
       currentStorage: [v => !!v || 'Campo obrigatório']
     },
     text: {
-      formHeader: 'CADASTRAR NOVO PRODUTO',
+      formHeader: 'CADASTRAR PRODUTO',
       details: 'DETALHES',
       values: 'VALORES',
       storage: 'ESTOQUE',
-      register: 'CADASTRAR'
+      register: 'CADASTRAR',
+      resetForm: 'Cancelar'
     },
     placeholders: {
       productName: 'Nome do produto',
@@ -239,6 +244,20 @@ export default {
       currentStorage: 'Quantidade atual'
     },
     labels: {
+      productName: 'Nome do produto',
+      internalCode: 'Código interno',
+      productDescription: 'Descrição do produto',
+      barCode: 'Código de barras',
+      weight: 'Peso (kg)',
+      height: 'Altura (cm)',
+      width: 'Largura (cm)',
+      depth: 'Comprimento (cm)',
+      costPrice: 'Valor de custo',
+      salePrice: 'Valor de venda',
+      minStorage: 'Estoque mínimo',
+      maxStorage: 'Estoque máximo',
+      currentStorage: 'Quantidade atual',
+
       changeInStorage: 'O produto movimenta o estoque?',
       activeProduct: 'O produto está ativo?'
     },
@@ -260,24 +279,26 @@ export default {
   }),
 
   watch: {
-    clearForm: async function (v) {
-      if (v) {
-        await this.$refs.form.reset()
-        this.changeInStorage = true
-        this.activeProduct = true
-        this.$emit('formIsReset', true)
-        this.$refs.nameInput.focus()
-        window.scrollTo(0,0)
-      }
+    clearForm: function (v) {
+      v ? this.resetForm() : false
     }
   },
 
   methods: {
+    resetForm () {
+      this.$refs.form.reset()
+      this.$refs.nameInput.focus()
+      setTimeout(() => {
+        this.activeProduct = true
+        this.changeInStorage = true
+        this.$emit('formIsReset')
+      }, 0)
+    },
     registerProduct () {
       const data = {
         name: this.productName,
-        code: this.internalCode,
-        code: this.barCode,
+        internal_code: this.internalCode,
+        bar_code: this.barCode,
         description: this.productDescription,
         weight: this.weight,
         width: this.width,
@@ -292,7 +313,9 @@ export default {
         is_active: this.activeProduct
       }
 
-      this.$emit('registerProduct', data)
+      if (this.$refs.form.validate()) {
+        this.$emit('registerProduct', data)
+      }
     }
   }
 }
