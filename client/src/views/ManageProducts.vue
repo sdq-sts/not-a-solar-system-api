@@ -7,7 +7,7 @@
         <v-dialog width="800" persistent v-model="dialog" no-click-animation>
           <v-card>
             <v-container grid-list-xl>
-              <RegisterProductForm
+              <ProductsRegisterForm
                 @registerProduct="submitRegisterProductForm"
                 @formIsReset="changeState"
                 @cancel="closeFormDialog"
@@ -27,10 +27,10 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import RegisterProductForm from '@/components/RegisterProductForm'
+import ProductsRegisterForm from '@/components/ProductsRegisterForm'
 
 export default {
-  components: { RegisterProductForm },
+  components: { ProductsRegisterForm },
   data: () => ({
     loading: false,
     clearForm: false,
