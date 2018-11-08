@@ -48,10 +48,10 @@ export default {
       {
         prependIcon: 'keyboard_arrow_up',
         prependIconAlt: 'keyboard_arrow_down',
-        text: 'Cadastro',
+        text: 'Produtos',
         model: false,
         children: [
-          { text: 'Produto', icon: 'view_module', pathName: 'register.product' }
+          { text: 'Gerenciar Produtos', icon: 'view_module', pathName: 'manage.products' }
         ]
       }
     ]

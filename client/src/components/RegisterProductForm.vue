@@ -2,7 +2,7 @@
   <v-form ref="form" @submit.prevent="registerProduct">
     <v-layout row wrap>
       <v-flex xs12>
-        <h1 class="header mb-4 text-xs-center" v-text="text.formHeader"></h1>
+        <h1 class="headline mb-4 mt-4 text-xs-center" v-text="text.formHeader"></h1>
       </v-flex>
 
       <v-flex xs8>
@@ -47,7 +47,7 @@
       </v-flex>
 
       <v-flex xs12>
-        <h2 class="header mb-4" v-text="text.details"></h2>
+        <h2 class="headline mb-4 text-xs-center" v-text="text.details"></h2>
       </v-flex>
 
       <v-flex xs3>
@@ -87,7 +87,7 @@
       </v-flex>
 
       <v-flex xs12>
-        <h2 class="header mb-4" v-text="text.values"></h2>
+        <h2 class="headline mb-4 text-xs-center" v-text="text.values"></h2>
       </v-flex>
 
       <v-flex xs6>
@@ -111,7 +111,7 @@
       </v-flex>
 
       <v-flex xs12>
-        <h2 class="header mb-4" v-text="text.storage"></h2>
+        <h2 class="headline mb-4 text-xs-center" v-text="text.storage"></h2>
       </v-flex>
 
       <v-flex xs4>
@@ -153,6 +153,7 @@
 
         <v-switch
           v-model="activeProduct"
+          :value="true"
           :label="labels.activeProduct"
           :color="color"
         ></v-switch>
@@ -166,7 +167,7 @@
               large
               block
               flat
-              @click="resetForm"
+              @click="cancelBtn"
             >{{ text.resetForm }}</v-btn>
           </v-flex>
 
@@ -257,7 +258,6 @@ export default {
       minStorage: 'Estoque mínimo',
       maxStorage: 'Estoque máximo',
       currentStorage: 'Quantidade atual',
-
       changeInStorage: 'O produto movimenta o estoque?',
       activeProduct: 'O produto está ativo?'
     },
@@ -280,19 +280,42 @@ export default {
 
   watch: {
     clearForm: function (v) {
-      v ? this.resetForm() : false
+      if (v) this.resetForm()
     }
   },
 
   methods: {
     resetForm () {
       this.$refs.form.reset()
-      this.$refs.nameInput.focus()
-      setTimeout(() => {
-        this.activeProduct = true
-        this.changeInStorage = true
+      this.$nextTick(() => {
+        this.resetFormModel()
+        this.$refs.nameInput.focus()
         this.$emit('formIsReset')
-      }, 0)
+      })
+    },
+    cancelBtn () {
+      this.$refs.form.reset()
+      this.$nextTick(() => {
+        this.resetFormModel()
+        this.$emit('cancel')
+      })
+    },
+    resetFormModel () {
+      this.productName = ''
+      this.internalCode = ''
+      this.barCode = ''
+      this.productDescription = ''
+      this.weight = ''
+      this.width = ''
+      this.height = ''
+      this.depth = ''
+      this.costPrice = ''
+      this.salePrice = ''
+      this.minStorage = ''
+      this.maxStorage = ''
+      this.currentStorage = ''
+      this.changeInStorage = true
+      this.activeProduct = true
     },
     registerProduct () {
       const data = {
