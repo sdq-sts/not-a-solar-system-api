@@ -1,6 +1,8 @@
 import '@babel/polyfill'
 import Vue from 'vue'
 import './plugins/vuetify'
+import './filters/currencyBRL'
+import './filters/formatedDate'
 import App from './App.vue'
 import store from './store'
 import router from './router'

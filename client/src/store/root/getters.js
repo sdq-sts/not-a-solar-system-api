@@ -10,5 +10,7 @@ export const getters = {
   isDarkTheme: (state) => state.isDarkTheme,
   snackbar: (state) => state.snackbar,
   snackbarText: (state) => state.snackbarText,
-  snackbarColor: (state) => state.snackbarColor
+  snackbarColor: (state) => state.snackbarColor,
+  productsList: (state) => state.productsList,
+  productsCount: (state) => state.productsCount
 }

@@ -1,193 +1,197 @@
 <template>
-  <v-form ref="form" @submit.prevent="registerProduct">
-    <v-layout row wrap>
-      <v-flex xs12>
-        <h1 class="headline mb-4 mt-4 text-xs-center" v-text="text.formHeader"></h1>
-      </v-flex>
-
-      <v-flex xs8>
+  <v-card>
+    <v-container grid-list-xl>
+      <v-form ref="form" @submit.prevent="registerProduct">
         <v-layout row wrap>
           <v-flex xs12>
+            <h1 class="headline mb-4 mt-4 text-xs-center" v-text="text.formHeader"></h1>
+          </v-flex>
+
+          <v-flex xs8>
+            <v-layout row wrap>
+              <v-flex xs12>
+                <v-text-field
+                  ref="nameInput"
+                  v-model="productName"
+                  :label="labels.productName"
+                  :rules="rules.productName"
+                  autofocus
+                  outline
+                ></v-text-field>
+              </v-flex>
+
+              <v-flex xs12>
+                <v-text-field
+                  v-model="internalCode"
+                  :label="labels.internalCode"
+                  :rules="rules.internalCode"
+                  outline
+                ></v-text-field>
+              </v-flex>
+
+              <v-flex xs12>
+                <v-text-field
+                  v-model="barCode"
+                  :label="labels.barCode"
+                  :rules="rules.barCode"
+                  outline
+                ></v-text-field>
+              </v-flex>
+            </v-layout>
+          </v-flex>
+
+          <v-flex xs12>
+            <v-textarea
+              :label="labels.productDescription"
+              v-model="productDescription"
+              outline
+            ></v-textarea>
+          </v-flex>
+
+          <v-flex xs12>
+            <h2 class="headline mb-4 text-xs-center" v-text="text.details"></h2>
+          </v-flex>
+
+          <v-flex xs3>
             <v-text-field
-              ref="nameInput"
-              v-model="productName"
-              :label="labels.productName"
-              :rules="rules.productName"
-              autofocus
+              type="number"
+              v-model="weight"
+              :label="labels.weight"
+              outline
+            ></v-text-field>
+          </v-flex>
+
+          <v-flex xs3>
+            <v-text-field
+              type="number"
+              v-model="height"
+              :label="labels.height"
+              outline
+            ></v-text-field>
+          </v-flex>
+
+          <v-flex xs3>
+            <v-text-field
+              type="number"
+              v-model="width"
+              :label="labels.width"
+              outline
+            ></v-text-field>
+          </v-flex>
+
+          <v-flex xs3>
+            <v-text-field
+              type="number"
+              v-model="depth"
+              :label="labels.depth"
               outline
             ></v-text-field>
           </v-flex>
 
           <v-flex xs12>
+            <h2 class="headline mb-4 text-xs-center" v-text="text.values"></h2>
+          </v-flex>
+
+          <v-flex xs6>
             <v-text-field
-              v-model="internalCode"
-              :label="labels.internalCode"
-              :rules="rules.internalCode"
+              type="number"
+              v-model="costPrice"
+              :label="labels.costPrice"
+              :rules="rules.costPrice"
+              outline
+            ></v-text-field>
+          </v-flex>
+
+          <v-flex xs6>
+            <v-text-field
+              type="number"
+              v-model="salePrice"
+              :label="labels.salePrice"
+              :rules="rules.salePrice"
               outline
             ></v-text-field>
           </v-flex>
 
           <v-flex xs12>
+            <h2 class="headline mb-4 text-xs-center" v-text="text.storage"></h2>
+          </v-flex>
+
+          <v-flex xs4>
             <v-text-field
-              v-model="barCode"
-              :label="labels.barCode"
-              :rules="rules.barCode"
+              type="number"
+              v-model="minStorage"
+              :label="labels.minStorage"
+              :rules="rules.minStorage"
               outline
             ></v-text-field>
           </v-flex>
-        </v-layout>
-      </v-flex>
 
-      <v-flex xs12>
-        <v-textarea
-          :label="labels.productDescription"
-          v-model="productDescription"
-          outline
-        ></v-textarea>
-      </v-flex>
-
-      <v-flex xs12>
-        <h2 class="headline mb-4 text-xs-center" v-text="text.details"></h2>
-      </v-flex>
-
-      <v-flex xs3>
-        <v-text-field
-          type="number"
-          v-model="weight"
-          :label="labels.weight"
-          outline
-        ></v-text-field>
-      </v-flex>
-
-      <v-flex xs3>
-        <v-text-field
-          type="number"
-          v-model="height"
-          :label="labels.height"
-          outline
-        ></v-text-field>
-      </v-flex>
-
-      <v-flex xs3>
-        <v-text-field
-          type="number"
-          v-model="width"
-          :label="labels.width"
-          outline
-        ></v-text-field>
-      </v-flex>
-
-      <v-flex xs3>
-        <v-text-field
-          type="number"
-          v-model="depth"
-          :label="labels.depth"
-          outline
-        ></v-text-field>
-      </v-flex>
-
-      <v-flex xs12>
-        <h2 class="headline mb-4 text-xs-center" v-text="text.values"></h2>
-      </v-flex>
-
-      <v-flex xs6>
-        <v-text-field
-          type="number"
-          v-model="costPrice"
-          :label="labels.costPrice"
-          :rules="rules.costPrice"
-          outline
-        ></v-text-field>
-      </v-flex>
-
-      <v-flex xs6>
-        <v-text-field
-          type="number"
-          v-model="salePrice"
-          :label="labels.salePrice"
-          :rules="rules.salePrice"
-          outline
-        ></v-text-field>
-      </v-flex>
-
-      <v-flex xs12>
-        <h2 class="headline mb-4 text-xs-center" v-text="text.storage"></h2>
-      </v-flex>
-
-      <v-flex xs4>
-        <v-text-field
-          type="number"
-          v-model="minStorage"
-          :label="labels.minStorage"
-          :rules="rules.minStorage"
-          outline
-        ></v-text-field>
-      </v-flex>
-
-      <v-flex xs4>
-        <v-text-field
-          type="number"
-          v-model="maxStorage"
-          :label="labels.maxStorage"
-          :rules="rules.maxStorage"
-          outline
-        ></v-text-field>
-      </v-flex>
-
-      <v-flex xs4>
-        <v-text-field
-          type="number"
-          v-model="currentStorage"
-          :label="labels.currentStorage"
-          :rules="rules.currentStorage"
-          outline
-        ></v-text-field>
-      </v-flex>
-
-      <v-flex xs12>
-        <v-switch
-          v-model="changeInStorage"
-          :label="labels.changeInStorage"
-          :color="color"
-        ></v-switch>
-
-        <v-switch
-          v-model="activeProduct"
-          :value="true"
-          :label="labels.activeProduct"
-          :color="color"
-        ></v-switch>
-      </v-flex>
-
-      <v-flex xs12 class="mb-5" justify-center>
-        <v-layout row wrap>
-          <v-flex xs3>
-            <v-btn class="ma-0"
-              tabindex="-1"
-              large
-              block
-              flat
-              @click="cancelBtn"
-            >{{ text.resetForm }}</v-btn>
+          <v-flex xs4>
+            <v-text-field
+              type="number"
+              v-model="maxStorage"
+              :label="labels.maxStorage"
+              :rules="rules.maxStorage"
+              outline
+            ></v-text-field>
           </v-flex>
 
-          <v-spacer></v-spacer>
+          <v-flex xs4>
+            <v-text-field
+              type="number"
+              v-model="currentStorage"
+              :label="labels.currentStorage"
+              :rules="rules.currentStorage"
+              outline
+            ></v-text-field>
+          </v-flex>
 
-          <v-flex xs3>
-            <v-btn class="ma-0"
+          <v-flex xs12>
+            <v-switch
+              v-model="changeInStorage"
+              :label="labels.changeInStorage"
               :color="color"
-              :dark="isDarkTheme"
-              :loading="loading"
-              large
-              block
-              type="submit"
-              @submit.prevent="registerProduct"
-            >{{ text.register }}</v-btn>
+            ></v-switch>
+
+            <v-switch
+              v-model="activeProduct"
+              :value="true"
+              :label="labels.activeProduct"
+              :color="color"
+            ></v-switch>
+          </v-flex>
+
+          <v-flex xs12 class="mb-5" justify-center>
+            <v-layout row wrap>
+              <v-flex xs3>
+                <v-btn class="ma-0"
+                  tabindex="-1"
+                  large
+                  block
+                  flat
+                  @click="cancelBtn"
+                >{{ text.resetForm }}</v-btn>
+              </v-flex>
+
+              <v-spacer></v-spacer>
+
+              <v-flex xs3>
+                <v-btn class="ma-0"
+                  :color="color"
+                  :dark="isDarkTheme"
+                  :loading="loading"
+                  large
+                  block
+                  type="submit"
+                  @submit.prevent="registerProduct"
+                >{{ text.register }}</v-btn>
+              </v-flex>
+            </v-layout>
           </v-flex>
         </v-layout>
-      </v-flex>
-    </v-layout>
-  </v-form>
+      </v-form>
+    </v-container>
+  </v-card>
 </template>
 
 <script>

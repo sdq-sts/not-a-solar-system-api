@@ -13,5 +13,7 @@ export const mutations = {
   set_jwt (state, jwt) { state.jwt = jwt },
   set_snackbar (state, value) { state.snackbar = value },
   set_snackbarColor: (state, color) => { state.snackbarColor = color },
-  set_snackbarText (state, text) { state.snackbarText = text }
+  set_snackbarText (state, text) { state.snackbarText = text },
+  set_productsList (state, productsList) { state.productsList = productsList },
+  set_productsCount (state, amount) { state.productsCount = amount }
 }

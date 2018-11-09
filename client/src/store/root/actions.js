@@ -44,6 +44,34 @@ export const actions = {
     }
   },
 
+  async fetchProductsMeta (ctx) {
+    const { commit } = ctx
+
+    try {
+      const result = await apiService.get('/products/meta')
+      commit('set_productsCount', result.data['products_count'])
+
+      return result.data
+    } catch (error) {
+      handleAjaxErrors(error)
+    }
+  },
+
+  async fetchProducts (ctx, payload = { page: 1, limit: 15 }) {
+    const { commit } = ctx
+    const { page, limit } = payload
+
+    try {
+      const result = await apiService.get(`/products/?page=${page}&limit=${limit}`)
+      commit('set_productsList', result.data)
+
+      return result.data
+    } catch (error) {
+      handleAjaxErrors(error)
+      return error
+    }
+  },
+
   showSnackbar (ctx, payload) {
     const { commit } = ctx
     const { text, color } = payload
