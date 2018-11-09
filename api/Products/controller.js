@@ -8,9 +8,17 @@ class ProductsController {
 
   async getAll (req) {
     const queryParams = { owner_id: req.user.id }
+    const limit = parseInt(req.query.limit) || 30
+    const page = parseInt(req.query.page) || 1
+
+    console.log(page)
 
     try {
-      const products = await this.Products.find(queryParams)
+      const products = await this.Products
+        .find(queryParams)
+        .skip((page - 1) * limit)
+        .limit(limit)
+
       return defaultResponse(products)
     } catch (error) {
       return errorResponse(error)
@@ -30,17 +38,6 @@ class ProductsController {
 
   async getById (req) {
     const queryParams = { _id: req.params.id }
-
-    try {
-      const user = await this.Products.findOne(queryParams)
-      return defaultResponse(user)
-    } catch (error) {
-      return errorResponse(error.message)
-    }
-  }
-
-  async getSelf (req) {
-    const queryParams = { _id: req.user.id }
 
     try {
       const user = await this.Products.findOne(queryParams)
@@ -70,6 +67,17 @@ class ProductsController {
       return defaultResponse(removedProduct, HttpStatus.NO_CONTENT)
     } catch (error) {
       errorResponse(error.message, HttpStatus.UNPROCESSABLE_ENTITY)
+    }
+  }
+
+  async getMetadata (req) {
+    const userId = req.user.id
+
+    try {
+      const documentCount = await this.Products.countDocuments({ owner_id: userId })
+      return defaultResponse({ products_count: documentCount })
+    } catch (error) {
+      return errorResponse(error)
     }
   }
 }
