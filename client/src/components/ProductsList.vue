@@ -12,6 +12,13 @@
           <td class="text-xs-center">{{ props.item.sale_price | currencyBRL }}</td>
           <td class="text-xs-center">{{ props.item.current_storage }}</td>
           <td class="text-xs-center">{{ props.item.created_at | formatedDate}}</td>
+          <td>
+            <v-layout row>
+              <v-icon @click="editItem(props.item)" v-text="`edit`"></v-icon>
+              <v-spacer></v-spacer>
+              <v-icon  @click="deleteItem(props.item)" v-text="`delete`"></v-icon>
+            </v-layout>
+          </td>
       </template>
     </v-data-table>
   </div>
@@ -32,9 +39,19 @@ export default {
       { text: 'Nome', align: 'left', sortable: false, value: 'name' },
       { text: 'Valor de venda', align: 'center', sortable: false, value: 'sale_price' },
       { text: 'Estoque', align: 'center', sortable: false, value: 'storage' },
-      { text: 'Cadastrado em', align: 'center', sortable: false, value: 'created_at' }
+      { text: 'Cadastrado em', align: 'center', sortable: false, value: 'created_at' },
+      { text: 'Ações', align: 'center', sortable: false, value: 'actions' }
     ]
-  })
+  }),
+
+  methods: {
+    editItem (item) {
+      this.$emit('editItem', item)
+    },
+    deleteItem (item) {
+      this.$emit('deleteItem', item)
+    }
+  }
 }
 </script>
 

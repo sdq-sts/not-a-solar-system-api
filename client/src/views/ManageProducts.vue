@@ -6,7 +6,6 @@
           @click="dialog = true"
           class="ma-0"
           color="primary"
-          small
           dark
         >CADASTRAR</v-btn>
 
@@ -21,19 +20,33 @@
             :clearForm="clearForm"
           />
         </v-dialog>
+
+        <v-dialog width="400" persistent v-model="dialogDelete" no-click-animation>
+          <ProductDelete
+            :product="productToDelete"
+            @cancel="closeDeleteDialog"
+            @confirm="confirmDeletion"
+          />
+        </v-dialog>
       </v-flex>
 
       <v-flex xs8 offset-xs2>
-        <ProductsList v-if="hasProducts" :productsList="productsList"/>
+        <ProductsList
+          v-if="hasProducts"
+          :productsList="productsList"
+          @editItem="editItem"
+          @deleteItem="openDialogDelete"
+        />
       </v-flex>
 
       <v-flex xs8 offset-xs2>
         <v-layout justify-center>
           <v-pagination
+            v-if="Math.ceil(productsCount / limit)"
             class="mt-2"
             :color="appMainColor"
             v-model="page"
-            :length="productsCount / limit"
+            :length="Math.ceil(productsCount / limit)"
             circle
           ></v-pagination>
         </v-layout>
@@ -46,9 +59,10 @@
 import { mapGetters } from 'vuex'
 import ProductsRegisterForm from '@/components/ProductsRegisterForm'
 import ProductsList from '@/components/ProductsList'
+import ProductDelete from '@/components/ProductDelete'
 
 export default {
-  components: { ProductsRegisterForm, ProductsList },
+  components: { ProductsRegisterForm, ProductsList, ProductDelete },
   data: () => ({
     loading: false,
     clearForm: false,
@@ -57,11 +71,14 @@ export default {
     snackbarColor: '',
     successText: 'Produto cadastrado',
     failText: 'Não foi possível cadastrar produto',
+    deleteErrorMsg: 'Não foi possível excluir o item',
     successColor: 'success',
     failColor: 'error',
     dialog: false,
+    dialogDelete: false,
+    productToDelete: {},
     page: 1,
-    limit: 8
+    limit: 3
   }),
 
   watch: {
@@ -90,22 +107,56 @@ export default {
       await this.$store.dispatch('fetchProducts', { page, limit })
     },
 
+    editItem (payload) {
+      console.log('EDIT ITEM', payload._id)
+    },
+
+    openDialogDelete (payload) {
+      this.productToDelete = payload
+      this.dialogDelete = true
+    },
+
+    async confirmDeletion (payload) {
+      try {
+        const result = await this.$store.dispatch('deleteProduct', payload)
+
+        if (result.status === 204) {
+          this.$store.dispatch('fetchProductsMeta')
+          this.$store.dispatch('fetchProducts')
+          this.dialogDelete = false
+        }
+      } catch (error) {
+        const errorMsg = this.deleteErrorMsg
+
+        this.$store.dispatch('showSnackbar', { text: errorMsg, color: 'error' })
+      }
+    },
+
+    closeDeleteDialog () {
+      this.dialogDelete = false
+    },
+
     registerSuccess () {
       const color = this.successColor
       const text = this.successText
+
       this.$store.dispatch('showSnackbar', { color, text })
       this.clearForm = true
       this.loading = false
     },
+
     registerFail () {
       const color = this.failColor
       const text = this.failText
+
       this.$store.dispatch('showSnackbar', { color, text: `${text}` })
       this.loading = false
     },
+
     changeState () {
       this.clearForm = false
     },
+
     closeFormDialog () {
       this.dialog = false
     }

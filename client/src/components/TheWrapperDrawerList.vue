@@ -44,16 +44,8 @@
 export default {
   data: () => ({
     items: [
-      { icon: 'view_quilt', text: 'Dashboard', pathName: 'dashboard.index' },
-      {
-        prependIcon: 'keyboard_arrow_up',
-        prependIconAlt: 'keyboard_arrow_down',
-        text: 'Produtos',
-        model: false,
-        children: [
-          { text: 'Gerenciar Produtos', icon: 'view_module', pathName: 'manage.products' }
-        ]
-      }
+      { icon: 'assessment', text: 'Dashboard', pathName: 'dashboard.index' },
+      { text: 'Produtos', icon: 'view_module', pathName: 'manage.products' }
     ]
   }),
 

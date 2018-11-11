@@ -57,7 +57,7 @@ export const actions = {
     }
   },
 
-  async fetchProducts (ctx, payload = { page: 1, limit: 15 }) {
+  async fetchProducts (ctx, payload = { page: 1, limit: 3 }) {
     const { commit } = ctx
     const { page, limit } = payload
 
@@ -70,6 +70,11 @@ export const actions = {
       handleAjaxErrors(error)
       return error
     }
+  },
+
+  deleteProduct (ctx, payload) {
+    console.log('delete product', payload)
+    return apiService.delete(`/products/${payload._id}`)
   },
 
   showSnackbar (ctx, payload) {
