@@ -11,11 +11,10 @@ class ProductsController {
     const limit = parseInt(req.query.limit) || 30
     const page = parseInt(req.query.page) || 1
 
-    console.log(page)
-
     try {
       const products = await this.Products
         .find(queryParams)
+        .sort('-created_at')
         .skip((page - 1) * limit)
         .limit(limit)
 
