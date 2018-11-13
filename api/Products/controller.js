@@ -7,7 +7,7 @@ class ProductsController {
   }
 
   async getAll (req) {
-    const queryParams = { owner_id: req.user.id }
+    const queryParams = { ownerId: req.user.id }
     const limit = parseInt(req.query.limit) || 30
     const page = parseInt(req.query.page) || 1
 
@@ -25,7 +25,7 @@ class ProductsController {
   }
 
   async create (req) {
-    const queryParams = { ...req.body, owner_id: req.user.id }
+    const queryParams = { ...req.body, ownerId: req.user.id }
 
     try {
       const newProduct = await this.Products.create(queryParams)
@@ -73,7 +73,7 @@ class ProductsController {
     const userId = req.user.id
 
     try {
-      const documentCount = await this.Products.countDocuments({ owner_id: userId })
+      const documentCount = await this.Products.countDocuments({ ownerId: userId })
       return defaultResponse({ products_count: documentCount })
     } catch (error) {
       return errorResponse(error)
