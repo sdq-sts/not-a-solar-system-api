@@ -14,7 +14,7 @@ class ProductsController {
     try {
       const products = await this.Products
         .find(queryParams)
-        .sort('-created_at')
+        .sort('-createdAt')
         .skip((page - 1) * limit)
         .limit(limit)
 
