@@ -3,23 +3,11 @@
     <v-layout row wrap>
       <v-flex xs8 offset-xs2>
         <v-btn
-          @click="dialog = true"
+          @click="registerProduct"
           class="ma-0"
           color="primary"
           dark
         >CADASTRAR</v-btn>
-
-        <v-dialog width="800" persistent v-model="dialog" no-click-animation>
-          <ProductsRegisterForm
-            @registerProduct="submitRegisterProductForm"
-            @formIsReset="changeState"
-            @cancel="closeFormDialog"
-            :color="appMainColor"
-            :isDarkColor="isDarkTheme"
-            :loading="loading"
-            :clearForm="clearForm"
-          />
-        </v-dialog>
 
         <v-dialog width="400" persistent v-model="dialogDelete" no-click-animation>
           <ProductDelete
@@ -28,13 +16,31 @@
             @confirm="confirmDeletion"
           />
         </v-dialog>
+
+        <v-dialog width="900" persistent v-model="dialog" no-click-animation lazy>
+          <v-card>
+            <v-container grid-list-lg>
+              <ProductForm
+                :productToEdit="productToEdit"
+                :color="appMainColor"
+                :isDarkTheme="isDarkTheme"
+                :clearForm="clearForm"
+                :isLoading="loadingForm"
+                :focusForm="dialog"
+                @cancel="closeDialog"
+                @submitEditForm="submitEditForm"
+                @submitRegisterForm="submitRegisterForm"
+              />
+            </v-container>
+          </v-card>
+        </v-dialog>
       </v-flex>
 
       <v-flex xs8 offset-xs2>
         <ProductsList
           v-if="hasProducts"
           :productsList="productsList"
-          @editItem="editItem"
+          @editItem="editProduct"
           @deleteItem="openDialogDelete"
         />
       </v-flex>
@@ -57,14 +63,14 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import ProductsRegisterForm from '@/components/ProductsRegisterForm'
 import ProductsList from '@/components/ProductsList'
 import ProductDelete from '@/components/ProductDelete'
+import ProductForm from '@/components/ProductForm'
 
 export default {
-  components: { ProductsRegisterForm, ProductsList, ProductDelete },
+  components: { ProductsList, ProductDelete, ProductForm },
   data: () => ({
-    loading: false,
+    loadingForm: false,
     clearForm: false,
     snackbar: false,
     snackbarText: '',
@@ -75,8 +81,11 @@ export default {
     successColor: 'success',
     failColor: 'error',
     dialog: false,
+    dialogAdd: false,
     dialogDelete: false,
+    dialogEdit: false,
     productToDelete: {},
+    productToEdit: null,
     page: 1,
     limit: 3
   }),
@@ -88,77 +97,76 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['appMainColor', 'isDarkTheme', 'productsList', 'productsCount']),
+    ...mapGetters([
+      'appMainColor',
+      'isDarkTheme',
+      'productsList',
+      'productsCount'
+    ]),
     hasProducts () {
-      return this.productsList.length > 0
+      return  this.productsList
+        ? this.productsList.length > 0
+        : false
     }
   },
 
   methods: {
-    async submitRegisterProductForm (payload) {
-      this.loading = true
-      const result = await this.$store.dispatch('submitRegisterProductForm', payload)
-      result.status === 201 ? this.registerSuccess() : this.registerFail()
-    },
-
     async fetchProducts (page) {
       const limit = this.limit
 
-      await this.$store.dispatch('fetchProducts', { page, limit })
-    },
-
-    editItem (payload) {
-      console.log('EDIT ITEM', payload._id)
-    },
-
-    openDialogDelete (payload) {
-      this.productToDelete = payload
-      this.dialogDelete = true
+      this.$store.dispatch('fetchProducts', { page, limit })
     },
 
     async confirmDeletion (payload) {
       try {
-        const result = await this.$store.dispatch('deleteProduct', payload)
-
-        if (result.status === 204) {
-          this.$store.dispatch('fetchProductsMeta')
-          this.$store.dispatch('fetchProducts')
-          this.dialogDelete = false
-        }
+        await this.$store.dispatch('deleteProduct', payload)
+        this.$store.dispatch('fetchProductsMeta')
+        this.$store.dispatch('fetchProducts')
+        this.dialogDelete = false
       } catch (error) {
-        const errorMsg = this.deleteErrorMsg
-
-        this.$store.dispatch('showSnackbar', { text: errorMsg, color: 'error' })
+        this.$store.dispatch('showSnackbar', { text: 'Erro ao excluir produto', color: 'error' })
       }
     },
-
+    openDialogDelete (payload) {
+      this.productToDelete = payload
+      this.dialogDelete = true
+    },
     closeDeleteDialog () {
       this.dialogDelete = false
     },
-
-    registerSuccess () {
-      const color = this.successColor
-      const text = this.successText
-
-      this.$store.dispatch('showSnackbar', { color, text })
-      this.clearForm = true
-      this.loading = false
-    },
-
-    registerFail () {
-      const color = this.failColor
-      const text = this.failText
-
-      this.$store.dispatch('showSnackbar', { color, text: `${text}` })
-      this.loading = false
-    },
-
-    changeState () {
-      this.clearForm = false
-    },
-
-    closeFormDialog () {
+    closeDialog () {
       this.dialog = false
+    },
+    editProduct (payload) {
+      this.dialog = true
+      this.productToEdit = payload
+    },
+    registerProduct () {
+      this.productToEdit = null
+      this.dialog = true
+    },
+    async submitEditForm (payload) {
+      try {
+        await this.$store.dispatch('editProduct', payload)
+        this.$store.dispatch('showSnackbar', { color: 'success', text: `Produto editado` })
+        this.$store.dispatch('fetchProductsMeta')
+        this.$store.dispatch('fetchProducts')
+        this.productToEdit = null
+        this.dialog = false
+      } catch (error) {
+        this.$store.dispatch('showSnackbar', { color: 'danger', text: `Erro ao editar o produto` })
+      }
+    },
+    async submitRegisterForm (payload) {
+      try {
+        await this.$store.dispatch('createProduct', payload)
+        this.$store.dispatch('showSnackbar', { color: 'success', text: `Produto cadastrado` })
+        this.$store.dispatch('fetchProductsMeta')
+        this.$store.dispatch('fetchProducts')
+        this.productToEdit = null
+      } catch (error) {
+        this.$store.dispatch('showSnackbar', { color: 'danger', text: `Erro ao cadastrar produto` })
+      }
     }
   },
 

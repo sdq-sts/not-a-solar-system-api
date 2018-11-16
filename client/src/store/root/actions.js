@@ -48,10 +48,10 @@ export const actions = {
     const { commit } = ctx
 
     try {
-      const result = await apiService.get('/products/meta')
-      commit('set_productsCount', result.data['products_count'])
+      const { data: meta } = await apiService.get('/products/meta')
+      commit('set_productsCount', meta['products_count'])
 
-      return result.data
+      return meta
     } catch (error) {
       handleAjaxErrors(error)
     }
@@ -62,18 +62,27 @@ export const actions = {
     const { page, limit } = payload
 
     try {
-      const result = await apiService.get(`/products/?page=${page}&limit=${limit}`)
-      commit('set_productsList', result.data)
+      const { data: products } = await apiService.get(`/products/?page=${page}&limit=${limit}`)
+      commit('set_productsList', products)
 
-      return result.data
+      return products
     } catch (error) {
       handleAjaxErrors(error)
       return error
     }
   },
 
+  createProduct (ctx, payload) {
+    return apiService.post('/products/', payload)
+  },
+
+  editProduct (ctx, payload) {
+    const { _id, ...data } = payload
+
+    return apiService.put(`/products/${_id}`, data)
+  },
+
   deleteProduct (ctx, payload) {
-    console.log('delete product', payload)
     return apiService.delete(`/products/${payload._id}`)
   },
 

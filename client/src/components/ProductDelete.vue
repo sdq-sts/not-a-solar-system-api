@@ -4,9 +4,9 @@
       <div class="heading">Tem certeza que deseja apagar o produto:</div>
       <p>{{ product.name }}</p>
       <v-layout row>
-        <v-btn small flat @click="cancel">Cancelar</v-btn>
+        <v-btn flat @click="cancel">Cancelar</v-btn>
         <v-spacer></v-spacer>
-        <v-btn small color="error" @click="confirmDeletion">Apagar</v-btn>
+        <v-btn color="error" @click="confirmDeletion">Apagar</v-btn>
       </v-layout>
     </v-container>
   </v-card>

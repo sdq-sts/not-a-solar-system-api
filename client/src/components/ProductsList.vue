@@ -7,11 +7,11 @@
       class="elevation-1"
     >
       <template slot="items" slot-scope="props">
-          <td class="text-xs-center">{{ props.item.internal_code }}</td>
+          <td class="text-xs-center">{{ props.item.internalCode }}</td>
           <td class="text-xs-left">{{ props.item.name }}</td>
-          <td class="text-xs-center">{{ props.item.sale_price | currencyBRL }}</td>
-          <td class="text-xs-center">{{ props.item.current_storage }}</td>
-          <td class="text-xs-center">{{ props.item.created_at | formatedDate}}</td>
+          <td class="text-xs-center">{{ props.item.salePrice | currencyBRL }}</td>
+          <td class="text-xs-center">{{ props.item.currentStorage }}</td>
+          <td class="text-xs-center">{{ props.item.createdAt | formatedDate}}</td>
           <td>
             <v-layout row>
               <v-icon @click="editItem(props.item)" v-text="`edit`"></v-icon>
