@@ -37,6 +37,14 @@
             ></v-textarea>
           </v-flex>
 
+          <v-flex xs4>
+            <v-layout row fill-height>
+              <v-flex xs12>
+                <slot name="img-upload"></slot>
+              </v-flex>
+            </v-layout>
+          </v-flex>
+
           <v-flex xs12>
             <v-layout row>
               <v-switch
@@ -276,10 +284,15 @@ export default {
   }),
 
   methods: {
-    watchProduct (v) {
-      v
-        ? this.setValuesToObj(this, v)
-        : this.setValuesToObj(this, this.formInitialState())
+    watchProduct (value) {
+      if (!value && this.$refs.form) {
+        this.$refs.form.reset()
+        this.$nextTick(() => {
+          this.setValuesToObj(this, this.formInitialState())
+        })
+      } else if (value) {
+        this.setValuesToObj(this, value)
+      }
     },
     watchFocusForm (v) {
       if (v) {

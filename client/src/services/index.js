@@ -1,4 +1,4 @@
-import { Service } from './Service'
+import { Service } from './api'
 
 const baseURL = process.env.NODE_ENV === 'production'
   ? `${process.env.BASE_URL}api/v1/`

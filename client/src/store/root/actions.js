@@ -1,3 +1,4 @@
+import axios from 'axios'
 import { apiService } from '@/services/'
 import { setAuthCredentials } from '@/utils/setAuthCredentials'
 import { resetAuthCredentials } from '@/utils/resetAuthCredentials'
@@ -57,12 +58,27 @@ export const actions = {
     }
   },
 
+  async requestFileUploadUrl (ctx, payload) {
+    const { fileType, folder } = payload
+    const res = await apiService.get('services/upload', { params: { fileType, folder } })
+    return res
+  },
+
+  uploadFile (ctx, payload) {
+    const { url, file } = payload
+
+    console.log(url, file)
+
+    return axios.put(url, file, { headers: { 'Content-Type': file.type } })
+  },
+
   async fetchProducts (ctx, payload = { page: 1, limit: 3 }) {
     const { commit } = ctx
     const { page, limit } = payload
+    const params = { page, limit }
 
     try {
-      const { data: products } = await apiService.get(`/products/?page=${page}&limit=${limit}`)
+      const { data: products } = await apiService.get('/products', { params })
       commit('set_productsList', products)
 
       return products

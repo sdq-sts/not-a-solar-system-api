@@ -20,7 +20,7 @@
         <v-dialog width="900" persistent v-model="dialog" no-click-animation lazy>
           <v-card>
             <v-container grid-list-lg>
-              <ProductForm
+              <product-form
                 :productToEdit="productToEdit"
                 :color="appMainColor"
                 :isDarkTheme="isDarkTheme"
@@ -30,7 +30,14 @@
                 @cancel="closeDialog"
                 @submitEditForm="submitEditForm"
                 @submitRegisterForm="submitRegisterForm"
-              />
+              >
+                <UploadFile
+                  slot="img-upload"
+                  :imgUrl="showFormImg"
+                  :defaultImgUrl="defaultProductImg"
+                  @fileAdded="fileAdded"
+                />
+              </product-form>
             </v-container>
           </v-card>
         </v-dialog>
@@ -41,7 +48,7 @@
           v-if="hasProducts"
           :productsList="productsList"
           @editItem="editProduct"
-          @deleteItem="openDialogDelete"
+          @deleteItem="openDeleteDialog"
         />
       </v-flex>
 
@@ -66,10 +73,14 @@ import { mapGetters } from 'vuex'
 import ProductsList from '@/components/ProductsList'
 import ProductDelete from '@/components/ProductDelete'
 import ProductForm from '@/components/ProductForm'
+import UploadFile from '@/components/UploadFile'
+import defaultProductImg from '@/assets/img-not-available.png'
 
 export default {
-  components: { ProductsList, ProductDelete, ProductForm },
+  components: { ProductsList, ProductDelete, ProductForm, UploadFile },
   data: () => ({
+    defaultProductImg,
+    file: null,
     loadingForm: false,
     clearForm: false,
     snackbar: false,
@@ -101,16 +112,26 @@ export default {
       'appMainColor',
       'isDarkTheme',
       'productsList',
-      'productsCount'
+      'productsCount',
+      'awsBucketUrl'
     ]),
+    showFormImg () {
+      return this.productToEdit
+        ? `${this.awsBucketUrl}/${this.productToEdit.image}`
+        : ''
+    },
     hasProducts () {
-      return  this.productsList
+      return this.productsList
         ? this.productsList.length > 0
         : false
     }
   },
 
   methods: {
+    fileAdded (file) {
+      this.file = file
+    },
+
     async fetchProducts (page) {
       const limit = this.limit
 
@@ -127,7 +148,7 @@ export default {
         this.$store.dispatch('showSnackbar', { text: 'Erro ao excluir produto', color: 'error' })
       }
     },
-    openDialogDelete (payload) {
+    openDeleteDialog (payload) {
       this.productToDelete = payload
       this.dialogDelete = true
     },
@@ -138,16 +159,23 @@ export default {
       this.dialog = false
     },
     editProduct (payload) {
-      this.dialog = true
       this.productToEdit = payload
+      this.dialog = true
     },
     registerProduct () {
       this.productToEdit = null
       this.dialog = true
     },
     async submitEditForm (payload) {
+      const { type: fileType } = this.file
+      const file = this.file
+
       try {
-        await this.$store.dispatch('editProduct', payload)
+        const { data: res } = await this.$store.dispatch('requestFileUploadUrl', { fileType, folder: 'products' })
+        const fileRes = await this.$store.dispatch('uploadFile', { url: res.url, file })
+        const product = { ...payload, image: res.key }
+
+        await this.$store.dispatch('editProduct', product)
         this.$store.dispatch('showSnackbar', { color: 'success', text: `Produto editado` })
         this.$store.dispatch('fetchProductsMeta')
         this.$store.dispatch('fetchProducts')
@@ -158,8 +186,15 @@ export default {
       }
     },
     async submitRegisterForm (payload) {
+      const { type: fileType } = this.file
+      const file = this.file
+
       try {
-        await this.$store.dispatch('createProduct', payload)
+        const { data: res } = await this.$store.dispatch('requestFileUploadUrl', { fileType, folder: 'products' })
+        const fileRes = await this.$store.dispatch('uploadFile', { url: res.url, file })
+        const product = { ...payload, image: res.key }
+
+        await this.$store.dispatch('createProduct', product)
         this.$store.dispatch('showSnackbar', { color: 'success', text: `Produto cadastrado` })
         this.$store.dispatch('fetchProductsMeta')
         this.$store.dispatch('fetchProducts')

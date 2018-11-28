@@ -13,9 +13,5 @@ export const getters = {
   snackbarColor: (state) => state.snackbarColor,
   productsList: (state) => state.productsList,
   productsCount: (state) => state.productsCount,
-  getProduct: (state) => (id) => {
-    const products = state.productsList
-      .filter((item) => item._id === id)
-    return products.length ? products[0] : false
-  }
+  awsBucketUrl: (state) => `${state.awsUrl}/${state.awsBucket}`
 }
