@@ -39,8 +39,8 @@ class ProductsController {
     const queryParams = { _id: req.params.id }
 
     try {
-      const user = await this.Products.findOne(queryParams)
-      return defaultResponse(user)
+      const product = await this.Products.findOne(queryParams)
+      return defaultResponse(product)
     } catch (error) {
       return errorResponse(error.message)
     }
