@@ -9,6 +9,8 @@
               v-model="name"
               :label="labels.name"
               :rules="rules.name"
+              counter
+              maxlength="100"
               autofocus
             ></v-text-field>
 
@@ -18,6 +20,8 @@
                   v-model="internalCode"
                   :label="labels.internalCode"
                   :rules="rules.internalCode"
+                  counter
+                  maxlength="20"
                 ></v-text-field>
               </v-flex>
 
@@ -26,6 +30,8 @@
                   v-model="barCode"
                   :label="labels.barCode"
                   :rules="rules.barCode"
+                  counter
+                  maxlength="20"
                 ></v-text-field>
               </v-flex>
             </v-layout>
@@ -33,6 +39,8 @@
             <v-textarea
               :label="labels.description"
               v-model="description"
+              counter
+              maxlength="255"
               rows="2"
             ></v-textarea>
           </v-flex>
