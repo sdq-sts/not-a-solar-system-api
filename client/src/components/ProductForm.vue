@@ -206,7 +206,7 @@ export default {
   data: () => ({
     loading: false,
     rules: {
-      productName: [v => !!v || 'Campo obrigatório'],
+      name: [v => !!v || 'Campo obrigatório'],
       internalCode: [v => !!v || 'Campo obrigatório'],
       costPrice: [v => !!v || 'Campo obrigatório'],
       salePrice: [v => !!v || 'Campo obrigatório'],
