@@ -14,7 +14,7 @@ module.exports = (app) => {
     (req, res) => {
       const fileExt = req.query.fileType.split('/')[1]
       const folder = req.query.folder
-      const key = `${folder}/${uuid()}.${fileExt}`
+      const key = `${folder}/${req.user.id}-${uuid()}.${fileExt}`
       const params = {
         Bucket: `not-a-solar-system`,
         ContentType: req.query.fileType,
