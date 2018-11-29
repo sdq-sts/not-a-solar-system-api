@@ -1,16 +1,31 @@
 <template>
   <v-card fill-height class="fill-height upload-card">
-    <input @change="previewImg" type="file" accept="image/*" ref="uploadImg" style="display: none">
+    <input
+      tabindex="-1"
+      @change="previewImg"
+      type="file"
+      accept="image/*"
+      ref="uploadImg"
+      style="display: none"
+    />
     <div class="img-wrapper">
       <img ref="img" :src="imgUrl || defaultImgUrl" alt="avatar" class="img-wrapper__img">
     </div>
-    <v-btn color="primary" @click="uploadImg">UPLOAD</v-btn>
+    <v-btn
+      tabindex="-1"
+      color="primary"
+      @click="uploadImg"
+    >{{ btnText }}</v-btn>
   </v-card>
 </template>
 
 <script>
 export default {
   props: {
+    clear: {
+      type: Boolean,
+      default: false
+    },
     imgUrl: {
       type: String,
       default: ''
@@ -20,10 +35,25 @@ export default {
       required: false
     }
   },
+
   data: () => ({
-    file: ''
+    file: '',
+    btnText: 'UPLOAD'
   }),
+
+  watch: {
+    clear: {
+      handler: 'watchClear',
+      immediate: true
+    }
+  },
+
   methods: {
+    watchClear (v) {
+      if (v) {
+        this.$refs.img.src = this.defaultImgUrl
+      }
+    },
     uploadImg () {
       this.$refs.uploadImg.click()
     },
@@ -59,5 +89,4 @@ export default {
   height: 100%;
   object-fit: contain;
 }
-
 </style>

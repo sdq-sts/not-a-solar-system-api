@@ -166,6 +166,7 @@
             type="submit"
             :color="color"
             :dark="isDarkTheme"
+            :loading="loading"
           >{{ productToEdit ? 'EDITAR' : 'CADASTRAR' }}</v-btn>
         </v-layout>
       </v-flex>
@@ -202,21 +203,8 @@ export default {
     }
   },
 
-  watch: {
-    productToEdit: {
-      handler: 'watchProduct',
-      immediate: true
-    },
-    focusForm: {
-      handler: 'watchFocusForm'
-    },
-    clearForm: {
-      handler: 'watchClearForm',
-      immediate: true
-    }
-  },
-
   data: () => ({
+    loading: false,
     rules: {
       productName: [v => !!v || 'Campo obrigatório'],
       internalCode: [v => !!v || 'Campo obrigatório'],
@@ -283,9 +271,24 @@ export default {
     isActive: true
   }),
 
+  watch: {
+    productToEdit: {
+      handler: 'watchProduct',
+      immediate: true
+    },
+    focusForm: {
+      handler: 'watchFocusForm'
+    },
+    clearForm: {
+      handler: 'watchClearForm',
+      immediate: true
+    }
+  },
+
   methods: {
     watchProduct (value) {
       if (!value && this.$refs.form) {
+        this.loading = false
         this.$refs.form.reset()
         this.$nextTick(() => {
           this.setValuesToObj(this, this.formInitialState())
@@ -301,6 +304,7 @@ export default {
     },
     watchClearForm (v) {
       if (v) {
+        this.loading = false
         this.$refs.form.reset()
         this.$nextTick(() => {
           this.setValuesToObj(this, this.formInitialState())
@@ -343,9 +347,11 @@ export default {
       Object.keys(obj).forEach(x => { targetObj[x] = obj[x] })
     },
     editProduct (_id, payload) {
+      this.loading = true
       this.$emit('submitEditForm', { _id, ...payload })
     },
     createProduct (payload) {
+      this.loading = true
       this.$emit('submitRegisterForm', payload)
     },
     submitForm () {

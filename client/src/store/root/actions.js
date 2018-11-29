@@ -66,9 +66,6 @@ export const actions = {
 
   uploadFile (ctx, payload) {
     const { url, file } = payload
-
-    console.log(url, file)
-
     return axios.put(url, file, { headers: { 'Content-Type': file.type } })
   },
 

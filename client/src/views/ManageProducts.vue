@@ -2,12 +2,17 @@
   <v-container grid-list-xl>
     <v-layout row wrap>
       <v-flex xs8 offset-xs2>
-        <v-btn
-          @click="registerProduct"
-          class="ma-0"
-          color="primary"
-          dark
-        >CADASTRAR</v-btn>
+        <v-layout row>
+          <v-flex xs2 offset-xs10>
+            <v-btn
+              @click="registerProduct"
+              class="ma-0"
+              color="primary"
+              dark
+              block
+            >CADASTRAR</v-btn>
+          </v-flex>
+        </v-layout>
 
         <v-dialog width="400" persistent v-model="dialogDelete" no-click-animation>
           <ProductDelete
@@ -33,7 +38,8 @@
               >
                 <UploadFile
                   slot="img-upload"
-                  :imgUrl="showFormImg"
+                  :clear="clearForm"
+                  :imgUrl="productImg"
                   :defaultImgUrl="defaultProductImg"
                   @fileAdded="fileAdded"
                 />
@@ -50,6 +56,7 @@
           @editItem="editProduct"
           @deleteItem="openDeleteDialog"
         />
+        <h2 v-else class="headline text-xs-center">{{ noProductMsg }}</h2>
       </v-flex>
 
       <v-flex xs8 offset-xs2>
@@ -89,6 +96,7 @@ export default {
     successText: 'Produto cadastrado',
     failText: 'Não foi possível cadastrar produto',
     deleteErrorMsg: 'Não foi possível excluir o item',
+    noProductMsg: 'Você ainda não tem nenhum produto cadastrado, clique no botão de cadastro e adicione seu primeiro produto.',
     successColor: 'success',
     failColor: 'error',
     dialog: false,
@@ -113,12 +121,15 @@ export default {
       'isDarkTheme',
       'productsList',
       'productsCount',
-      'awsBucketUrl'
+      'awsBucketUrl',
+      'getImage'
     ]),
-    showFormImg () {
-      return this.productToEdit
-        ? `${this.awsBucketUrl}/${this.productToEdit.image}`
-        : ''
+    productImg () {
+      if (this.productToEdit && this.productToEdit.image) {
+        return this.getImage(this.productToEdit.image)
+      } else {
+        return ''
+      }
     },
     hasProducts () {
       return this.productsList
@@ -131,13 +142,11 @@ export default {
     fileAdded (file) {
       this.file = file
     },
-
     async fetchProducts (page) {
       const limit = this.limit
 
       this.$store.dispatch('fetchProducts', { page, limit })
     },
-
     async confirmDeletion (payload) {
       try {
         await this.$store.dispatch('deleteProduct', payload)
@@ -167,15 +176,19 @@ export default {
       this.dialog = true
     },
     async submitEditForm (payload) {
-      const { type: fileType } = this.file
       const file = this.file
+      let product = payload
+
+      if (file) {
+        const { type: fileType } = file
+        const { data: res } = await this.$store.dispatch('requestFileUploadUrl', { fileType, folder: 'products' })
+        await this.$store.dispatch('uploadFile', { url: res.url, file })
+        product = { ...payload, image: res.key }
+      }
 
       try {
-        const { data: res } = await this.$store.dispatch('requestFileUploadUrl', { fileType, folder: 'products' })
-        const fileRes = await this.$store.dispatch('uploadFile', { url: res.url, file })
-        const product = { ...payload, image: res.key }
-
         await this.$store.dispatch('editProduct', product)
+
         this.$store.dispatch('showSnackbar', { color: 'success', text: `Produto editado` })
         this.$store.dispatch('fetchProductsMeta')
         this.$store.dispatch('fetchProducts')
@@ -186,19 +199,27 @@ export default {
       }
     },
     async submitRegisterForm (payload) {
-      const { type: fileType } = this.file
       const file = this.file
+      let product = payload
+
+      if (file) {
+        const { type: fileType } = file
+        const { data: res } = await this.$store.dispatch('requestFileUploadUrl', { fileType, folder: 'products' })
+        await this.$store.dispatch('uploadFile', { url: res.url, file })
+        product = { ...payload, image: res.key }
+      }
 
       try {
-        const { data: res } = await this.$store.dispatch('requestFileUploadUrl', { fileType, folder: 'products' })
-        const fileRes = await this.$store.dispatch('uploadFile', { url: res.url, file })
-        const product = { ...payload, image: res.key }
-
         await this.$store.dispatch('createProduct', product)
+
         this.$store.dispatch('showSnackbar', { color: 'success', text: `Produto cadastrado` })
         this.$store.dispatch('fetchProductsMeta')
         this.$store.dispatch('fetchProducts')
+        this.clearForm = true
         this.productToEdit = null
+        this.$nextTick(() => {
+          this.clearForm = false
+        })
       } catch (error) {
         this.$store.dispatch('showSnackbar', { color: 'danger', text: `Erro ao cadastrar produto` })
       }
