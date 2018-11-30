@@ -36,7 +36,13 @@ module.exports.isValidPassword = async function (password, hashedPassword) {
 }
 
 // Product Model
-module.exports.productPreUpdate = async function (next) {
-  this.getUpdate().$set.updatedAt = Date.now()
+module.exports.productPreUpdate = function (next) {
+  this._update.updatedAt = Date.now()
+  next()
+}
+
+// Purchase model
+module.exports.purchasePreUpdate = function (next) {
+  this._update.updatedAt = Date.now()
   next()
 }
