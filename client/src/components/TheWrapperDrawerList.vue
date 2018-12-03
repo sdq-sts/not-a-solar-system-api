@@ -44,7 +44,8 @@
 export default {
   data: () => ({
     items: [
-      { icon: 'assessment', text: 'Dashboard', pathName: 'dashboard.index' },
+      { text: 'Dashboard', icon: 'assessment', pathName: 'dashboard.index' },
+      { text: 'Compras', icon: 'credit_card', pathName: 'manage.purchases' },
       { text: 'Produtos', icon: 'view_module', pathName: 'manage.products' }
     ]
   }),
