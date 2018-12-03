@@ -42,6 +42,15 @@ module.exports.productPreUpdate = function (next) {
 }
 
 // Purchase model
+module.exports.purchasePreSave = function (next) {
+  const totalProducts = this.products
+    .reduce((v, x) => (x.amount * x.cost) + v, 0)
+  const value = totalProducts + this.tax - this.discount
+
+  this.total = Math.round(value * 100 + Number.EPSILON) / 100
+  next()
+}
+
 module.exports.purchasePreUpdate = function (next) {
   this._update.updatedAt = Date.now()
   next()
