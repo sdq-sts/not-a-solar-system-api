@@ -1,16 +1,22 @@
 <template>
   <div>
     <h1>COMPRAS</h1>
-      <v-dialog width="400" persistent v-model="deleteDialog" no-click-animation>
-        <ConfirmDeletion
-          :item="purchaseToDelete"
-          :loading="deleteLoading"
-          @cancelDeletion="closeDialogDelete"
-          @confirmDeletion="removePurchase"
-        />
-      </v-dialog>
+    <!-- ADD COMBOBOX -->
 
-    <TableList :purchasesList="purchases" @deleteItem="openDeleteDialog"/>
+    <v-dialog width="400" persistent v-model="deleteDialog" no-click-animation>
+      <ConfirmDeletion
+        :item="purchaseToDelete"
+        :loading="deleteLoading"
+        @cancelDeletion="closeDialogDelete"
+        @confirmDeletion="deletePurchase"
+      />
+    </v-dialog>
+
+    <TableList
+      :purchasesList="purchases"
+      @editPurchaseStatus="editPurchaseStatus"
+      @deleteItem="openDeleteDialog"
+    />
   </div>
 </template>
 
@@ -38,13 +44,21 @@ export default {
   },
 
   methods: {
-    ...mapActions('purchases', ['fetchPurchases']),
-    async removePurchase (item) {
+    ...mapActions('purchases', [
+      'fetchPurchases',
+      'editPurchase',
+      'removePurchase'
+    ]),
+    async editPurchaseStatus (payload) {
+      await this.editPurchase(payload)
+      await this.fetchPurchases()
+    },
+    async deletePurchase (item) {
       this.deleteLoading = true
-      await this.$store.dispatch('purchases/removePurchase', item)
+      await this.removePurchase(item)
       this.deleteLoading = false
       this.deleteDialog = false
-      this.fetchPurchases()
+      await this.fetchPurchases()
     },
     closeDialogDelete () {
       this.deleteDialog = false

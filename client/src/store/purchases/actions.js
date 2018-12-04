@@ -6,7 +6,12 @@ export const actions = {
     const { commit } = ctx
     const purchases = await apiService.get('/purchases')
 
-    commit('SET_PURCHASES', purchases.data)
+    commit('PURCHASES', purchases.data)
+  },
+
+  editPurchase (ctx, payload) {
+    const { _id, ...params } = payload
+    return apiService.put(`/purchases/${payload._id}`, params)
   },
 
   removePurchase (ctx, payload) {
