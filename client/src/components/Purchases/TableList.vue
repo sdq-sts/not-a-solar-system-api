@@ -1,54 +1,52 @@
 <template>
-  <div>
-    <v-data-table
-      :headers="headers"
-      :items="purchasesList"
-      hide-actions
-      class="elevation-1"
-    >
-      <template slot="items" slot-scope="props">
-          <td class="text-xs-center">{{ props.item.nfe }}</td>
-          <td class="text-xs-center">{{ props.item.issueDate | formatedDate }}</td>
-          <td class="text-xs-center" style="width: 120px">
-            <v-menu offset-y nudge-left="25%" full-width class="n-menu">
+  <v-data-table
+    :headers="headers"
+    :items="purchasesList"
+    hide-actions
+    class="elevation-1"
+  >
+    <template slot="items" slot-scope="props">
+      <td class="text-xs-center">{{ props.item.nfe }}</td>
+      <td class="text-xs-center">{{ props.item.issueDate | formatedDate }}</td>
+      <td class="text-xs-center" style="width: 120px">
+        <v-menu offset-y nudge-left="25%" full-width class="n-menu">
+          <v-chip
+            slot="activator"
+            class="n-chip"
+            :color="statusColor(props.item.status)"
+            small
+            block
+            outline
+          >{{ statusText(props.item.status) }}
+          </v-chip>
+          <v-list>
+            <v-list-tile
+              v-for="(status, i) in purchaseStatus"
+              :key="i"
+              @click="editPurchaseStatus(props.item, status.value)"
+            >
               <v-chip
-                slot="activator"
                 class="n-chip"
-                :color="statusColor(props.item.status)"
+                :color="statusColor(status.value)"
                 small
-                block
                 outline
-              >{{ statusText(props.item.status) }}
-              </v-chip>
-              <v-list>
-                <v-list-tile
-                  v-for="(status, i) in purchaseStatus"
-                  :key="i"
-                  @click="editPurchaseStatus(props.item, status.value)"
-                >
-                  <v-chip
-                    class="n-chip"
-                    :color="statusColor(status.value)"
-                    small
-                    outline
-                  >{{ status.name }}</v-chip>
-                </v-list-tile>
-              </v-list>
-            </v-menu>
-          </td>
-          <td class="text-xs-center">{{ props.item.total | currencyBRL }}</td>
-          <td style="width: 120px">
-            <v-layout row>
-              <v-icon @click="editItem(props.item)" v-text="`visibility`" small></v-icon>
-              <v-spacer></v-spacer>
-              <v-icon @click="editItem(props.item)" v-text="`edit`" small></v-icon>
-              <v-spacer></v-spacer>
-              <v-icon  @click="deleteItem(props.item)" v-text="`delete`" small v-show="props.item.status !== 'confirmed'"></v-icon>
-            </v-layout>
-          </td>
-      </template>
-    </v-data-table>
-  </div>
+              >{{ status.name }}</v-chip>
+            </v-list-tile>
+          </v-list>
+        </v-menu>
+      </td>
+      <td class="text-xs-center">{{ props.item.total | currencyBRL }}</td>
+      <td style="width: 120px">
+        <v-layout row>
+          <v-icon @click="editItem(props.item)" v-text="`visibility`" small></v-icon>
+          <v-spacer></v-spacer>
+          <v-icon @click="editItem(props.item)" v-text="`edit`" small></v-icon>
+          <v-spacer></v-spacer>
+          <v-icon  @click="deleteItem(props.item)" v-text="`delete`" small v-show="props.item.status !== 'confirmed'"></v-icon>
+        </v-layout>
+      </td>
+    </template>
+  </v-data-table>
 </template>
 
 <script>
@@ -76,37 +74,30 @@ export default {
   }),
 
   methods: {
-    statusColor(status) {
+    statusColor (status) {
       switch (status) {
         case 'confirmed':
           return 'success'
-          break
         case 'pending':
           return 'warning'
-          break
         case 'canceled':
           return 'error'
-          break
       }
     },
-    statusText(status) {
+    statusText (status) {
       switch (status) {
         case 'confirmed':
           return 'confirmado'
-          break
         case 'pending':
           return 'pendente'
-          break
         case 'canceled':
           return 'cancelado'
-          break
       }
     },
     visualizePurchase (item) {
       this.$emit('visualizePurchase', item)
     },
     editPurchaseStatus (item, status) {
-      // console.log(item, status)
       const { _id } = item
       const payload = { _id, status }
       this.$emit('editPurchaseStatus', payload)
