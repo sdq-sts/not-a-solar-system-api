@@ -51,6 +51,42 @@ class PurchasesController {
     }
   }
 
+  async update (req) {
+    const queryParams = { _id: req.params.id }
+    const modifiedFields = { ...req.body }
+
+    try {
+      const purchase = await this.Purchases.findOneAndUpdate(queryParams, { $set: modifiedFields })
+      console.log(purchase, null, 2)
+      if (modifiedFields.status === 'confirmed' && purchase.status !== 'confirmed') {
+        const promisesList = purchase.products.map((product) => {
+          const params = { _id: product.productId }
+          const amount = product.amount
+
+          return this.Products.updateOne(params, { $inc: { currentStorage: amount } }).exec()
+        })
+
+        await Promise.all(promisesList)
+      } else if (
+        (modifiedFields.status !== 'pending' || modifiedFields.status !== 'canceled') &&
+        (purchase.status !== 'pending' || purchase.status !== 'canceled') &&
+        (modifiedFields.status !== 'confirmed')) {
+        const promiseList = purchase.products.map((product) => {
+          const params = { _id: product.productId }
+          const amount = product.amount * -1
+
+          return this.Products.updateOne(params, { $inc: { currentStorage: amount } }).exec()
+        })
+
+        await Promise.all(promiseList)
+      }
+
+      return defaultResponse(purchase)
+    } catch (error) {
+      return errorResponse(error.message, HttpStatus.UNPROCESSABLE_ENTITY)
+    }
+  }
+
   async getById (req) {
     const queryParams = { _id: req.params.id }
 
@@ -59,18 +95,6 @@ class PurchasesController {
       return defaultResponse(sale)
     } catch (error) {
       return errorResponse(error.message)
-    }
-  }
-
-  async update (req) {
-    const queryParams = { _id: req.params.id }
-    const modifiedFields = { ...req.body }
-
-    try {
-      const updatedProduct = await this.Purchases.update(queryParams, { $set: modifiedFields })
-      return defaultResponse(updatedProduct)
-    } catch (error) {
-      return errorResponse(error.message, HttpStatus.UNPROCESSABLE_ENTITY)
     }
   }
 
