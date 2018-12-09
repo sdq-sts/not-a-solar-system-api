@@ -1,1 +1,1 @@
-## README
+## Not a solar system
