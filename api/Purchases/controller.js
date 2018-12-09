@@ -57,7 +57,7 @@ class PurchasesController {
 
     try {
       const purchase = await this.Purchases.findOneAndUpdate(queryParams, { $set: modifiedFields })
-      // console.log(purchase, null, 2)
+
       if (modifiedFields.status === 'confirmed' && purchase.status !== 'confirmed') {
         const promisesList = purchase.products.map((product) => {
           const params = { _id: product.productId }
