@@ -57,8 +57,9 @@ class PurchasesController {
 
     try {
       const purchase = await this.Purchases.findOneAndUpdate(queryParams, { $set: modifiedFields })
+      const isSameStatus = purchase.status === modifiedFields.status
 
-      if (modifiedFields.status === 'confirmed' && purchase.status !== 'confirmed') {
+      if (!isSameStatus && modifiedFields.status === 'confirmed') {
         const promisesList = purchase.products.map((product) => {
           const params = { _id: product.productId }
           const amount = product.amount
@@ -67,10 +68,7 @@ class PurchasesController {
         })
 
         await Promise.all(promisesList)
-      } else if (
-        (modifiedFields.status !== 'pending' || modifiedFields.status !== 'canceled') &&
-        (purchase.status !== 'pending' || purchase.status !== 'canceled') &&
-        (modifiedFields.status !== 'confirmed')) {
+      } else if (!isSameStatus && (modifiedFields.status === 'pending' || modifiedFields.status === 'canceled')) {
         const promiseList = purchase.products.map((product) => {
           const params = { _id: product.productId }
           const amount = product.amount * -1
