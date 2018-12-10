@@ -72,7 +72,6 @@ class PurchasesController {
 
         await Promise.all(promisesList)
       } else if (removeProducts) {
-        console.log('wut', isSameStatus)
         const promiseList = purchase.products.map((product) => {
           const params = { _id: product.productId }
           const amount = product.amount * -1
