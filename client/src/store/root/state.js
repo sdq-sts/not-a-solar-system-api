@@ -13,9 +13,7 @@ export const initialState = () => ({
   snackbar: false,
   snackbarText: '',
   snackbarColor: 'info',
-  snackbarTimeout: 2000,
-  productsList: [],
-  productsCount: 0
+  snackbarTimeout: 2000
 })
 
 export const state = { ...initialState() }

@@ -13,7 +13,5 @@ export const mutations = {
   set_isLoggedIn (state, value) { state.isLoggedIn = value },
   set_snackbar (state, value) { state.snackbar = value },
   set_snackbarColor: (state, color) => { state.snackbarColor = color },
-  set_snackbarText (state, text) { state.snackbarText = text },
-  set_productsList (state, productsList) { state.productsList = productsList },
-  set_productsCount (state, amount) { state.productsCount = amount }
+  set_snackbarText (state, text) { state.snackbarText = text }
 }

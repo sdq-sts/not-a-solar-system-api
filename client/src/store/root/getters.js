@@ -11,8 +11,6 @@ export const getters = {
   snackbar: (state) => state.snackbar,
   snackbarText: (state) => state.snackbarText,
   snackbarColor: (state) => state.snackbarColor,
-  productsList: (state) => state.productsList,
-  productsCount: (state) => state.productsCount,
   awsBucketUrl: (state) => `${state.awsUrl}/${state.awsBucket}`,
   getImage: (state) => (key) => `${state.awsUrl}/${state.awsBucket}/${key}`
 }
