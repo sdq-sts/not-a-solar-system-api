@@ -38,11 +38,17 @@
       <td class="text-xs-center">{{ props.item.total | currencyBRL }}</td>
       <td style="width: 120px">
         <v-layout row>
-          <v-icon @click="editItem(props.item)" v-text="`visibility`" small></v-icon>
+          <v-icon @click="showPurchase(props.item)" v-text="`visibility`" small></v-icon>
           <v-spacer></v-spacer>
           <v-icon @click="editItem(props.item)" v-text="`edit`" small></v-icon>
           <v-spacer></v-spacer>
-          <v-icon  @click="deleteItem(props.item)" v-text="`delete`" small v-show="props.item.status !== 'confirmed'"></v-icon>
+          <v-icon
+            :class="{ 'hide-icon': props.item.status === 'confirmed' }"
+            :disabled="props.item.status === 'confirmed'"
+            v-text="`delete`"
+            @click="deleteItem(props.item)"
+            small
+          ></v-icon>
         </v-layout>
       </td>
     </template>
@@ -94,8 +100,8 @@ export default {
           return 'cancelado'
       }
     },
-    visualizePurchase (item) {
-      this.$emit('visualizePurchase', item)
+    showPurchase (item) {
+      this.$emit('showPurchase', item)
     },
     editPurchaseStatus (item, status) {
       const { _id } = item
@@ -113,6 +119,10 @@ export default {
 </script>
 
 <style>
+.hide-icon {
+  opacity: .3;
+}
+
 .n-chip {
   cursor: pointer;
   width: 100%!important;
