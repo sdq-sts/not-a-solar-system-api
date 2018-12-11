@@ -5,6 +5,6 @@ const options = {
   currency: 'BRL'
 }
 
-const currencyBRL = (v) => v.toLocaleString('pt-BR', options)
+const currencyBRL = (v) => v ? v.toLocaleString('pt-BR', options) : ''
 
 Vue.filter('currencyBRL', currencyBRL)

@@ -1,6 +1,6 @@
 import Vue from 'vue'
 
-var options = {
+const options = {
   year: 'numeric',
   month: '2-digit',
   day: 'numeric',
