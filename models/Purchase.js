@@ -22,7 +22,7 @@ module.exports = (db) => {
     },
     products: [
       {
-        productId: { type: Schema.Types.ObjectId, ref: 'Product' },
+        product: { type: Schema.Types.ObjectId, ref: 'Product' },
         amount: { type: Number, min: 1 },
         cost: { type: Number, min: 0 }
       }

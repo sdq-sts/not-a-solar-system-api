@@ -18,6 +18,7 @@ class PurchasesController {
       const purchases = await this.Purchases
         .find(queryParams)
         .sort('-createdAt')
+        .populate('products.product', 'name')
         .skip((page - 1) * limit)
         .limit(limit)
 
@@ -36,7 +37,7 @@ class PurchasesController {
 
       if (queryParams.status === 'confirmed') {
         const promisesList = products.map((product) => {
-          const params = { _id: product.productId }
+          const params = { _id: product.product }
           const amount = product.amount
 
           return this.Products.updateOne(params, { $inc: { currentStorage: amount } }).exec()
@@ -64,7 +65,7 @@ class PurchasesController {
 
       if (addProducts) {
         const promisesList = purchase.products.map((product) => {
-          const params = { _id: product.productId }
+          const params = { _id: product.product }
           const amount = product.amount
 
           return this.Products.updateOne(params, { $inc: { currentStorage: amount } }).exec()
@@ -73,7 +74,7 @@ class PurchasesController {
         await Promise.all(promisesList)
       } else if (removeProducts) {
         const promiseList = purchase.products.map((product) => {
-          const params = { _id: product.productId }
+          const params = { _id: product.product }
           const amount = product.amount * -1
 
           return this.Products.updateOne(params, { $inc: { currentStorage: amount } }).exec()
