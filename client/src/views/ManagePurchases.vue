@@ -1,59 +1,71 @@
 <template>
-  <div>
-    <h1>COMPRAS</h1>
-    <!-- ADD COMBOBOX -->
+  <v-container grid-list-xl>
+    <v-layout row wrap>
+      <v-flex xs6 offset-xs3>
+        <h1>COMPRAS</h1>
+      </v-flex>
+      <!-- ADD COMBOBOX -->
 
-    <v-dialog width="800" v-model="showPurchaseDialog" no-click-animation>
-      <ShowPurchase :purchase="purchaseToShow"/>
-    </v-dialog>
+      <v-dialog width="800" v-model="formPurchaseDialog" no-click-animation>
+        <PurchaseForm/>
+      </v-dialog>
 
-    <v-dialog width="400" persistent v-model="deleteDialog" no-click-animation>
-      <ConfirmDeletion
-        :item="purchaseToDelete"
-        :loading="deleteLoading"
-        @cancelDeletion="closeDialogDelete"
-        @confirmDeletion="deletePurchase"
-      />
-    </v-dialog>
+      <v-dialog width="800" v-model="showPurchaseDialog" no-click-animation>
+        <PurchaseShow :purchase="purchaseToShow"/>
+      </v-dialog>
 
-    <TableList
-      :purchasesList="purchases"
-      @editPurchaseStatus="editPurchaseStatus"
-      @deleteItem="openDeleteDialog"
-      @showPurchase="openShowPurchaseDialog"
-    />
+      <v-dialog width="400" persistent v-model="deletePurchaseDialog" no-click-animation>
+        <PurchaseDelete
+          :item="purchaseToDelete"
+          :loading="deleteLoading"
+          @cancelDeletion="closeDialogDelete"
+          @confirmDeletion="deletePurchase"
+        />
+      </v-dialog>
 
-    <v-flex xs8 offset-xs2>
-      <v-layout justify-center>
-        <v-pagination
-          v-if="Math.ceil(purchasesCount / limit)"
-          class="mt-2"
-          :color="appMainColor"
-          v-model="page"
-          :length="Math.ceil(purchasesCount / limit)"
-          circle
-        ></v-pagination>
-      </v-layout>
-    </v-flex>
+      <v-flex xs6 offset-xs3>
+        <PurchaseList
+          :purchasesList="purchases"
+          @editPurchaseStatus="editPurchaseStatus"
+          @deleteItem="openDeleteDialog"
+          @showPurchase="openShowPurchaseDialog"
+        />
+      </v-flex>
 
-  </div>
+      <v-flex xs6 offset-xs3>
+        <v-layout justify-center>
+          <v-pagination
+            v-if="Math.ceil(purchasesCount / limit)"
+            class="mt-2"
+            :color="appMainColor"
+            v-model="page"
+            :length="Math.ceil(purchasesCount / limit)"
+            circle
+          ></v-pagination>
+        </v-layout>
+      </v-flex>
+    </v-layout>
+  </v-container>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import TableList from '@/components/Purchases/TableList'
-import ShowPurchase from '@/components/Purchases/ShowPurchase'
-import ConfirmDeletion from '@/components/Shared/ConfirmDeletion'
+import PurchaseList from '@/components/Purchases/PurchaseList'
+import PurchaseShow from '@/components/Purchases/PurchaseShow'
+import PurchaseForm from '@/components/Purchases/PurchaseForm'
+import PurchaseDelete from '@/components/Shared/ConfirmDeletion'
 
 export default {
   components: {
-    TableList,
-    ShowPurchase,
-    ConfirmDeletion
+    PurchaseList,
+    PurchaseShow,
+    PurchaseForm,
+    PurchaseDelete
   },
 
   data: () => ({
-    deleteDialog: false,
+    formPurchaseDialog: true,
+    deletePurchaseDialog: false,
     showPurchaseDialog: false,
     deleteLoading: false,
     purchaseToShow: {},
@@ -95,7 +107,7 @@ export default {
       this.deleteLoading = true
       await this.removePurchase(item)
       this.deleteLoading = false
-      this.deleteDialog = false
+      this.deletePurchaseDialog = false
       await this.fetchPurchases()
     },
     getPurchases (page) {
@@ -104,11 +116,11 @@ export default {
       this.fetchPurchases({ page, limit })
     },
     closeDialogDelete () {
-      this.deleteDialog = false
+      this.deletePurchaseDialog = false
     },
     openDeleteDialog (payload) {
       this.purchaseToDelete = payload
-      this.deleteDialog = true
+      this.deletePurchaseDialog = true
     },
     openShowPurchaseDialog (purchase) {
       this.purchaseToShow = purchase
