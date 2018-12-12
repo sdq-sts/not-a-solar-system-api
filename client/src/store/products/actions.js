@@ -8,7 +8,7 @@ export const actions = {
     try {
       const { data: meta } = await apiService.get('/products/meta')
       commit('PRODUCTS_COUNT', meta['productsCount'])
-      console.log(meta.productsCount)
+
       return meta
     } catch (error) {
       handleAjaxErrors(error)

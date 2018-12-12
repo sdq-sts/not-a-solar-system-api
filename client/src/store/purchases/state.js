@@ -1,5 +1,6 @@
 export const initialState = () => ({
-  purchases: []
+  purchases: [],
+  purchasesCount: 0
 })
 
 export const state = { ...initialState() }

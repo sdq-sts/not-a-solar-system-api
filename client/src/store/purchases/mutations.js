@@ -5,5 +5,6 @@ export const mutations = {
     const IS = initialState()
     Object.keys(IS).forEach(x => { state[x] = IS[x] })
   },
-  PURCHASES: (state, purchases) => { state.purchases = purchases }
+  PURCHASES: (state, purchases) => { state.purchases = purchases },
+  PURCHASES_COUNT: (state, count) => { state.purchasesCount = count }
 }

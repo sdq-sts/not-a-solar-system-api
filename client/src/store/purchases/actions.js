@@ -1,10 +1,26 @@
 import { apiService } from '@/services/'
-// import { handleAjaxErrors } from '@/utils/handleAjaxErrors'
+import { handleAjaxErrors } from '@/utils/handleAjaxErrors'
 
 export const actions = {
-  async fetchPurchases (ctx, payload) {
+  async fetchPurchasesMeta (ctx) {
     const { commit } = ctx
-    const purchases = await apiService.get('/purchases')
+
+    try {
+      const { data: meta } = await apiService.get('/purchases/meta')
+      commit('PURCHASES_COUNT', meta['purchasesCount'])
+
+      return meta
+    } catch (error) {
+      handleAjaxErrors(error)
+    }
+  },
+
+  async fetchPurchases (ctx, payload = { page: 1, limit: 3 }) {
+    const { commit } = ctx
+    const { page, limit } = payload
+    const params = { page, limit }
+
+    const purchases = await apiService.get('/purchases', { params })
 
     commit('PURCHASES', purchases.data)
   },

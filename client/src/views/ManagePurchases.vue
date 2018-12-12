@@ -22,6 +22,20 @@
       @deleteItem="openDeleteDialog"
       @showPurchase="openShowPurchaseDialog"
     />
+
+    <v-flex xs8 offset-xs2>
+      <v-layout justify-center>
+        <v-pagination
+          v-if="Math.ceil(purchasesCount / limit)"
+          class="mt-2"
+          :color="appMainColor"
+          v-model="page"
+          :length="Math.ceil(purchasesCount / limit)"
+          circle
+        ></v-pagination>
+      </v-layout>
+    </v-flex>
+
   </div>
 </template>
 
@@ -43,24 +57,39 @@ export default {
     showPurchaseDialog: false,
     deleteLoading: false,
     purchaseToShow: {},
-    purchaseToDelete: {}
+    purchaseToDelete: {},
+    page: 1,
+    limit: 3
   }),
 
+  watch: {
+    page: {
+      handler: 'getPurchases'
+    }
+  },
+
   computed: {
+    ...mapGetters([
+      'appMainColor',
+      'isDarkTheme'
+    ]),
     ...mapGetters('purchases', [
-      'purchases'
+      'purchases',
+      'purchasesCount'
     ])
   },
 
   methods: {
     ...mapActions('purchases', [
+      'fetchPurchasesMeta',
       'fetchPurchases',
       'editPurchase',
       'removePurchase'
     ]),
     async editPurchaseStatus (payload) {
       await this.editPurchase(payload)
-      await this.fetchPurchases()
+      this.fetchPurchasesMeta()
+      this.fetchPurchases()
     },
     async deletePurchase (item) {
       this.deleteLoading = true
@@ -68,6 +97,11 @@ export default {
       this.deleteLoading = false
       this.deleteDialog = false
       await this.fetchPurchases()
+    },
+    getPurchases (page) {
+      const limit = this.limit
+
+      this.fetchPurchases({ page, limit })
     },
     closeDialogDelete () {
       this.deleteDialog = false
@@ -83,6 +117,7 @@ export default {
   },
 
   beforeCreate () {
+    this.$store.dispatch('purchases/fetchPurchasesMeta')
     this.$store.dispatch('purchases/fetchPurchases')
   }
 }
