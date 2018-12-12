@@ -74,7 +74,7 @@ class ProductsController {
 
     try {
       const documentCount = await this.Products.countDocuments({ ownerId: userId })
-      return defaultResponse({ products_count: documentCount })
+      return defaultResponse({ productsCount: documentCount })
     } catch (error) {
       return errorResponse(error)
     }
