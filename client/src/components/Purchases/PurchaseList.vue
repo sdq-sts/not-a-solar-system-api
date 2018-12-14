@@ -40,7 +40,7 @@
         <v-layout row>
           <v-icon @click="showPurchase(props.item)" v-text="`visibility`" small></v-icon>
           <v-spacer></v-spacer>
-          <v-icon @click="editItem(props.item)" v-text="`edit`" small></v-icon>
+          <v-icon @click="editPurchase(props.item)" v-text="`edit`" small></v-icon>
           <v-spacer></v-spacer>
           <v-icon
             :class="{ 'hide-icon': props.item.status === 'confirmed' }"
@@ -108,11 +108,11 @@ export default {
       const payload = { _id, status }
       this.$emit('editPurchaseStatus', payload)
     },
-    editItem (item) {
-      this.$emit('editItem', item)
+    editPurchase (item) {
+      this.$emit('editPurchase', item)
     },
     deleteItem (item) {
-      this.$emit('deleteItem', item)
+      this.$emit('deletePurchase', item)
     }
   }
 }

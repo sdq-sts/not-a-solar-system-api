@@ -18,7 +18,7 @@
         <PurchaseDelete
           :item="purchaseToDelete"
           :loading="deleteLoading"
-          @cancelDeletion="closeDialogDelete"
+          @cancelDeletion="closeDeleteDialog"
           @confirmDeletion="deletePurchase"
         />
       </v-dialog>
@@ -27,8 +27,9 @@
         <PurchaseList
           :purchasesList="purchases"
           @editPurchaseStatus="editPurchaseStatus"
-          @deleteItem="openDeleteDialog"
+          @deletePurchase="openDeletePurchaseDialog"
           @showPurchase="openShowPurchaseDialog"
+          @editPurchase="openEditPurchaseDialog"
         />
       </v-flex>
 
@@ -112,19 +113,22 @@ export default {
     },
     getPurchases (page) {
       const limit = this.limit
-
       this.fetchPurchases({ page, limit })
     },
-    closeDialogDelete () {
-      this.deletePurchaseDialog = false
+    openEditPurchaseDialog (purchase) {
+      this.purchaseToEdit = purchase
+      this.formPurchaseDialog = true
     },
-    openDeleteDialog (payload) {
-      this.purchaseToDelete = payload
+    openDeletePurchaseDialog (purchase) {
+      this.purchaseToDelete = purchase
       this.deletePurchaseDialog = true
     },
     openShowPurchaseDialog (purchase) {
       this.purchaseToShow = purchase
       this.showPurchaseDialog = true
+    },
+    closeDeleteDialog () {
+      this.deletePurchaseDialog = false
     }
   },
 
