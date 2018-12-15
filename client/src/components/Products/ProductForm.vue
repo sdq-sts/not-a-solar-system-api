@@ -230,21 +230,6 @@ export default {
       confirm: 'CONFIRMAR',
       resetForm: 'CANCELAR'
     },
-    placeholders: {
-      name: 'Nome do produto',
-      internalCode: 'Código interno',
-      description: 'Descrição do produto',
-      barCode: 'Código de barras',
-      weight: 'Peso (kg)',
-      height: 'Altura (cm)',
-      width: 'Largura (cm)',
-      depth: 'Comprimento (cm)',
-      costPrice: 'Valor de custo',
-      salePrice: 'Valor de venda',
-      minStorage: 'Estoque mínimo',
-      maxStorage: 'Estoque máximo',
-      currentStorage: 'Quantidade atual'
-    },
     labels: {
       name: 'Nome do produto',
       internalCode: 'Código interno',
