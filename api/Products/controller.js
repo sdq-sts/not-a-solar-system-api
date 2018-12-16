@@ -7,9 +7,10 @@ class ProductsController {
   }
 
   async getAll (req) {
-    const queryParams = { ownerId: req.user.id }
+    const search = new RegExp(req.query.search, 'gi') || ''
     const limit = parseInt(req.query.limit) || 30
     const page = parseInt(req.query.page) || 1
+    const queryParams = { ownerId: req.user.id, name: search }
 
     try {
       const products = await this.Products
