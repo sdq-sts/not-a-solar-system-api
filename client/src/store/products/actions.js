@@ -15,10 +15,10 @@ export const actions = {
     }
   },
 
-  async fetchProducts (ctx, payload = { page: 1, limit: 3 }) {
+  async fetchProducts (ctx, payload = { page: 1, limit: 3, search: '' }) {
     const { commit } = ctx
-    const { page, limit } = payload
-    const params = { page, limit }
+    const { page, limit, search } = payload
+    const params = { page, limit, search }
 
     try {
       const { data: products } = await apiService.get('/products', { params })
