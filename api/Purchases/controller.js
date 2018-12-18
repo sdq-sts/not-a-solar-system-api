@@ -59,9 +59,11 @@ class PurchasesController {
     try {
       const purchase = await this.Purchases.findOneAndUpdate(queryParams, { $set: modifiedFields })
       const isSameStatus = (purchase.status === modifiedFields.status)
-      const addProducts = (!isSameStatus && modifiedFields.status === 'confirmed')
+      const addProducts = (!isSameStatus && modifiedFields.status === 'confirmed') &&
+        (purchase.changeStorage && purchase.isActive)
       const removeProducts = (!isSameStatus && purchase.status === 'confirmed') &&
-        (modifiedFields.status === 'pending' || modifiedFields.status === 'canceled')
+        (modifiedFields.status === 'pending' || modifiedFields.status === 'canceled') &&
+        (purchase.changeStorage && purchase.isActive)
 
       if (addProducts) {
         const promisesList = purchase.products.map((product) => {
