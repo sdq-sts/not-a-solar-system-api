@@ -15,15 +15,11 @@ module.exports = (db) => {
     password: {
       type: String,
       required: true
-    },
-    createdAt: {
-      type: Date,
-      default: Date.now
-    },
-    updatedAt: {
-      type: Date
     }
-  }, { versionKey: false })
+  }, {
+    timestamps: true,
+    versionKey: false
+  })
 
   userSchema.pre('save', userPreSave)
   userSchema.pre('update', userPreUpdate)

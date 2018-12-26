@@ -1,5 +1,5 @@
 const { Schema } = require('mongoose')
-const { purchasePreSave, purchasePreUpdate } = require('../helpers/mongoose')
+const { purchasePreSave } = require('../helpers/mongoose')
 
 module.exports = (db) => {
   const purchaseSchema = new Schema({
@@ -37,11 +37,6 @@ module.exports = (db) => {
       default: 0,
       min: 0
     },
-    payment: {
-      type: String,
-      enum: ['cash', 'installment'],
-      default: 'cash'
-    },
     note: {
       type: String,
       maxlength: 255,
@@ -50,18 +45,13 @@ module.exports = (db) => {
     total: {
       type: Number,
       default: 0
-    },
-    createdAt: {
-      type: Date,
-      default: Date.now
-    },
-    updatedAt: {
-      type: Date
     }
-  }, { versionKey: false })
+  }, {
+    timestamps: true,
+    versionKey: false
+  })
 
   purchaseSchema.pre('save', purchasePreSave)
-  purchaseSchema.pre('update', purchasePreUpdate)
 
   return db.model('Purchase', purchaseSchema)
 }

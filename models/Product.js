@@ -1,5 +1,4 @@
 const { Schema } = require('mongoose')
-const { productPreUpdate } = require('../helpers/mongoose')
 
 module.exports = (db) => {
   const productSchema = new Schema({
@@ -72,17 +71,11 @@ module.exports = (db) => {
     currentStorage: {
       required: true,
       type: Number
-    },
-    createdAt: {
-      type: Date,
-      default: Date.now
-    },
-    updatedAt: {
-      type: Date
     }
-  }, { versionKey: false })
-
-  productSchema.pre('update', productPreUpdate)
+  }, {
+    timestamps: true,
+    versionKey: false
+  })
 
   return db.model('Product', productSchema)
 }
