@@ -25,6 +25,10 @@ export const actions = {
     commit('PURCHASES', purchases.data)
   },
 
+  createPurchase (ctx, payload) {
+    return apiService.post('/purchases/', JSON.parse(payload))
+  },
+
   editPurchase (ctx, payload) {
     const { _id, ...params } = payload
     return apiService.put(`/purchases/${payload._id}`, params)

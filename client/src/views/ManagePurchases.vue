@@ -1,13 +1,15 @@
 <template>
   <v-container grid-list-xl>
     <v-layout row wrap>
-      <v-flex xs6 offset-xs3>
-        <h1>COMPRAS</h1>
-      </v-flex>
-      <!-- ADD COMBOBOX -->
 
-      <v-dialog width="800" v-model="formPurchaseDialog" no-click-animation>
-        <PurchaseForm/>
+      <v-dialog width="60%" v-model="formPurchaseDialog" no-click-animation>
+        <PurchaseForm
+          :purchaseToEdit="purchaseToEdit"
+          @cancel="closeFormDialog"
+          @submit="createNewPurchase"
+          @edit="modifyPurchase"
+          ref="purchaseForm"
+        />
       </v-dialog>
 
       <v-dialog width="800" v-model="showPurchaseDialog" no-click-animation>
@@ -22,6 +24,16 @@
           @confirmDeletion="deletePurchase"
         />
       </v-dialog>
+
+      <v-flex xs6 offset-xs3>
+        <v-layout row wrap justify-end>
+          <v-btn
+            :dark="isDarkTheme"
+            :color="appMainColor"
+            @click="openNewPurchaseDialog"
+          >{{ text.newPurchase }}</v-btn>
+        </v-layout>
+      </v-flex>
 
       <v-flex xs6 offset-xs3>
         <PurchaseList
@@ -71,8 +83,12 @@ export default {
     deleteLoading: false,
     purchaseToShow: {},
     purchaseToDelete: {},
+    purchaseToEdit: null,
     page: 1,
-    limit: 3
+    limit: 3,
+    text: {
+      newPurchase: 'Nova compra'
+    }
   }),
 
   watch: {
@@ -93,9 +109,11 @@ export default {
   },
 
   methods: {
+    ...mapActions([ 'showSnackbar' ]),
     ...mapActions('purchases', [
       'fetchPurchasesMeta',
       'fetchPurchases',
+      'createPurchase',
       'editPurchase',
       'removePurchase'
     ]),
@@ -111,9 +129,27 @@ export default {
       this.deletePurchaseDialog = false
       await this.fetchPurchases()
     },
+    async createNewPurchase (purchase) {
+      try {
+        await this.createPurchase(purchase)
+        this.showSnackbar({ color: 'success', text: `Compra cadastrada` })
+        this.$refs.purchaseForm.reset()
+        this.$refs.purchaseForm.focus()
+      } catch (err) {
+        this.showSnackbar({ color: 'danger', text: `Compra não cadastrada` })
+      }
+    },
+    async modifyPurchase (value) {
+      const res = await this.editPurchase(value)
+      console.log('EDIT PURCHASE', res)
+    },
     getPurchases (page) {
       const limit = this.limit
       this.fetchPurchases({ page, limit })
+    },
+    openNewPurchaseDialog (purchase) {
+      this.purchaseToEdit = null
+      this.formPurchaseDialog = true
     },
     openEditPurchaseDialog (purchase) {
       this.purchaseToEdit = purchase
@@ -129,6 +165,9 @@ export default {
     },
     closeDeleteDialog () {
       this.deletePurchaseDialog = false
+    },
+    closeFormDialog () {
+      this.formPurchaseDialog = false
     }
   },
 
