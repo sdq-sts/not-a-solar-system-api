@@ -16,12 +16,13 @@ module.exports = (db) => {
       {
         product: { type: Schema.Types.ObjectId, ref: 'Product' },
         amount: { type: Number, min: 1 },
-        price: { type: Number, min: 0 }
+        salePrice: { type: Number, min: 0 }
       }
     ],
     total: {
       type: Number,
-      default: 0
+      default: 0,
+      min: 0
     }
   }, {
     timestamps: true,

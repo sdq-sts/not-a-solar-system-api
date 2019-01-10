@@ -47,7 +47,7 @@ module.exports.purchasePreSave = function (next) {
 // Sale model
 module.exports.salePreSave = function (next) {
   const totalProducts = this.products
-    .reduce((v, x) => (x.amount * x.price) + v, 0)
+    .reduce((v, x) => (x.amount * x.salePrice) + v, 0)
 
   this.total = Math.round(totalProducts * 100 + Number.EPSILON) / 100
   next()

@@ -44,7 +44,8 @@ module.exports = (db) => {
     },
     total: {
       type: Number,
-      default: 0
+      default: 0,
+      min: 0
     }
   }, {
     timestamps: true,

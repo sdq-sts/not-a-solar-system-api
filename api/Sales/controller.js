@@ -3,9 +3,10 @@ const { defaultResponse, errorResponse } = require('../../helpers/responses')
 
 class SalesController {
   constructor (models) {
-    const { Sale } = models
+    const { Sale, Product } = models
 
     this.Sales = Sale
+    this.Products = Product
   }
 
   async getAll (req) {
@@ -22,16 +23,26 @@ class SalesController {
 
       return defaultResponse(sales)
     } catch (error) {
-      console.log(error)
       return errorResponse(error)
     }
   }
 
   async create (req) {
     const queryParams = { ...req.body, ownerId: req.user.id }
+    const products = queryParams.products
 
     try {
       const newSale = await this.Sales.create(queryParams)
+
+      const promisesList = products.map((product) => {
+        const params = { _id: product.product }
+        const amount = -product.amount
+
+        return this.Products.updateOne(params, { $inc: { currentStorage: amount } }).exec()
+      })
+
+      await Promise.all(promisesList)
+
       return defaultResponse(newSale, HttpStatus.CREATED)
     } catch (error) {
       return errorResponse(error.message, HttpStatus.UNPROCESSABLE_ENTITY)
