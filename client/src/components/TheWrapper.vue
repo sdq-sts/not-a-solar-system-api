@@ -6,7 +6,7 @@
 
     <v-toolbar
       clipped-left
-      :color="appMainColor"
+      color="primary"
       dark
       app
       fixed
@@ -30,8 +30,7 @@
         <LogoutCard
           :username="username"
           :userPictureUrl="avatar"
-          :color="appMainColor"
-          :isDarkTheme="isDarkTheme"
+          color="primary"
           :logoutAction="logout"
         />
       </v-menu>
@@ -63,7 +62,7 @@ export default {
   }),
 
   computed: {
-    ...mapGetters(['company', 'username', 'userAvatar', 'appMainColor', 'isDarkTheme']),
+    ...mapGetters([ 'company', 'username', 'userAvatar' ]),
     avatar () {
       return this.userAvatar || defaultAvatar
     }

@@ -8,36 +8,52 @@
         :label="labels.item"
         :search-input.sync="search"
         @change="update"
+        :loading="loading"
         clearable
         dense
       ></v-combobox>
     </v-flex>
 
-    <v-flex xs2>
+    <v-flex xs1>
       <v-text-field
         v-model="amount"
         :label="labels.amount"
+        :rules="[ lteStorage ]"
         type="number"
+        :max="currentStorage"
+        min="1"
         @input="update"
       ></v-text-field>
     </v-flex>
 
-    <v-flex xs2>
+    <v-flex xs1>
       <v-text-field
-        v-model="cost"
-        :label="labels.cost"
+        :label="labels.storage"
+        :value="currentStorage"
         type="number"
-        @input="update"
-      ></v-text-field>
-    </v-flex>
-
-    <v-flex xs2>
-      <v-text-field
-        :label="labels.total"
-        :value="total | currencyBRL"
-        tabindex="-1"
-        disabled
         readonly
+      ></v-text-field>
+    </v-flex>
+
+    <v-flex xs2>
+      <v-text-field
+        :value="cost | currencyBRL"
+        :label="labels.cost"
+        @input="update"
+        tabindex="-1"
+        readonly
+        reverse
+      ></v-text-field>
+    </v-flex>
+
+    <v-flex xs2>
+      <v-text-field
+        :value="total | currencyBRL"
+        :label="labels.total"
+        class="text-xs-center"
+        tabindex="-1"
+        readonly
+        reverse
       ></v-text-field>
     </v-flex>
 
@@ -65,6 +81,7 @@ export default {
   },
 
   data: () => ({
+    loading: false,
     item: null,
     search: '',
     product: '',
@@ -72,6 +89,7 @@ export default {
     cost: 0,
     items: [],
     labels: {
+      storage: 'Estoque',
       item: 'Produto',
       amount: 'Quantidade',
       cost: 'Custo unitário',
@@ -93,6 +111,9 @@ export default {
   computed: {
     total () {
       return this.cost * this.amount
+    },
+    currentStorage () {
+      return ((this.product || {}).item || {}).currentStorage || 0
     }
   },
 
@@ -100,26 +121,39 @@ export default {
     ...mapActions('products', [ 'fetchProducts' ]),
     async watchSearch (search) {
       if (search) {
+        this.loading = true
         const products = await this.fetchProducts({ search })
+
         this.items = products.map((product) => ({ text: product.name, item: product }))
+        this.loading = false
       } else {
         this.items = []
       }
     },
-    update () {
-      const { product, amount, cost } = this
+    update (value) {
+      const { product, amount } = this
       const productId = ((product || {}).item || {})._id
       const productAmount = parseFloat(amount) || 0
-      const productCost = parseFloat(cost) || 0
+      const productSalePrice = ((product || {}).item || {}).salePrice
+        ? parseFloat(product.item.salePrice)
+        : 0
 
+      this.cost = productSalePrice
       this.$emit('input', {
         product: productId,
         amount: productAmount,
-        cost: productCost
+        salePrice: productSalePrice
       })
     },
     removeItem (e) {
       this.$emit('removeItem', e)
+    },
+    lteStorage (value) {
+      if ((this.product || {}).item) {
+        return value <= this.currentStorage || `Máximo ${this.currentStorage}`
+      }
+
+      return true
     }
   }
 }

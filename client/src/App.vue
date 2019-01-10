@@ -1,6 +1,6 @@
 <template>
-  <v-app>
-    <v-content>
+  <v-app :dark="isDarkTheme">
+    <v-content >
       <router-view></router-view>
 
       <v-snackbar
@@ -23,7 +23,11 @@ export default {
   components: {},
   data: () => ({}),
   computed: {
-    ...mapGetters(['snackbarText', 'snackbarColor']),
+    ...mapGetters([
+      'snackbarText',
+      'snackbarColor',
+      'isDarkTheme'
+    ]),
     snackbar: {
       get () {
         return this.$store.getters.snackbar

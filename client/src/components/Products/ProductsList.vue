@@ -14,9 +14,9 @@
           <td class="text-xs-center">{{ props.item.createdAt | formatedDate}}</td>
           <td>
             <v-layout row>
-              <v-icon @click="editItem(props.item)" v-text="`edit`"></v-icon>
+              <v-icon @click="editItem(props.item)" v-text="`edit`" small></v-icon>
               <v-spacer></v-spacer>
-              <v-icon  @click="deleteItem(props.item)" v-text="`delete`"></v-icon>
+              <v-icon  @click="deleteItem(props.item)" v-text="`delete`" small></v-icon>
             </v-layout>
           </td>
       </template>

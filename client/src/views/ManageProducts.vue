@@ -27,8 +27,6 @@
             <v-container grid-list-lg>
               <product-form
                 :productToEdit="productToEdit"
-                :color="appMainColor"
-                :isDarkTheme="isDarkTheme"
                 :clearForm="clearForm"
                 :isLoading="loadingForm"
                 :focusForm="dialog"
@@ -64,7 +62,6 @@
           <v-pagination
             v-if="Math.ceil(productsCount / limit)"
             class="mt-2"
-            :color="appMainColor"
             v-model="page"
             :length="Math.ceil(productsCount / limit)"
             circle
@@ -117,11 +114,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters([
-      'appMainColor',
-      'isDarkTheme',
-      'getImage'
-    ]),
+    ...mapGetters([ 'getImage' ]),
     ...mapGetters('products', [
       'products',
       'productsCount'

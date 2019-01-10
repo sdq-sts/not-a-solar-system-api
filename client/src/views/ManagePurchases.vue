@@ -28,8 +28,7 @@
       <v-flex xs6 offset-xs3>
         <v-layout row wrap justify-end>
           <v-btn
-            :dark="isDarkTheme"
-            :color="appMainColor"
+            color="primary"
             @click="openNewPurchaseDialog"
           >{{ text.newPurchase }}</v-btn>
         </v-layout>
@@ -50,7 +49,7 @@
           <v-pagination
             v-if="Math.ceil(purchasesCount / limit)"
             class="mt-2"
-            :color="appMainColor"
+            color="primary"
             v-model="page"
             :length="Math.ceil(purchasesCount / limit)"
             circle
@@ -77,7 +76,7 @@ export default {
   },
 
   data: () => ({
-    formPurchaseDialog: true,
+    formPurchaseDialog: false,
     deletePurchaseDialog: false,
     showPurchaseDialog: false,
     deleteLoading: false,
@@ -98,10 +97,6 @@ export default {
   },
 
   computed: {
-    ...mapGetters([
-      'appMainColor',
-      'isDarkTheme'
-    ]),
     ...mapGetters('purchases', [
       'purchases',
       'purchasesCount'

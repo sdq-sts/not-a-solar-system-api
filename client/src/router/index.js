@@ -51,6 +51,11 @@ const router = new Router({
           path: '/compras',
           name: 'manage.purchases',
           component: () => import(/* webpackChunkName: "manage.purchases" */ '@/views/ManagePurchases.vue')
+        },
+        {
+          path: '/vendas',
+          name: 'manage.sales',
+          component: () => import(/* webpackChunkName: "manage.sales" */ '@/views/ManageSales.vue')
         }
       ]
     }

@@ -17,7 +17,6 @@
           <v-menu
             :close-on-content-click="false"
             v-model="dateMenu"
-            :nudge-right="40"
             lazy
             transition="scale-transition"
             offset-y
@@ -31,8 +30,10 @@
               readonly
             ></v-text-field>
             <v-date-picker
-              locale="pt-BR"
               v-model="form.issueDate"
+              color="primary"
+              header-color="primary"
+              locale="pt-BR"
               @input="dateMenu = false"
             ></v-date-picker>
           </v-menu>
@@ -62,7 +63,7 @@
               v-model="products[i]"
               v-for="(p, i) in products"
               :key="i"
-              @removeItem="removeItem(i)"
+              @removeItem="removeProduct(i)"
             />
           </v-flex>
         </v-layout>
@@ -71,8 +72,7 @@
           <v-flex xs2 justify-end>
             <v-btn
               tabindex="-1"
-              :color="appMainColor"
-              :dark="isDarkTheme"
+              color="primary"
               @click="addProduct"
               block
               small
@@ -138,8 +138,7 @@
           <v-spacer></v-spacer>
           <v-btn
             type="submit"
-            :color="appMainColor"
-            :dark="isDarkTheme"
+            color="primary"
             :loading="loading"
           >{{ purchaseToEdit ? 'EDITAR' : 'CADASTRAR' }}</v-btn>
         </v-layout>
@@ -149,7 +148,6 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 import PurchaseFormProduct from './PurchaseFormProduct'
 
 export default {
@@ -172,7 +170,7 @@ export default {
     product: null,
     dateMenu: false,
     products: {
-      1: { product: '', amount: 1, cost: 0 }
+      '1': { product: '', amount: 1, cost: 0 }
     },
     status: { text: 'Pendente', value: 'pending' },
     labels: {
@@ -214,17 +212,13 @@ export default {
   }),
 
   computed: {
-    ...mapGetters([
-      'appMainColor',
-      'isDarkTheme'
-    ]),
     productsTotal () {
       const reducer = (x, y) => (y.amount * y.cost) + x
       const productsTotal = Object.values(this.products).reduce(reducer, 0)
       return productsTotal
     },
     purchaseTotal () {
-      const purchaseTotal = Number(this.productsTotal) + Number(this.form.tax) - Number(this.form.discount)
+      const purchaseTotal = parseFloat(this.productsTotal) + parseFloat(this.form.tax) - parseFloat(this.form.discount)
       return purchaseTotal
     }
   },
@@ -242,17 +236,15 @@ export default {
 
   methods: {
     submitForm () {
-      const { form } = this
-      form.tax = Number(form.tax) || 0
-      form.discount = Number(form.discount) || 0
-      form.products = Object.values(this.products)
-      form.issueDate = new Date(this.form.issueDate).toISOString()
-
       if (this.$refs.form.validate()) {
-        this.$emit('submit', JSON.stringify(form))
+        this.form.tax = parseFloat(this.form.tax) || 0
+        this.form.discount = parseFloat(this.form.discount) || 0
+        this.form.products = Object.values(this.products)
+        this.form.issueDate = new Date(this.form.issueDate).toISOString()
+        this.$emit('submit', JSON.stringify(this.form))
       }
     },
-    removeItem (index) {
+    removeProduct (index) {
       const hasMoreThanOneItem = Object.keys(this.products).length > 1
 
       if (hasMoreThanOneItem) {

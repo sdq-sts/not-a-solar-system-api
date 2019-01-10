@@ -19,7 +19,7 @@
     <v-card-actions class="pa-3">
       <v-layout row wrap>
         <v-flex xs12>
-          <v-btn :dark="isDarkTheme" class="mt-3" :color="color" large block @click="logoutAction()">{{ logoutBtnText }}</v-btn>
+          <v-btn class="mt-3" :color="color" large block @click="logoutAction()">{{ logoutBtnText }}</v-btn>
         </v-flex>
       </v-layout>
     </v-card-actions>
@@ -56,10 +56,6 @@ export default {
     color: {
       type: String,
       default: ''
-    },
-    isDarkTheme: {
-      type: Boolean,
-      default: true
     }
   }
 }

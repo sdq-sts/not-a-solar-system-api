@@ -58,7 +58,7 @@
               <v-switch
                 v-model="changeStorage"
                 :label="labels.changeStorage"
-                :color="color"
+                color="primary"
               ></v-switch>
 
               <v-spacer></v-spacer>
@@ -66,7 +66,7 @@
               <v-switch
                 v-model="isActive"
                 :label="labels.isActive"
-                :color="color"
+                color="primary"
               ></v-switch>
             </v-layout>
           </v-flex>
@@ -168,12 +168,11 @@
 
       <v-flex xs12>
         <v-layout row>
-          <v-btn flat @click="cancelBtn">Cancelar</v-btn>
+          <v-btn @click="cancelBtn" flat>Cancelar</v-btn>
           <v-spacer></v-spacer>
           <v-btn
             type="submit"
-            :color="color"
-            :dark="isDarkTheme"
+            color="primary"
             :loading="loading"
           >{{ productToEdit ? 'EDITAR' : 'CADASTRAR' }}</v-btn>
         </v-layout>
@@ -192,10 +191,6 @@ export default {
     color: {
       type: String,
       default: ''
-    },
-    isDarkTheme: {
-      type: Boolean,
-      default: true
     },
     clearForm: {
       type: Boolean,

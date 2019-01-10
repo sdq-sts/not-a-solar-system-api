@@ -8,7 +8,6 @@ export const initialState = () => ({
   userAvatar: '',
   isLoggedIn: false,
   jwt: '',
-  appMainColor: 'blue darken-2',
   isDarkTheme: true,
   snackbar: false,
   snackbarText: '',

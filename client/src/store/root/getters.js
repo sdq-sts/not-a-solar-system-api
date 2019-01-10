@@ -6,7 +6,6 @@ export const getters = {
   userEmail: (state) => state.userEmail,
   userAvatar: (state) => state.userAvatar,
   isLoggedIn: (state) => state.isLoggedIn,
-  appMainColor: (state) => state.appMainColor,
   isDarkTheme: (state) => state.isDarkTheme,
   snackbar: (state) => state.snackbar,
   snackbarText: (state) => state.snackbarText,
