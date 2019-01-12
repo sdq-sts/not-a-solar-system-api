@@ -1,20 +1,42 @@
 <template>
   <v-card>
-    <v-layout row>
-      <v-flex xs7>
-        <v-card-title primary-title>
-          <div class="headline">{{ username }}</div>
-        </v-card-title>
-      </v-flex>
+    <v-card-title>
+      <v-layout row>
+        <v-flex xs7>
+          <v-card-title primary-title>
+            <div class="headline">{{ username }}</div>
+          </v-card-title>
+        </v-flex>
 
-      <v-flex xs5 justify-center align-center>
-        <div class="pr-3">
-          <v-img :src="userPictureUrl" height="125px" contain></v-img>
-        </div>
-      </v-flex>
-    </v-layout>
+        <v-flex xs5 justify-center align-center>
+          <div class="pr-3">
+            <v-img :src="userPictureUrl" height="125px" contain></v-img>
+          </div>
+        </v-flex>
+      </v-layout>
+    </v-card-title>
 
     <v-divider light></v-divider>
+
+    <v-card-text class="mb-0">
+      <v-layout row wrap align-center>
+        <v-flex align-self-center>
+          <v-layout row wrap align-center>
+            <v-icon>{{ darkTheme ? 'brightness_2': 'wb_sunny' }}</v-icon>
+            <span class="ml-3 body-2">{{ text.darkMode }}</span>
+          </v-layout>
+        </v-flex>
+
+        <v-flex xs3>
+          <v-layout row justify-end>
+            <v-switch
+              v-model="darkTheme"
+              color="primary"
+            ></v-switch>
+          </v-layout>
+        </v-flex>
+      </v-layout>
+    </v-card-text>
 
     <v-card-actions class="pa-3">
       <v-layout row wrap>
@@ -29,6 +51,10 @@
 <script>
 export default {
   props: {
+    dark: {
+      type: Boolean,
+      default: false
+    },
     username: {
       type: String,
       required: true
@@ -57,6 +83,30 @@ export default {
       type: String,
       default: ''
     }
+  },
+
+  data: () => ({
+    darkTheme: false,
+    text: {
+      darkMode: 'MODO ESCURO'
+    }
+  }),
+
+  watch: {
+    darkTheme: {
+      handler: 'watchDarkProp',
+      immediate: false
+    }
+  },
+
+  methods: {
+    watchDarkProp (value) {
+      this.$emit('setDarkTheme', value)
+    }
+  },
+
+  mounted () {
+    this.darkTheme = this.dark
   }
 }
 </script>

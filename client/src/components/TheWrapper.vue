@@ -19,6 +19,7 @@
 
       <v-menu
         transition="slide-y-transition"
+        :close-on-content-click="false"
         bottom
       >
         <v-btn slot="activator" icon large>
@@ -30,8 +31,10 @@
         <LogoutCard
           :username="username"
           :userPictureUrl="avatar"
-          color="primary"
           :logoutAction="logout"
+          :dark="darkMode"
+          @setDarkTheme="handleLogoutCardTheme"
+          color="primary"
         />
       </v-menu>
 
@@ -47,10 +50,10 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
 import TheWrapperDrawerList from '@/components/TheWrapperDrawerList'
 import LogoutCard from '@/components/LogoutCard'
 import defaultAvatar from '@/assets/default_avatar.png'
-import { mapGetters } from 'vuex'
 
 export default {
   components: { TheWrapperDrawerList, LogoutCard },
@@ -62,19 +65,29 @@ export default {
   }),
 
   computed: {
-    ...mapGetters([ 'company', 'username', 'userAvatar' ]),
+    ...mapGetters([ 'company', 'username', 'userAvatar', 'darkMode' ]),
     avatar () {
       return this.userAvatar || defaultAvatar
     }
   },
 
   methods: {
-    handleDrawerState () {
-      this.drawer = !this.drawer
-    },
+    ...mapActions(['editUser']),
     async logout () {
       this.$store.dispatch('logout')
       this.$router.push({ name: 'login' })
+    },
+    handleDrawerState () {
+      this.drawer = !this.drawer
+    },
+    async handleLogoutCardTheme (value) {
+      if (value) {
+        await this.editUser({ darkMode: true })
+        this.$store.commit('SET_DARK_MODE', true)
+      } else {
+        await this.editUser({ darkMode: false })
+        this.$store.commit('SET_DARK_MODE', false)
+      }
     }
   }
 }

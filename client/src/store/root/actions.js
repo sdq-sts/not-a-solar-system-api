@@ -45,6 +45,17 @@ export const actions = {
     }
   },
 
+  async editUser (ctx, payload) {
+    const id = ctx.getters.userId
+    try {
+      await apiService.put(`/users/${id}`, payload)
+    } catch (error) {
+      handleAjaxErrors(error)
+
+      return error
+    }
+  },
+
   async requestFileUploadUrl (ctx, payload) {
     const { fileType, folder } = payload
     const res = await apiService.get('services/upload', { params: { fileType, folder } })

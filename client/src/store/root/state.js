@@ -8,7 +8,7 @@ export const initialState = () => ({
   userAvatar: '',
   isLoggedIn: false,
   jwt: '',
-  isDarkTheme: false,
+  darkMode: false,
   snackbar: false,
   snackbarText: '',
   snackbarColor: 'info',

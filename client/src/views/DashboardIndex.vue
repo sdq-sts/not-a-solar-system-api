@@ -1,29 +1,23 @@
 <template>
   <div>
     <h1>DASHBOARD INDEX PAGE</h1>
-    <div>
-      <apexchart width="500" type="line" :options="options" :series="series"></apexchart>
-    </div>
+    <LineChart :dark="darkMode"/>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+import LineChart from '@/components/Dashboard/LineChart'
 
 export default {
-  data: () => ({
-    options: {
-      chart: {
-        id: 'vuechart-example'
-      },
-      xaxis: {
-        categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998]
-      }
-    },
-    series: [{
-      name: 'series-1',
-      data: [30, 40, 45, 50, 49, 60, 70, 91]
-    }]
-  })
+  components: {
+    LineChart
+  },
+  computed: {
+    ...mapGetters([
+      'darkMode'
+    ])
+  }
 }
 </script>
 

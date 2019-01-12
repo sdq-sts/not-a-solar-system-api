@@ -9,6 +9,7 @@ export const verifyTokenValidity = async (jwt) => {
     store.commit('set_userId', data._id)
     store.commit('set_username', data.name)
     store.commit('set_userEmail', data.email)
+    store.commit('SET_DARK_MODE', data.darkMode)
 
     return true
   } catch (error) {

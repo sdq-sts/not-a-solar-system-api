@@ -1,5 +1,5 @@
 <template>
-  <v-app :dark="isDarkTheme">
+  <v-app :dark="darkMode">
     <v-content >
       <router-view></router-view>
 
@@ -9,8 +9,7 @@
         :bottom="true"
         :timeout="2000"
         :color="snackbarColor"
-      >{{ snackbarText }}
-      </v-snackbar>
+      >{{ snackbarText }}</v-snackbar>
     </v-content>
   </v-app>
 </template>
@@ -26,7 +25,7 @@ export default {
     ...mapGetters([
       'snackbarText',
       'snackbarColor',
-      'isDarkTheme'
+      'darkMode'
     ]),
     snackbar: {
       get () {
