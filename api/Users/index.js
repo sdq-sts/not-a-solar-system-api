@@ -16,7 +16,6 @@ module.exports = (app) => {
     })
 
   router.post('/',
-    // app.auth.authenticate(),
     (req, res) => {
       userController.create(req)
         .then((response) => {
@@ -36,7 +35,7 @@ module.exports = (app) => {
     })
 
   router.get('/:id',
-    // app.auth.authenticate(),
+    app.auth.authenticate(),
     (req, res) => {
       userController.getById(req)
         .then((response) => {
@@ -46,7 +45,7 @@ module.exports = (app) => {
     })
 
   router.put('/:id',
-    // app.auth.authenticate(),
+    app.auth.authenticate(),
     (req, res) => {
       userController.update(req)
         .then((response) => {
@@ -55,7 +54,7 @@ module.exports = (app) => {
     })
 
   router.delete('/:id',
-    // app.auth.authenticate(),
+    app.auth.authenticate(),
     (req, res) => {
       userController.delete(req)
         .then((response) => {

@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt')
+const { roundNumber } = require('./utils')
 
 // User Model
 module.exports.userPreSave = async function (next) {
@@ -40,7 +41,7 @@ module.exports.purchasePreSave = function (next) {
     .reduce((v, x) => (x.amount * x.cost) + v, 0)
   const value = (totalProducts + this.tax) - (this.discount)
 
-  this.total = Math.round(value * 100 + Number.EPSILON) / 100
+  this.total = roundNumber(value)
   next()
 }
 
@@ -49,6 +50,6 @@ module.exports.salePreSave = function (next) {
   const totalProducts = this.products
     .reduce((v, x) => (x.amount * x.salePrice) + v, 0)
 
-  this.total = Math.round(totalProducts * 100 + Number.EPSILON) / 100
+  this.total = roundNumber(totalProducts)
   next()
 }

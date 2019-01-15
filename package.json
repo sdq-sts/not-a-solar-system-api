@@ -27,6 +27,7 @@
     "helmet": "^3.14.0",
     "http-status": "^1.2.0",
     "jsonwebtoken": "^8.3.0",
+    "moment": "^2.23.0",
     "mongoose": "^5.3.4",
     "morgan": "^1.9.1",
     "passport": "^0.4.0",

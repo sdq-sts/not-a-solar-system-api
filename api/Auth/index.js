@@ -18,7 +18,7 @@ module.exports = (app) => {
         : false
 
       if (user && validPassword) {
-        const payload = { id: user.id, email: user.email }
+        const payload = { id: user.id, email: user.email, darkMode: user.darkMode }
         const token = jwt.sign(payload, config.jwtSecret, { expiresIn: '12h' })
         const { id, name, email } = user
 

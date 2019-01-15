@@ -32,8 +32,6 @@ class PurchasesController {
     const queryParams = { ...req.body, ownerId: req.user.id }
     const products = queryParams.products
 
-    console.log(products)
-
     try {
       const newPurchase = await this.Purchases.create(queryParams)
 

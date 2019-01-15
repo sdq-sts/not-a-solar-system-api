@@ -15,6 +15,10 @@ module.exports = (db) => {
     password: {
       type: String,
       required: true
+    },
+    darkMode: {
+      type: Boolean,
+      defaut: false
     }
   }, {
     timestamps: true,
