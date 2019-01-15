@@ -29,12 +29,12 @@ const router = new Router({
     {
       path: '/dashboard',
       meta: { requiresAuth: true },
-      component: () => import(/* webpackChunkName: "dashboard" */ '@/views/Dashboard.vue'),
+      component: () => import(/* webpackChunkName: "wrapper" */ '@/views/Wrapper.vue'),
       children: [
         {
           path: '/dashboard',
           name: 'dashboard.index',
-          component: () => import(/* webpackChunkName: "dashboard.index" */ '@/views/DashboardIndex.vue')
+          component: () => import(/* webpackChunkName: "dashboard" */ '@/views/Dashboard.vue')
         },
         {
           path: '/produtos',

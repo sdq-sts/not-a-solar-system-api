@@ -1,22 +1,22 @@
 <template>
-  <the-wrapper>
-    <router-view/>
-  </the-wrapper>
+  <div>
+    <h1>DASHBOARD INDEX PAGE</h1>
+    <LineChart :dark="darkMode"/>
+  </div>
 </template>
 
 <script>
-import TheWrapper from '@/components/TheWrapper'
+import { mapGetters } from 'vuex'
+import LineChart from '@/components/Dashboard/SalesChart'
 
 export default {
-  components: { TheWrapper },
-
-  data: () => ({}),
-
-  methods: {
-    async logout () {
-      await this.$store.dispatch('logout')
-      this.$router.push({ name: 'login' })
-    }
+  components: {
+    LineChart
+  },
+  computed: {
+    ...mapGetters([
+      'darkMode'
+    ])
   }
 }
 </script>
