@@ -1,9 +1,7 @@
 const HttpStatus = require('http-status')
 const moment = require('moment')
 const { defaultResponse, errorResponse } = require('../../helpers/responses')
-const { roundNumber } = require('../../helpers/utils')
-
-moment.locale('pt-br')
+const { roundNumber, getLastMonths } = require('../../helpers/utils')
 
 class SalesController {
   constructor (models) {
@@ -94,12 +92,7 @@ class SalesController {
       const salesDocs = await this.Sales.find({ ownerId })
       const salesTotal = roundNumber(salesDocs.reduce((x, y) => x + y.total, 0))
       const salesCount = salesDocs.length
-      const datesArr = Array.from({ length: 13 }, (v, k) => k)
-      const allMonths = datesArr.map((x) => ({
-        start: new Date(moment().subtract(x, 'months').startOf('month').toISOString()),
-        end: new Date(moment().subtract(x, 'months').endOf('month').toISOString())
-      }))
-      const salesByMonth = allMonths.map(d => {
+      const salesByMonth = getLastMonths().map(d => {
         const date = moment(d.start).format('MM/Y')
         const salesInMonth = salesDocs.filter(x => x.createdAt >= d.start && x.createdAt <= d.end)
         const total = salesInMonth.reduce((x, y) => x + y.total, 0)
