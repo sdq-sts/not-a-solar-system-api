@@ -16,7 +16,7 @@ module.exports = (app) => {
       const folder = req.query.folder
       const key = `${folder}/${req.user.id}-${uuid()}.${fileExt}`
       const params = {
-        Bucket: `not-a-solar-system`,
+        Bucket: app.config.awsBucket,
         ContentType: req.query.fileType,
         Key: key,
         Expires: 60
