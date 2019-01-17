@@ -91,22 +91,21 @@ class SalesController {
     const ownerId = req.user.id
 
     try {
-      const docs = await this.Sales.find({ ownerId })
-      const salesTotal = roundNumber(docs.reduce((x, y) => x + y.total, 0))
-      const salesCount = docs.length
-      const datesArr = Array.from({ length: 12 }, (v, k) => k + 1)
+      const salesDocs = await this.Sales.find({ ownerId })
+      const salesTotal = roundNumber(salesDocs.reduce((x, y) => x + y.total, 0))
+      const salesCount = salesDocs.length
+      const datesArr = Array.from({ length: 13 }, (v, k) => k)
       const allMonths = datesArr.map((x) => ({
         start: new Date(moment().subtract(x, 'months').startOf('month').toISOString()),
         end: new Date(moment().subtract(x, 'months').endOf('month').toISOString())
       }))
-
       const salesByMonth = allMonths.map(d => {
-        const date = moment(d.start).format('MMMM Y')
-        const total = docs
-          .filter(x => x.createdAt >= d.start && x.createdAt <= d.end)
-          .reduce((x, y) => x + y.total, 0)
+        const date = moment(d.start).format('MM/Y')
+        const salesInMonth = salesDocs.filter(x => x.createdAt >= d.start && x.createdAt <= d.end)
+        const total = salesInMonth.reduce((x, y) => x + y.total, 0)
+        const sales = salesInMonth.length
 
-        return { date, total }
+        return { date, total, sales }
       }).reverse()
 
       return defaultResponse({ salesCount, salesTotal, salesByMonth })

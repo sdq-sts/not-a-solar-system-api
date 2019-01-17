@@ -106,8 +106,8 @@ class PurchasesController {
     const queryParams = { _id: req.params.id }
 
     try {
-      const removedProduct = await this.Purchases.remove(queryParams)
-      return defaultResponse(removedProduct, HttpStatus.NO_CONTENT)
+      const removedPurchase = await this.Purchases.remove(queryParams)
+      return defaultResponse(removedPurchase, HttpStatus.NO_CONTENT)
     } catch (error) {
       errorResponse(error.message, HttpStatus.UNPROCESSABLE_ENTITY)
     }
