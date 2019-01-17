@@ -6,5 +6,7 @@ export const mutations = {
     Object.keys(IS).forEach(x => { state[x] = IS[x] })
   },
   PURCHASES: (state, purchases) => { state.purchases = purchases },
-  PURCHASES_COUNT: (state, count) => { state.purchasesCount = count }
+  PURCHASES_COUNT: (state, count) => { state.purchasesCount = count },
+  PURCHASES_TOTAL: (state, total) => { state.purchasesTotal = total },
+  PURCHASES_BY_MONTH: (state, purchases) => { state.purchasesByMonth = purchases }
 }

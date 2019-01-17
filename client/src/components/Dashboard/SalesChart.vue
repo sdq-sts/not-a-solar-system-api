@@ -10,6 +10,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   props: {
     dark: {
@@ -17,9 +19,16 @@ export default {
       default: false
     }
   },
+
   data: () => ({
     options: {
-      xaxis: { categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998] },
+      xaxis: { categories: [] },
+      title: {
+        text: 'VENDAS',
+        style: {
+          fontSize: '32px'
+        }
+      },
       tooltip: { theme: 'light' },
       chart: {
         foreColor: '#373d3f',
@@ -36,8 +45,8 @@ export default {
       }
     },
     series: [{
-      name: 'series-1',
-      data: [30, 40, 45, 50, 49, 60, 70, 91]
+      name: 'Vendas',
+      data: []
     }]
   }),
 
@@ -45,16 +54,38 @@ export default {
     dark: {
       handler: 'setThemeColor',
       immediate: true
+    },
+    salesByMonth: {
+      handler: 'setChartData',
+      immediate: true
     }
   },
 
   computed: {
-    strokeColors () {
-      return this.$vuetify.theme.primary
+    ...mapGetters('sales', [
+      'salesByMonth'
+    ]),
+    chartSeriesData () {
+      return this.salesByMonth.reduce((x, y) => [...x, y.total], [])
+    },
+    chartXaxis () {
+      return this.salesByMonth.reduce((x, y) => [...x, y.date], [])
     }
   },
 
   methods: {
+    setChartData () {
+      const xaxis = {
+        xaxis: {
+          categories: this.chartXaxis
+        }
+      }
+      this.series = [{
+        name: 'Vendas',
+        data: this.chartSeriesData
+      }]
+      this.options = { ...this.options, ...xaxis }
+    },
     darkThemeOptions () {
       return {
         chart: { foreColor: '#fff', toolbar: { show: false } },
@@ -78,7 +109,7 @@ export default {
         tooltip: { theme: 'light' },
         stroke: {
           width: 2,
-          colors: this.strokeColors
+          colors: this.$vuetify.theme.primary
         },
         markers: {
           size: 4,
@@ -96,6 +127,10 @@ export default {
         this.options = { ...this.options, ...this.lightThemeOptions() }
       }
     }
+  },
+
+  mounted () {
+    this.setChartData()
   }
 }
 </script>

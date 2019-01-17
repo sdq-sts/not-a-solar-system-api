@@ -1,5 +1,7 @@
 const HttpStatus = require('http-status')
+const moment = require('moment')
 const { defaultResponse, errorResponse } = require('../../helpers/responses')
+const { roundNumber, getLastMonths } = require('../../helpers/utils')
 
 class PurchasesController {
   constructor (models) {
@@ -117,8 +119,23 @@ class PurchasesController {
     const userId = req.user.id
 
     try {
-      const documentCount = await this.Purchases.countDocuments({ ownerId: userId })
-      return defaultResponse({ purchasesCount: documentCount })
+      const purchasesDocs = await this.Purchases.find({ ownerId: userId })
+      const total = roundNumber(purchasesDocs.reduce((x, y) => x + y.total, 0))
+      const purchasesCount = purchasesDocs.length
+      const purchasesByMonth = getLastMonths().map(d => {
+        const date = moment(d.start).format('MM/Y')
+        const purchasesInMonth = purchasesDocs.filter(x => x.createdAt >= d.start && x.createdAt <= d.end)
+        const total = purchasesInMonth.reduce((x, y) => x + y.total, 0)
+        const purchases = purchasesInMonth.length
+
+        return { date, total, purchases }
+      })
+
+      return defaultResponse({
+        total,
+        purchasesCount,
+        purchasesByMonth
+      })
     } catch (error) {
       return errorResponse(error)
     }
