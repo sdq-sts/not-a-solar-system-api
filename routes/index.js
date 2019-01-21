@@ -20,4 +20,6 @@ module.exports.setRoutes = (app) => {
 
   app.use('/', express.static(clientPath))
   app.use('*', express.static(clientPath))
+
+  app.logger.info('App routes successfully applied!')
 }

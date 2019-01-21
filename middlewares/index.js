@@ -1,7 +1,6 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const helmet = require('helmet')
-const morgan = require('morgan')
 const cors = require('cors')
 const path = require('path')
 const compression = require('compression')
@@ -17,8 +16,9 @@ module.exports.applyMiddlewares = (app) => {
   app.use(helmet())
   app.use(cors())
   app.use(compression())
-  app.use(morgan('dev'))
   app.use(auth.initialize())
 
   app.auth = auth
+
+  app.logger.info('Middlewares successfully applied!')
 }

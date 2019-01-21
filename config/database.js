@@ -7,17 +7,17 @@ module.exports.connectDatabase = async (app) => {
 
   try {
     await mongoose.connect(app.config.dbURI, { useCreateIndex: true, useNewUrlParser: true })
-    console.log('Conectado ao banco de dados!')
+    app.logger.info('Connected to the database!')
   } catch (error) {
-    console.log('Erro ao tentar conectar banco de dados', error)
+    app.logger.info(`Error while trying connect to database: ${error}`)
   }
 }
 
 module.exports.disconnectDatabase = async () => {
   try {
     await mongoose.disconnect()
-    console.log('Desconectado ao banco de dados!')
+    console.log('Disconnected from the database!')
   } catch (error) {
-    console.log('Erro ao tentar desconectar banco de dados', error)
+    console.log(`Error while trying disconnect from database: ${error}`)
   }
 }
