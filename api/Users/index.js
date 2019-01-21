@@ -7,59 +7,47 @@ module.exports = (app) => {
 
   router.get('/',
     app.auth.authenticate(),
-    (req, res) => {
-      userController.getAll(req)
-        .then((response) => {
-          res.status(response.statusCode)
-          res.json(response.data)
-        })
+    async (req, res) => {
+      const response = await userController.getAll(req)
+      res.status(response.statusCode)
+      res.json(response.data)
     })
 
   router.post('/',
-    (req, res) => {
-      userController.create(req)
-        .then((response) => {
-          res.status(response.statusCode)
-          res.json(response.data)
-        })
+    async (req, res) => {
+      const response = await userController.create(req)
+      res.status(response.statusCode)
+      res.json(response.data)
     })
 
   router.get('/me',
     app.auth.authenticate(),
-    (req, res) => {
-      userController.getSelf(req)
-        .then((response) => {
-          res.status(response.statusCode)
-          res.json(response.data)
-        })
+    async (req, res) => {
+      const response = await userController.getSelf(req)
+      res.status(response.statusCode)
+      res.json(response.data)
     })
 
   router.get('/:id',
     app.auth.authenticate(),
-    (req, res) => {
-      userController.getById(req)
-        .then((response) => {
-          res.status(response.statusCode)
-          res.json(response.data)
-        })
+    async (req, res) => {
+      const response = await userController.getById(req)
+      res.status(response.statusCode)
+      res.json(response.data)
     })
 
   router.put('/:id',
     app.auth.authenticate(),
-    (req, res) => {
-      userController.update(req)
-        .then((response) => {
-          res.sendStatus(response.statusCode)
-        })
+    async (req, res) => {
+      const response = await userController.update(req)
+      res.sendStatus(response.statusCode)
     })
 
   router.delete('/:id',
     app.auth.authenticate(),
-    (req, res) => {
-      userController.delete(req)
-        .then((response) => {
-          res.sendStatus(response.statusCode)
-        })
+    async (req, res) => {
+      const response = await userController.delete(req)
+      res.sendStatus(response.statusCode)
     })
 
   return router

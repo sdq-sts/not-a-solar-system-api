@@ -7,60 +7,48 @@ module.exports = (app) => {
 
   router.get('/',
     app.auth.authenticate(),
-    (req, res) => {
-      productController.getAll(req)
-        .then((response) => {
-          res.status(response.statusCode)
-          res.json(response.data)
-        })
+    async (req, res) => {
+      const response = await productController.getAll(req)
+      res.status(response.statusCode)
+      res.json(response.data)
     })
 
   router.post('/',
     app.auth.authenticate(),
-    (req, res) => {
-      productController.create(req)
-        .then((response) => {
-          res.status(response.statusCode)
-          res.json(response.data)
-        })
+    async (req, res) => {
+      const response = await productController.create(req)
+      res.status(response.statusCode)
+      res.json(response.data)
     })
 
   router.get('/meta',
     app.auth.authenticate(),
-    (req, res) => {
-      productController.getMetadata(req)
-        .then((response) => {
-          res.status(response.statusCode)
-          res.json(response.data)
-        })
+    async (req, res) => {
+      const response = await productController.getMetadata(req)
+      res.status(response.statusCode)
+      res.json(response.data)
     })
 
   router.get('/:id',
     app.auth.authenticate(),
-    (req, res) => {
-      productController.getById(req)
-        .then((response) => {
-          res.status(response.statusCode)
-          res.json(response.data)
-        })
+    async (req, res) => {
+      const response = await productController.getById(req)
+      res.status(response.statusCode)
+      res.json(response.data)
     })
 
   router.put('/:id',
     app.auth.authenticate(),
-    (req, res) => {
-      productController.update(req)
-        .then((response) => {
-          res.sendStatus(response.statusCode)
-        })
+    async (req, res) => {
+      const response = await productController.update(req)
+      res.sendStatus(response.statusCode)
     })
 
   router.delete('/:id',
     app.auth.authenticate(),
-    (req, res) => {
-      productController.delete(req)
-        .then((response) => {
-          res.sendStatus(response.statusCode)
-        })
+    async (req, res) => {
+      const response = await productController.delete(req)
+      res.sendStatus(response.statusCode)
     })
 
   return router

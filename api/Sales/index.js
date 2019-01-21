@@ -7,60 +7,48 @@ module.exports = (app) => {
 
   router.get('/',
     app.auth.authenticate(),
-    (req, res) => {
-      saleController.getAll(req)
-        .then((response) => {
-          res.status(response.statusCode)
-          res.json(response.data)
-        })
+    async (req, res) => {
+      const response = await saleController.getAll(req)
+      res.status(response.statusCode)
+      res.json(response.data)
     })
 
   router.post('/',
     app.auth.authenticate(),
-    (req, res) => {
-      saleController.create(req)
-        .then((response) => {
-          res.status(response.statusCode)
-          res.json(response.data)
-        })
+    async (req, res) => {
+      const response = await saleController.create(req)
+      res.status(response.statusCode)
+      res.json(response.data)
     })
 
   router.get('/meta',
     app.auth.authenticate(),
-    (req, res) => {
-      saleController.getMetadata(req)
-        .then((response) => {
-          res.status(response.statusCode)
-          res.json(response.data)
-        })
+    async (req, res) => {
+      const response = await saleController.getMetadata(req)
+      res.status(response.statusCode)
+      res.json(response.data)
     })
 
   router.get('/:id',
     app.auth.authenticate(),
-    (req, res) => {
-      saleController.getById(req)
-        .then((response) => {
-          res.status(response.statusCode)
-          res.json(response.data)
-        })
+    async (req, res) => {
+      const response = await saleController.getById(req)
+      res.status(response.statusCode)
+      res.json(response.data)
     })
 
   router.put('/:id',
     app.auth.authenticate(),
-    (req, res) => {
-      saleController.update(req)
-        .then((response) => {
-          res.sendStatus(response.statusCode)
-        })
+    async (req, res) => {
+      const response = await saleController.update(req)
+      res.sendStatus(response.statusCode)
     })
 
   router.delete('/:id',
     app.auth.authenticate(),
-    (req, res) => {
-      saleController.delete(req)
-        .then((response) => {
-          res.sendStatus(response.statusCode)
-        })
+    async (req, res) => {
+      const response = await saleController.delete(req)
+      res.sendStatus(response.statusCode)
     })
 
   return router
