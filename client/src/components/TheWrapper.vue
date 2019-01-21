@@ -1,7 +1,7 @@
 <template>
   <div>
-    <v-navigation-drawer clipped v-model="drawer" fixed app>
-      <TheWrapperDrawerList/>
+    <v-navigation-drawer v-model="drawer" absolute>
+      <TheWrapperDrawer/>
     </v-navigation-drawer>
 
     <v-toolbar
@@ -51,12 +51,12 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import TheWrapperDrawerList from '@/components/TheWrapperDrawerList'
+import TheWrapperDrawer from '@/components/TheWrapperDrawer'
 import LogoutCard from '@/components/LogoutCard'
 import defaultAvatar from '@/assets/default_avatar.png'
 
 export default {
-  components: { TheWrapperDrawerList, LogoutCard },
+  components: { TheWrapperDrawer, LogoutCard },
 
   data: () => ({
     dialog: false,

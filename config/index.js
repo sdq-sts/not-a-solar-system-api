@@ -1,15 +1,11 @@
 const dotenv = require('dotenv')
-const variables = require('./variables')()
-const datasource = require('./datasource')()
-const middlewares = require('./middlewares')()
-const database = require('./database')()
+const { setVariables } = require('./variables')
+const { connectDatabase } = require('./database')
+const { applyDatasource } = require('./datasource')
 
-module.exports = (app) => ({
-  init () {
-    dotenv.config()
-    variables.config(app)
-    database.connect(app)
-    datasource.config(app)
-    middlewares.config(app)
-  }
-})
+module.exports.applyConfiguration = (app) => {
+  dotenv.config()
+  setVariables(app)
+  connectDatabase(app)
+  applyDatasource(app)
+}

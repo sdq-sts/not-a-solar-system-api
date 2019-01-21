@@ -1,17 +1,15 @@
 const fs = require('fs')
 const path = require('path')
 
-module.exports = () => ({
-  config (app) {
-    const modelsDir = path.join(__dirname, '../models')
-    const { db } = app
+module.exports.applyDatasource = (app) => {
+  const modelsDir = path.join(__dirname, '../models')
+  const { db } = app
 
-    fs.readdirSync(modelsDir)
-      .map((file) => {
-        const modelPath = path.join(modelsDir, file)
-        const model = require(modelPath)
+  fs.readdirSync(modelsDir)
+    .map((file) => {
+      const modelPath = path.join(modelsDir, file)
+      const model = require(modelPath)
 
-        model(db)
-      })
-  }
-})
+      model(db)
+    })
+}

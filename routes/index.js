@@ -7,18 +7,17 @@ const services = require('../api/Services')
 const purchases = require('../api/Purchases')
 const sales = require('../api/Sales')
 
-module.exports = (app) => ({
-  init () {
-    const clientPath = path.join(__dirname, '../client/dist')
+module.exports.setRoutes = (app) => {
+  const clientPath = path.join(__dirname, '../client/dist')
+  const apiBasePath = '/api/v1'
 
-    app.use('/api/v1/users', users(app))
-    app.use('/api/v1/products', products(app))
-    app.use('/api/v1/auth', auth(app))
-    app.use('/api/v1/services', services(app))
-    app.use('/api/v1/purchases', purchases(app))
-    app.use('/api/v1/sales', sales(app))
+  app.use(`${apiBasePath}/auth`, auth(app))
+  app.use(`${apiBasePath}/users`, users(app))
+  app.use(`${apiBasePath}/services`, services(app))
+  app.use(`${apiBasePath}/sales`, sales(app))
+  app.use(`${apiBasePath}/products`, products(app))
+  app.use(`${apiBasePath}/purchases`, purchases(app))
 
-    app.use('/', express.static(clientPath))
-    app.use('*', express.static(clientPath))
-  }
-})
+  app.use('/', express.static(clientPath))
+  app.use('*', express.static(clientPath))
+}

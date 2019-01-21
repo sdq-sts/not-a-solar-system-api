@@ -3,18 +3,18 @@
     <v-layout row wrap>
       <v-flex xs8 offset-xs2>
         <v-layout row>
-          <v-flex>
+          <v-flex xs4>
             <v-card color="primary" :dark="true">
               <v-card-title>
                 <p class="display-1 ma-0" style="width: 100%">{{ salesTotal | currencyBRL }}</p>
               </v-card-title>
               <v-card-text>
-                <p class="title">Valor em vendas</p>
+                <p class="title">Total em vendas</p>
               </v-card-text>
             </v-card>
           </v-flex>
 
-          <v-flex>
+          <v-flex xs2>
             <v-card color="primary" :dark="true">
               <v-card-title>
                 <p class="display-1 ma-0" style="width: 100%">{{ salesCount }}</p>
@@ -25,7 +25,7 @@
             </v-card>
           </v-flex>
 
-         <v-flex>
+         <v-flex xs2>
             <v-card color="primary" :dark="true">
               <v-card-title>
                 <p class="display-1 ma-0" style="width: 100%">{{ purchasesCount }}</p>
@@ -36,7 +36,7 @@
             </v-card>
           </v-flex>
 
-         <v-flex>
+         <v-flex xs4>
             <v-card color="primary" :dark="true">
               <v-card-title>
                 <p class="display-1 ma-0" style="width: 100%">{{ purchasesTotal | currencyBRL }}</p>
@@ -53,7 +53,7 @@
             <SalesChart :dark="darkMode"/>
           </v-flex>
           <v-flex>
-            <SalesChart :dark="darkMode"/>
+            <PurchasesChart :dark="darkMode"/>
           </v-flex>
         </v-layout>
       </v-flex>
@@ -64,10 +64,12 @@
 <script>
 import { mapGetters } from 'vuex'
 import SalesChart from '@/components/Dashboard/SalesChart'
+import PurchasesChart from '@/components/Dashboard/PurchasesChart'
 
 export default {
   components: {
-    SalesChart
+    SalesChart,
+    PurchasesChart
   },
 
   computed: {

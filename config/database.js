@@ -1,28 +1,23 @@
 const mongoose = require('mongoose')
 
-module.exports = () => {
-  mongoose.Promise = global.Promise
+mongoose.Promise = global.Promise
 
-  return {
-    db: () => mongoose,
+module.exports.connectDatabase = async (app) => {
+  app.db = mongoose
 
-    connect: async (app) => {
-      const opts = { useCreateIndex: true, useNewUrlParser: true }
-      const { config } = app
+  try {
+    await mongoose.connect(app.config.dbURI, { useCreateIndex: true, useNewUrlParser: true })
+    console.log('Conectado ao banco de dados!')
+  } catch (error) {
+    console.log('Erro ao tentar conectar banco de dados', error)
+  }
+}
 
-      app.db = mongoose
-
-      try {
-        await mongoose.connect(config.dbURI, opts)
-        console.log('Conectado ao banco de dados!')
-      } catch (error) {
-        console.log(error)
-      }
-    },
-
-    disconnect: async () => {
-      await mongoose.disconnect()
-      console.log('Desconectado ao banco de dados!')
-    }
+module.exports.disconnectDatabase = async () => {
+  try {
+    await mongoose.disconnect()
+    console.log('Desconectado ao banco de dados!')
+  } catch (error) {
+    console.log('Erro ao tentar desconectar banco de dados', error)
   }
 }
