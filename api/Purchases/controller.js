@@ -129,7 +129,7 @@ class PurchasesController {
         const purchases = purchasesInMonth.length
 
         return { date, total, purchases }
-      })
+      }).reverse()
 
       return defaultResponse({
         total,
