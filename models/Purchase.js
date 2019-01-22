@@ -1,5 +1,5 @@
 const { Schema } = require('mongoose')
-const { purchasePreSave } = require('../helpers/mongoose')
+const { purchasePreSave } = require('../utils')
 
 module.exports = (db) => {
   const purchaseSchema = new Schema({

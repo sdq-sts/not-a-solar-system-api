@@ -1,5 +1,5 @@
 const HttpStatus = require('http-status')
-const { defaultResponse, errorResponse } = require('../../helpers/responses')
+const { defaultResponse, errorResponse } = require('../../utils')
 
 class UsersController {
   constructor (UsersModel) {

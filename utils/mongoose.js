@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt')
-const { roundNumber } = require('./utils')
+const { roundNumber } = require('./common')
 
 // User Model
 module.exports.userPreSave = async function (next) {

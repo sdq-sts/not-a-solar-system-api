@@ -1,7 +1,7 @@
 const express = require('express')
 const HttpStatus = require('http-status')
 const jwt = require(`jsonwebtoken`)
-const { isValidPassword } = require('../../helpers/mongoose')
+const { isValidPassword } = require('../../utils')
 const router = express.Router()
 
 module.exports = (app) => {
