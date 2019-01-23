@@ -2,22 +2,26 @@ const mongoose = require('mongoose')
 
 mongoose.Promise = global.Promise
 
-module.exports.connectDatabase = async (app) => {
-  app.db = mongoose
-
+const connectDatabase = async (app) => {
   try {
-    await mongoose.connect(app.config.dbURI, { useCreateIndex: true, useNewUrlParser: true })
+    await app.db.connect(app.config.dbURI, { useCreateIndex: true, useNewUrlParser: true })
     app.logger.info('Connected to the database!')
   } catch (error) {
-    app.logger.info(`Error while trying connect to database: ${error}`)
+    app.logger.error(`Error while trying connect to database: ${error}`)
   }
 }
 
-module.exports.disconnectDatabase = async () => {
+const disconnectDatabase = async (app) => {
   try {
-    await mongoose.disconnect()
-    console.log('Disconnected from the database!')
+    await app.db.disconnect()
+    app.logger.info('Disconnected from the database!')
   } catch (error) {
-    console.log(`Error while trying disconnect from database: ${error}`)
+    app.logger.error(`Error while trying disconnect from database: ${error}`)
   }
+}
+
+module.exports.configDatabase = (app) => {
+  app.db = mongoose
+  app.connectDatabase = connectDatabase
+  app.disconnectDatabase = disconnectDatabase
 }
