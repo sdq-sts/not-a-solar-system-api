@@ -1,0 +1,84 @@
+{
+  "Product": {
+    "required": [ "name", "internalCode", "minStorage", "maxStorage", "currentStorage" ],
+    "properties": {
+      "_id": { "type": "string", "uniqueItems": true, "readOnly": true },
+      "ownerId": {
+        "type": "string",
+        "description": "A user refecence type ObjectId. This field is automatically sent in the token.",
+        "example": "5c405b92a0341e3dd8da45cb",
+        "readOnly": true
+      },
+      "name": {
+        "type": "string",
+        "description": "Name of the product",
+        "maxLength": 100
+      },
+      "description": {
+        "type": "string",
+        "description": "Description of the product",
+        "maxLength": 255
+      },
+      "image": {
+        "type": "string",
+        "description": "Url to the image of the product"
+      },
+      "barCode": {
+        "type": "string",
+        "description": "Barcode of the product",
+        "maxLength": 20
+      },
+      "internalCode": {
+        "type": "string",
+        "description": "A internal code for the product",
+        "maxLength": 20
+      },
+      "changeStorage": {
+        "type": "boolean",
+        "description": "A boolean defining if the product change the storage amount"
+      },
+      "isActive": {
+        "type": "boolean",
+        "description": "A boolean defining if the product is active in the storage"
+      },
+      "costPrice": {
+        "type": "number",
+        "description": "The cost price of the product"
+      },
+      "salePrice": {
+        "type": "number",
+        "description": "The sale price of the product"
+      },
+      "weight": {
+        "type": "number",
+        "description": "The weight of the product in KG"
+      },
+      "width": {
+        "type": "number",
+        "description": "The width of the product in cm"
+      },
+      "height": {
+        "type": "number",
+        "description": "The height of the product in cm"
+      },
+      "depth": {
+        "type": "number",
+        "description": "The depth of the product in cm"
+      },
+      "minStorage": {
+        "type": "number",
+        "description": "The minimum amount of this product in storage"
+      },
+      "maxStorage": {
+        "type": "number",
+        "description": "The maximum amount of this product in storage"
+      },
+      "currentStorage": {
+        "type": "number",
+        "description": "The current amount of this product in storage"
+      },
+      "createdAt": { "type": "string", "format": "date-time", "readOnly": true },
+      "updatedAt": { "type": "string", "format": "date-time", "readOnly": true }
+    }
+  }
+}

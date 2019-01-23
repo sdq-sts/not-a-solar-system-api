@@ -1,0 +1,58 @@
+{
+  "Purchase": {
+    "required": {},
+    "properties": {
+      "ownerId": {
+        "type": "string",
+        "description": "A user refecence type ObjectId. This field is automatically sent in the token.",
+        "example": "5c405b92a0341e3dd8da45cb",
+        "readOnly": true
+      },
+      "nfe": { "type": "string" },
+      "status": {
+        "type": "string",
+        "enum": [ "pending", "confirmed", "canceled" ],
+        "default": "pending"
+      },
+      "issueDate": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "products": {
+        "type": "array",
+        "description": "A array of bought products",
+        "items": {
+          "type": "object",
+          "properties": {
+            "product": { "type": "string" },
+            "amount": { "type": "integer", "minimum": 1 },
+            "cost": { "type": "number", "minimum": 0 }
+          }
+        }
+      },
+      "tax": {
+        "type": "number",
+        "format": "float",
+        "description": "Tax amount",
+        "minimum": 0
+      },
+      "discount": {
+        "type": "number",
+        "format": "float",
+        "description": "discount amount",
+        "minimum": 0
+      },
+      "note": {
+        "type": "string",
+        "description": "Note about the purchase",
+        "maxLength": 255
+      },
+      "total": {
+        "type": "number",
+        "format": "float",
+        "minimum": 0,
+        "readOnly": "true"
+      }
+    }
+  }
+}

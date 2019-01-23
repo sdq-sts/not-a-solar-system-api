@@ -1,0 +1,14 @@
+{
+  "User": {
+    "required": [ "name", "email", "password" ],
+    "properties": {
+      "_id": { "type": "string", "uniqueItems": true, "readOnly": true },
+      "name": { "type": "string" },
+      "email": { "type": "string", "format": "email", "uniqueItems": true },
+      "password": { "type": "string", "format": "password" },
+      "darkMode": { "type": "boolean" },
+      "createdAt": { "type": "string", "format": "date-time", "readOnly": true },
+      "updatedAt": { "type": "string", "format": "date-time", "readOnly": true }
+    }
+  }
+}

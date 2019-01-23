@@ -1,0 +1,39 @@
+{
+  "Sale": {
+    "required": [],
+    "properties": {
+      "_id": { "type": "string", "uniqueItems": true, "readOnly": true },
+      "ownerId": {
+        "type": "string",
+        "description": "A user refecence type ObjectId. This field is automatically sent in the token.",
+        "example": "5c405b92a0341e3dd8da45cb",
+        "readOnly": true
+      },
+      "status": {
+        "type": "string",
+        "enum": [ "pending", "confirmed", "canceled" ],
+        "default": "confirmed"
+      },
+      "products": {
+        "type": "array",
+        "description": "A array of sold products",
+        "items": {
+          "type": "object",
+          "properties": {
+            "product": { "type": "string" },
+            "amount": { "type": "integer", "minimum": 1 },
+            "salePrice": { "type": "number", "minimum": 0 }
+          }
+        }
+      },
+      "total": {
+        "type": "number",
+        "format": "float",
+        "minimum": 0,
+        "default": 0
+      },
+      "createdAt": { "type": "string", "format": "date-time", "readOnly": true },
+      "updatedAt": { "type": "string", "format": "date-time", "readOnly": true }
+    }
+  }
+}

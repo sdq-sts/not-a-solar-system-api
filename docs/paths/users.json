@@ -1,0 +1,118 @@
+{
+  "/users": {
+    "post": {
+      "tags": [ "Users" ],
+      "summary": "Create new user in system",
+      "produces": [ "application/json" ],
+      "parameters": [
+        {
+          "name": "user",
+          "in": "body",
+          "description": "User that we want to create",
+          "schema": { "$ref": "#/definitions/User" }
+        }
+      ],
+      "responses": {
+        "201": {
+          "description": "Created",
+          "schema": { "$ref": "#/definitions/User" }
+        },
+        "422": {
+          "description": "Unprocessable Entity"
+        }
+      }
+    },
+
+    "get": {
+      "tags": [ "Users" ],
+      "summary": "Get all users in system",
+      "produces": [ "application/json" ],
+      "responses": {
+        "200": {
+          "description": "OK",
+          "schema": { "type": "array", "items": { "$ref": "#/definitions/User" } }
+        },
+        "400": {
+          "description": "Bad Request"
+        }
+      }
+    }
+  },
+
+  "users/me": {
+    "get": {
+      "tags": [ "Users" ],
+      "summary": "Get authenticated user",
+      "responses": {
+        "200": {
+          "description": "User is found",
+          "schema": { "$ref": "#/definitions/User" }
+        },
+        "400": {
+          "description": "User not found"
+        }
+      }
+    }
+  },
+
+  "/users/{userId}": {
+    "parameters": [
+      {
+        "name": "userId",
+        "in": "path",
+        "required": true,
+        "description": "ID of user that we want to find",
+        "type": "string"
+      }
+    ],
+
+    "get": {
+      "tags": [ "Users" ],
+      "summary": "Get user with given ID",
+      "responses": {
+        "200": {
+          "description": "User is found",
+          "schema": { "$ref": "#/definitions/User" }
+        },
+        "400": {
+          "description": "User not found"
+        }
+      }
+    },
+
+    "delete": {
+      "summary": "Delete user with given ID",
+      "tags": [ "Users" ],
+      "responses": {
+        "204": {
+          "description": "User is deleted - No Content"
+        },
+        "422": {
+          "description": "Unprocessable Entity"
+        }
+      }
+    },
+
+    "put": {
+      "summary": "Update user with give ID",
+      "tags": [ "Users" ],
+      "parameters": [
+        {
+          "name": "user",
+          "in": "body",
+          "description": "User with new values of properties",
+          "schema": { "$ref": "#/definitions/User" }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "User is updated",
+          "schema": { "$ref": "#/definitions/User" }
+        },
+        "422": {
+          "description": "Unprocessable Entity"
+        }
+      }
+    }
+  }
+}
