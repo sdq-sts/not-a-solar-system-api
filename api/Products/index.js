@@ -4,7 +4,7 @@ const { ProductsController } = require('./controller')
 const { cleanCache } = require('../../middlewares/')
 
 module.exports = (app) => {
-  const productController = new ProductsController(app.db.models.Product)
+  const productController = new ProductsController(app.db.models)
 
   router.get('/',
     app.auth.authenticate(),

@@ -2,8 +2,9 @@ const HttpStatus = require('http-status')
 const { defaultResponse, errorResponse } = require('../../utils')
 
 class ProductsController {
-  constructor (ProductsModel) {
-    this.Products = ProductsModel
+  constructor (models) {
+    const { Product } = models
+    this.Products = Product
   }
 
   async getAll (req) {

@@ -1,5 +1,5 @@
 const HttpStatus = require('http-status')
-const logger = require('../config/logger')
+const { logger } = require('../config/logger')
 
 const defaultResponse = (data, statusCode = HttpStatus.OK) => ({
   data,
