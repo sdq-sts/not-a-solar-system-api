@@ -11,3 +11,7 @@ module.exports.getLastMonths = (n = 13) => {
 
   return allMonths
 }
+
+module.exports.stringifyFilter = (key, value) => {
+  return value instanceof RegExp ? value.toString() : value
+}

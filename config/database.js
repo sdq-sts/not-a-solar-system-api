@@ -22,6 +22,7 @@ const disconnectDatabase = async (app) => {
 
 module.exports.configDatabase = (app) => {
   app.db = mongoose
+  app.db.set('debug', true)
   app.connectDatabase = connectDatabase
   app.disconnectDatabase = disconnectDatabase
 }

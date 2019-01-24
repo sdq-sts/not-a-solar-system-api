@@ -1,6 +1,7 @@
-const { PurchasesController } = require('./controller')
 const express = require('express')
 const router = express.Router()
+const { PurchasesController } = require('./controller')
+const { cleanCache } = require('../../middlewares/')
 
 module.exports = (app) => {
   const purchaseController = new PurchasesController(app.db.models)
@@ -15,6 +16,7 @@ module.exports = (app) => {
 
   router.post('/',
     app.auth.authenticate(),
+    cleanCache,
     async (req, res) => {
       const response = await purchaseController.create(req)
       res.status(response.statusCode)
@@ -39,6 +41,7 @@ module.exports = (app) => {
 
   router.put('/:id',
     app.auth.authenticate(),
+    cleanCache,
     async (req, res) => {
       const response = await purchaseController.update(req)
       res.sendStatus(response.statusCode)
@@ -46,6 +49,7 @@ module.exports = (app) => {
 
   router.delete('/:id',
     app.auth.authenticate(),
+    cleanCache,
     async (req, res) => {
       const response = await purchaseController.delete(req)
       res.sendStatus(response.statusCode)

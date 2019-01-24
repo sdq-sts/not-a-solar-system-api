@@ -8,7 +8,7 @@ class ProductsController {
 
   async getAll (req) {
     const search = new RegExp(req.query.search, 'gi') || ''
-    const limit = parseInt(req.query.limit) || 30
+    const limit = parseInt(req.query.limit) || 20
     const page = parseInt(req.query.page) || 1
     const queryParams = { ownerId: req.user.id, name: search }
 
@@ -18,6 +18,7 @@ class ProductsController {
         .sort('-createdAt')
         .skip((page - 1) * limit)
         .limit(limit)
+        .cache({ key: req.user.id })
 
       return defaultResponse(products)
     } catch (error) {
@@ -25,25 +26,30 @@ class ProductsController {
     }
   }
 
-  async create (req) {
-    const queryParams = { ...req.body, ownerId: req.user.id }
-
-    try {
-      const newProduct = await this.Products.create(queryParams)
-      return defaultResponse(newProduct, HttpStatus.CREATED)
-    } catch (error) {
-      return errorResponse(error.message, HttpStatus.UNPROCESSABLE_ENTITY)
-    }
-  }
-
   async getById (req) {
     const queryParams = { _id: req.params.id }
 
     try {
-      const product = await this.Products.findOne(queryParams)
+      const product = await this.Products
+        .findOne(queryParams)
+        .cache({ key: req.user.id })
+
       return defaultResponse(product)
     } catch (error) {
       return errorResponse(error.message)
+    }
+  }
+
+  async create (req) {
+    const queryParams = { ...req.body, ownerId: req.user.id }
+
+    try {
+      const newProduct = await this.Products
+        .create(queryParams)
+
+      return defaultResponse(newProduct, HttpStatus.CREATED)
+    } catch (error) {
+      return errorResponse(error.message, HttpStatus.UNPROCESSABLE_ENTITY)
     }
   }
 
@@ -52,7 +58,9 @@ class ProductsController {
     const modifiedFields = { ...req.body }
 
     try {
-      const updatedProduct = await this.Products.update(queryParams, { $set: modifiedFields })
+      const updatedProduct = await this.Products
+        .updateOne(queryParams, { $set: modifiedFields })
+
       return defaultResponse(updatedProduct)
     } catch (error) {
       return errorResponse(error.message, HttpStatus.UNPROCESSABLE_ENTITY)
@@ -63,7 +71,9 @@ class ProductsController {
     const queryParams = { _id: req.params.id }
 
     try {
-      const removedProduct = await this.Products.remove(queryParams)
+      const removedProduct = await this.Products
+        .remove(queryParams)
+
       return defaultResponse(removedProduct, HttpStatus.NO_CONTENT)
     } catch (error) {
       errorResponse(error.message, HttpStatus.UNPROCESSABLE_ENTITY)
@@ -74,7 +84,9 @@ class ProductsController {
     const userId = req.user.id
 
     try {
-      const documentCount = await this.Products.countDocuments({ ownerId: userId })
+      const documentCount = await this.Products
+        .countDocuments({ ownerId: userId })
+
       return defaultResponse({ productsCount: documentCount })
     } catch (error) {
       return errorResponse(error)

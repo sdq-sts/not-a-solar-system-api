@@ -11,7 +11,7 @@ class SalesController {
   }
 
   async getAll (req) {
-    const limit = parseInt(req.query.limit) || 30
+    const limit = parseInt(req.query.limit) || 20
     const page = parseInt(req.query.page) || 1
     const queryParams = { ownerId: req.user.id }
 
@@ -21,10 +21,25 @@ class SalesController {
         .sort('-createdAt')
         .skip((page - 1) * limit)
         .limit(limit)
+        .cache({ key: req.user.id })
 
       return defaultResponse(sales)
     } catch (error) {
       return errorResponse(error)
+    }
+  }
+
+  async getById (req) {
+    const queryParams = { _id: req.params.id }
+
+    try {
+      const sale = await this.Sales
+        .findOne(queryParams)
+        .cache({ key: req.user.id })
+
+      return defaultResponse(sale)
+    } catch (error) {
+      return errorResponse(error.message)
     }
   }
 
@@ -33,13 +48,14 @@ class SalesController {
     const products = queryParams.products
 
     try {
-      const newSale = await this.Sales.create(queryParams)
+      const newSale = await this.Sales
+        .create(queryParams)
 
       const promisesList = products.map((product) => {
         const params = { _id: product.product }
         const amount = -product.amount
 
-        return this.Products.updateOne(params, { $inc: { currentStorage: amount } }).exec()
+        return this.Products.updateOne(params, { $inc: { currentStorage: amount } })
       })
 
       await Promise.all(promisesList)
@@ -50,23 +66,14 @@ class SalesController {
     }
   }
 
-  async getById (req) {
-    const queryParams = { _id: req.params.id }
-
-    try {
-      const sale = await this.Sales.findOne(queryParams)
-      return defaultResponse(sale)
-    } catch (error) {
-      return errorResponse(error.message)
-    }
-  }
-
   async update (req) {
     const queryParams = { _id: req.params.id }
     const modifiedFields = { ...req.body }
 
     try {
-      const updatedProduct = await this.Sales.update(queryParams, { $set: modifiedFields })
+      const updatedProduct = await this.Sales
+        .updateOne(queryParams, { $set: modifiedFields })
+
       return defaultResponse(updatedProduct)
     } catch (error) {
       return errorResponse(error.message, HttpStatus.UNPROCESSABLE_ENTITY)
@@ -77,7 +84,9 @@ class SalesController {
     const queryParams = { _id: req.params.id }
 
     try {
-      const removedProduct = await this.Sales.remove(queryParams)
+      const removedProduct = await this.Sales
+        .remove(queryParams)
+
       return defaultResponse(removedProduct, HttpStatus.NO_CONTENT)
     } catch (error) {
       errorResponse(error.message, HttpStatus.UNPROCESSABLE_ENTITY)

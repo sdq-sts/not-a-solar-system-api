@@ -5,8 +5,9 @@ const cors = require('cors')
 const path = require('path')
 const compression = require('compression')
 const authStrategy = require('../auth')
+const { cleanCache } = require('./cleanCache')
 
-module.exports.applyMiddlewares = (app) => {
+const applyMiddlewares = (app) => {
   const auth = authStrategy(app)
   const clientPath = path.join(__dirname, '../client/dist')
 
@@ -21,4 +22,9 @@ module.exports.applyMiddlewares = (app) => {
   app.auth = auth
 
   app.logger.info('Middlewares successfully applied!')
+}
+
+module.exports = {
+  applyMiddlewares,
+  cleanCache
 }

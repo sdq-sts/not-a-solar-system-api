@@ -10,21 +10,13 @@ class UsersController {
     const params = {}
 
     try {
-      const users = await this.Users.find(params, '-password')
+      const users = await this.Users
+        .find(params, '-password')
+        .cache({ key: req.user.id })
+
       return defaultResponse(users)
     } catch (error) {
       return errorResponse(error)
-    }
-  }
-
-  async create (req) {
-    const params = { ...req.body }
-
-    try {
-      const newUser = await this.Users.create(params)
-      return defaultResponse(newUser, HttpStatus.CREATED)
-    } catch (error) {
-      return errorResponse(error.message, HttpStatus.UNPROCESSABLE_ENTITY)
     }
   }
 
@@ -32,10 +24,26 @@ class UsersController {
     const params = { _id: req.params.id }
 
     try {
-      const user = await this.Users.findOne(params, '-password')
+      const user = await this.Users
+        .findOne(params, '-password')
+        .cache({ key: req.user.id })
+
       return defaultResponse(user)
     } catch (error) {
       return errorResponse(error.message)
+    }
+  }
+
+  async create (req) {
+    const params = { ...req.body }
+
+    try {
+      const newUser = await this.Users
+        .create(params)
+
+      return defaultResponse(newUser, HttpStatus.CREATED)
+    } catch (error) {
+      return errorResponse(error.message, HttpStatus.UNPROCESSABLE_ENTITY)
     }
   }
 
@@ -43,7 +51,9 @@ class UsersController {
     const params = { _id: req.user.id }
 
     try {
-      const user = await this.Users.findOne(params, '-password')
+      const user = await this.Users
+        .findOne(params, '-password')
+
       return defaultResponse(user)
     } catch (error) {
       return errorResponse(error.message)
@@ -55,7 +65,9 @@ class UsersController {
     const modifiedFields = { ...req.body }
 
     try {
-      const updatedUser = await this.Users.update(params, { $set: modifiedFields })
+      const updatedUser = await this.Users
+        .updateOne(params, { $set: modifiedFields })
+
       return defaultResponse(updatedUser)
     } catch (error) {
       return errorResponse(error.message, HttpStatus.UNPROCESSABLE_ENTITY)
@@ -66,7 +78,9 @@ class UsersController {
     const params = { _id: req.params.id }
 
     try {
-      const removedUser = await this.Users.remove(params)
+      const removedUser = await this.Users
+        .remove(params)
+
       return defaultResponse(removedUser, HttpStatus.NO_CONTENT)
     } catch (error) {
       errorResponse(error.message, HttpStatus.UNPROCESSABLE_ENTITY)

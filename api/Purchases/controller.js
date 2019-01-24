@@ -12,7 +12,7 @@ class PurchasesController {
 
   async getAll (req) {
     const queryParams = { ownerId: req.user.id }
-    const limit = parseInt(req.query.limit) || 30
+    const limit = parseInt(req.query.limit) || 20
     const page = parseInt(req.query.page) || 1
 
     try {
@@ -22,10 +22,25 @@ class PurchasesController {
         .populate('products.product', 'name')
         .skip((page - 1) * limit)
         .limit(limit)
+        .cache({ key: req.user.id })
 
       return defaultResponse(purchases)
     } catch (error) {
       return errorResponse(error)
+    }
+  }
+
+  async getById (req) {
+    const queryParams = { _id: req.params.id }
+
+    try {
+      const sale = await this.Purchases
+        .findOne(queryParams)
+        .cache({ key: req.user.id })
+
+      return defaultResponse(sale)
+    } catch (error) {
+      return errorResponse(error.message)
     }
   }
 
@@ -41,7 +56,7 @@ class PurchasesController {
           const params = { _id: product.product }
           const amount = product.amount
 
-          return this.Products.updateOne(params, { $inc: { currentStorage: amount } }).exec()
+          return this.Products.updateOne(params, { $inc: { currentStorage: amount } })
         })
 
         await Promise.all(promisesList)
@@ -71,7 +86,7 @@ class PurchasesController {
           const params = { _id: product.product }
           const amount = product.amount
 
-          return this.Products.updateOne(params, { $inc: { currentStorage: amount } }).exec()
+          return this.Products.updateOne(params, { $inc: { currentStorage: amount } })
         })
 
         await Promise.all(promisesList)
@@ -80,7 +95,7 @@ class PurchasesController {
           const params = { _id: product.product }
           const amount = product.amount * -1
 
-          return this.Products.updateOne(params, { $inc: { currentStorage: amount } }).exec()
+          return this.Products.updateOne(params, { $inc: { currentStorage: amount } })
         })
 
         await Promise.all(promiseList)
@@ -89,17 +104,6 @@ class PurchasesController {
       return defaultResponse(purchase)
     } catch (error) {
       return errorResponse(error.message, HttpStatus.UNPROCESSABLE_ENTITY)
-    }
-  }
-
-  async getById (req) {
-    const queryParams = { _id: req.params.id }
-
-    try {
-      const sale = await this.Purchases.findOne(queryParams)
-      return defaultResponse(sale)
-    } catch (error) {
-      return errorResponse(error.message)
     }
   }
 
