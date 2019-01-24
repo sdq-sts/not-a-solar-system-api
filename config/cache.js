@@ -1,18 +1,22 @@
 const redis = require('redis')
 const mongoose = require('mongoose')
-const redisClient = redis.createClient()
-const { promisifyAll } = require('bluebird')
 const { stringifyFilter } = require('../utils')
+const redisClient = redis.createClient(process.env.REDIS_URL)
+const { promisifyAll } = require('bluebird')
 
 promisifyAll(redis.RedisClient.prototype)
 
 module.exports.configCache = async (app) => {
   const exec = mongoose.Query.prototype.exec
 
+  if (app.config.redisPass) {
+    redisClient.auth(app.config.redisPass)
+  }
+
   mongoose.Query.prototype.cache = function (options = {}) {
     this.useCache = true
     this.hashKey = JSON.stringify(options.key || '')
-    this.cacheExpTime = options.exp || 60 * 15
+    this.cacheExpTime = options.exp || parseInt(app.config.redisExp)
 
     return this
   }
@@ -37,7 +41,7 @@ module.exports.configCache = async (app) => {
     }
 
     const result = await exec.apply(this, arguments)
-    redisClient.hset(this.hashKey, key, JSON.stringify(result), 'EX', 10)
+    redisClient.hset(this.hashKey, key, JSON.stringify(result), 'EX', this.cacheExpTime)
 
     return result
   }
@@ -47,7 +51,7 @@ module.exports.configCache = async (app) => {
   })
 
   redisClient.on('connect', () => {
-    app.logger.info('Redis is ready!')
+    app.logger.info('Connected to cache database!')
   })
 
   app.redisClient = redisClient
