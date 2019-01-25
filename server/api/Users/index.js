@@ -1,32 +1,30 @@
-const express = require('express')
-const router = express.Router()
-const { SalesController } = require('./controller')
+const router = require('express').Router()
+const { UsersController } = require('./controller')
 const { cleanCache } = require('../../middlewares/')
 
 module.exports = (app) => {
-  const saleController = new SalesController(app.db.models)
+  const userController = new UsersController(app.db.models.User)
 
   router.get('/',
     app.auth.authenticate(),
     async (req, res) => {
-      const response = await saleController.getAll(req)
+      const response = await userController.getAll(req)
       res.status(response.statusCode)
       res.json(response.data)
     })
 
   router.post('/',
-    app.auth.authenticate(),
     cleanCache,
     async (req, res) => {
-      const response = await saleController.create(req)
+      const response = await userController.create(req)
       res.status(response.statusCode)
       res.json(response.data)
     })
 
-  router.get('/meta',
+  router.get('/me',
     app.auth.authenticate(),
     async (req, res) => {
-      const response = await saleController.getMetadata(req)
+      const response = await userController.getSelf(req)
       res.status(response.statusCode)
       res.json(response.data)
     })
@@ -34,7 +32,7 @@ module.exports = (app) => {
   router.get('/:id',
     app.auth.authenticate(),
     async (req, res) => {
-      const response = await saleController.getById(req)
+      const response = await userController.getById(req)
       res.status(response.statusCode)
       res.json(response.data)
     })
@@ -43,7 +41,7 @@ module.exports = (app) => {
     app.auth.authenticate(),
     cleanCache,
     async (req, res) => {
-      const response = await saleController.update(req)
+      const response = await userController.update(req)
       res.sendStatus(response.statusCode)
     })
 
@@ -51,7 +49,7 @@ module.exports = (app) => {
     app.auth.authenticate(),
     cleanCache,
     async (req, res) => {
-      const response = await saleController.delete(req)
+      const response = await userController.delete(req)
       res.sendStatus(response.statusCode)
     })
 

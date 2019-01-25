@@ -1,15 +1,14 @@
-const express = require('express')
-const router = express.Router()
-const { ProductsController } = require('./controller')
+const router = require('express').Router()
+const { SalesController } = require('./controller')
 const { cleanCache } = require('../../middlewares/')
 
 module.exports = (app) => {
-  const productController = new ProductsController(app.db.models)
+  const saleController = new SalesController(app.db.models)
 
   router.get('/',
     app.auth.authenticate(),
     async (req, res) => {
-      const response = await productController.getAll(req)
+      const response = await saleController.getAll(req)
       res.status(response.statusCode)
       res.json(response.data)
     })
@@ -18,7 +17,7 @@ module.exports = (app) => {
     app.auth.authenticate(),
     cleanCache,
     async (req, res) => {
-      const response = await productController.create(req)
+      const response = await saleController.create(req)
       res.status(response.statusCode)
       res.json(response.data)
     })
@@ -26,7 +25,7 @@ module.exports = (app) => {
   router.get('/meta',
     app.auth.authenticate(),
     async (req, res) => {
-      const response = await productController.getMetadata(req)
+      const response = await saleController.getMetadata(req)
       res.status(response.statusCode)
       res.json(response.data)
     })
@@ -34,7 +33,7 @@ module.exports = (app) => {
   router.get('/:id',
     app.auth.authenticate(),
     async (req, res) => {
-      const response = await productController.getById(req)
+      const response = await saleController.getById(req)
       res.status(response.statusCode)
       res.json(response.data)
     })
@@ -43,7 +42,7 @@ module.exports = (app) => {
     app.auth.authenticate(),
     cleanCache,
     async (req, res) => {
-      const response = await productController.update(req)
+      const response = await saleController.update(req)
       res.sendStatus(response.statusCode)
     })
 
@@ -51,7 +50,7 @@ module.exports = (app) => {
     app.auth.authenticate(),
     cleanCache,
     async (req, res) => {
-      const response = await productController.delete(req)
+      const response = await saleController.delete(req)
       res.sendStatus(response.statusCode)
     })
 

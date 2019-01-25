@@ -1,6 +1,5 @@
-const express = require('express')
+const router = require('express').Router()
 const { AuthController } = require('./controller')
-const router = express.Router()
 
 module.exports = (app) => {
   const authController = new AuthController(app.db.models, app.config.jwtSecret)
