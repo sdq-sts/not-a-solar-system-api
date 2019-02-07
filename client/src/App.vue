@@ -16,11 +16,14 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { darkThemeColors, lightThemeColors } from '@/utils/themeColors'
 
 export default {
   name: 'App',
   components: {},
-  data: () => ({}),
+
+data: () => ({}),
+
   computed: {
     ...mapGetters([
       'snackbarText',
@@ -33,6 +36,23 @@ export default {
       },
       set (value) {
         this.$store.commit('set_snackbar', value)
+      }
+    }
+  },
+
+  watch: {
+    darkMode: {
+      handler: 'watchDarkMode',
+      immediate: true
+    }
+  },
+
+  methods: {
+    watchDarkMode (isDarkmode) {
+      if (isDarkmode) {
+        Object.assign(this.$vuetify.theme, darkThemeColors)
+      } else {
+        Object.assign(this.$vuetify.theme, lightThemeColors)
       }
     }
   }
