@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import TheWrapper from '@/components/TheWrapper'
+import TheWrapper from '@/components/Shared/TheWrapper'
 
 export default {
   components: { TheWrapper },

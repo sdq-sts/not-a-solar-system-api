@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import RegisterForm from '@/components/RegisterForm'
+import RegisterForm from '@/components/Auth/RegisterForm'
 
 export default {
   data: () => ({

@@ -77,7 +77,7 @@ import { mapGetters, mapActions } from 'vuex'
 import ProductsList from '@/components/Products/ProductsList'
 import ProductDelete from '@/components/Products/ProductDelete'
 import ProductForm from '@/components/Products/ProductForm'
-import UploadFile from '@/components/UploadFile'
+import UploadFile from '@/components/Shared/UploadFile'
 import defaultProductImg from '@/assets/img-not-available.png'
 
 export default {
