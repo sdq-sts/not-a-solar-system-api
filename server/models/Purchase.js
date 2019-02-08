@@ -1,11 +1,15 @@
 const { Schema } = require('mongoose')
-const { purchasePreSave } = require('../utils')
+const { purchasePreSave } = require('@/utils')
 
 module.exports = (db) => {
   const purchaseSchema = new Schema({
     ownerId: {
       type: Schema.Types.ObjectId,
       ref: 'User'
+    },
+    provider: {
+      type: String,
+      default: ''
     },
     nfe: {
       type: String,

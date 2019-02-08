@@ -1,6 +1,6 @@
 const HttpStatus = require('http-status')
 const moment = require('moment')
-const { defaultResponse, errorResponse, roundNumber, getLastMonths } = require('../../utils')
+const { defaultResponse, errorResponse, roundNumber, getLastMonths } = require('@/utils')
 
 class SalesController {
   constructor (models) {

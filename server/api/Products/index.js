@@ -1,6 +1,6 @@
 const router = require('express').Router()
 const { ProductsController } = require('./controller')
-const { cleanCache } = require('../../middlewares/')
+const { cleanCache } = require('@/middlewares/')
 
 module.exports = (app) => {
   const productController = new ProductsController(app.db.models)

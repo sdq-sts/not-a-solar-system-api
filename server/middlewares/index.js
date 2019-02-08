@@ -4,7 +4,7 @@ const helmet = require('helmet')
 const cors = require('cors')
 const path = require('path')
 const compression = require('compression')
-const authStrategy = require('../auth')
+const authStrategy = require('@/auth')
 const { cleanCache } = require('./cleanCache')
 
 const applyMiddlewares = (app) => {

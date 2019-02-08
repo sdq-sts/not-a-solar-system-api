@@ -1,7 +1,6 @@
 const jwt = require(`jsonwebtoken`)
 const HttpStatus = require('http-status')
-const { isValidPassword } = require('../../utils')
-const { defaultResponse, errorResponse } = require('../../utils')
+const { defaultResponse, errorResponse, isValidPassword } = require('@/utils')
 
 class AuthController {
   constructor (models, jwtSecret) {

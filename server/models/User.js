@@ -1,5 +1,5 @@
 const { Schema } = require('mongoose')
-const { userPreUpdate, userPreSave } = require('../utils')
+const { userPreUpdate, userPreSave } = require('@/utils')
 
 module.exports = (db) => {
   const userSchema = new Schema({

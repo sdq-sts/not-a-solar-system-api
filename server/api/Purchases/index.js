@@ -1,6 +1,6 @@
 const router = require('express').Router()
 const { PurchasesController } = require('./controller')
-const { cleanCache } = require('../../middlewares/')
+const { cleanCache } = require('@/middlewares/')
 
 module.exports = (app) => {
   const purchaseController = new PurchasesController(app.db.models)

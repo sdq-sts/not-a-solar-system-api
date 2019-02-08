@@ -1,10 +1,10 @@
-const auth = require('../api/Auth')
-const users = require('../api/Users')
-const products = require('../api/Products')
-const services = require('../api/Services')
-const purchases = require('../api/Purchases')
-const sales = require('../api/Sales')
-const { swaggerDocs } = require('../docs')
+const auth = require('@/api/Auth')
+const users = require('@/api/Users')
+const products = require('@/api/Products')
+const services = require('@/api/Services')
+const purchases = require('@/api/Purchases')
+const sales = require('@/api/Sales')
+const { swaggerDocs } = require('@/docs')
 
 module.exports.setRoutes = (app) => {
   const apiBasePath = '/api/v1'

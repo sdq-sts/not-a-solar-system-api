@@ -14,9 +14,11 @@ module.exports.configCache = async (app) => {
   }
 
   mongoose.Query.prototype.cache = function (options = {}) {
-    this.useCache = true
-    this.hashKey = JSON.stringify(options.key || '')
-    this.cacheExpTime = options.exp || parseInt(app.config.redisExp)
+    if (process.env.REDIS_URL) {
+      this.useCache = true
+      this.hashKey = JSON.stringify(options.key || '')
+      this.cacheExpTime = options.exp || parseInt(app.config.redisExp)
+    }
 
     return this
   }

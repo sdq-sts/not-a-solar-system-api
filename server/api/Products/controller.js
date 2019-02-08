@@ -1,5 +1,5 @@
 const HttpStatus = require('http-status')
-const { defaultResponse, errorResponse } = require('../../utils')
+const { defaultResponse, errorResponse } = require('@/utils')
 
 class ProductsController {
   constructor (models) {
