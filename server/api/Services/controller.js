@@ -12,7 +12,7 @@ class ServicesController {
   }
 
   async getUploadUrl (req) {
-    const fileExt = req.query.fileType.split('/')[1]
+    const fileExt = req.query.fileType ? req.query.fileType.split('/')[1] : false
     const folder = req.query.folder
     const key = `${folder}/${req.user.id}-${uuid()}.${fileExt}`
     const params = {
@@ -22,17 +22,16 @@ class ServicesController {
       Expires: 60
     }
 
+    if (!fileExt || folder) {
+      return errorResponse('File extension or folder not specified')
+    }
+
     try {
       const url = await this.S3.getSignedUrl('putObject', params)
       return defaultResponse({ key, url })
     } catch (error) {
       return errorResponse(error)
     }
-    // this.S3.getSignedUrl('putObject', params, (err, url) => {
-    //   if (err) return errorResponse(err)
-
-    //   return defaultResponse({ key, url })
-    // })
   }
 }
 
