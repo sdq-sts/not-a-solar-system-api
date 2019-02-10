@@ -1,15 +1,21 @@
-const fs = require('fs')
-const path = require('path')
+const { lstatSync, readdirSync, existsSync } = require('fs')
+const { join } = require('path')
 
+const isDirectory = source => lstatSync(source).isDirectory()
+const getDirectories = source => readdirSync(source)
+  .map(name => join(source, name))
+  .filter(isDirectory)
+
+// load all /api/**/model.js to db models
 module.exports.applyDatasource = (app) => {
-  const modelsDir = path.join(__dirname, '../models')
   const { db } = app
+  const dirs = getDirectories(join(__dirname, '../api'))
 
-  fs.readdirSync(modelsDir)
-    .map((file) => {
-      const modelPath = path.join(modelsDir, file)
-      const model = require(modelPath)
+  dirs.map(source => {
+    const modelPath = join(source, 'model.js')
 
-      model(db)
-    })
+    if (existsSync(modelPath)) {
+      require(modelPath)(db)
+    }
+  })
 }

@@ -1,9 +1,9 @@
-const auth = require('@/api/Auth')
-const users = require('@/api/Users')
-const products = require('@/api/Products')
-const services = require('@/api/Services')
-const purchases = require('@/api/Purchases')
-const sales = require('@/api/Sales')
+const auth = require('@/api/Auth/routes')
+const users = require('@/api/Users/routes')
+const products = require('@/api/Products/routes')
+const services = require('@/api/Services/routes')
+const purchases = require('@/api/Purchases/routes')
+const sales = require('@/api/Sales/routes')
 const { swaggerDocs } = require('@/docs')
 
 module.exports.setRoutes = (app) => {
