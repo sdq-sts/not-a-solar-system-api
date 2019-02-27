@@ -1,18 +1,14 @@
-const express = require('express')
 const bodyParser = require('body-parser')
 const helmet = require('helmet')
 const cors = require('cors')
-const path = require('path')
 const compression = require('compression')
 const authStrategy = require('@/auth')
 const { cleanCache } = require('./cleanCache')
 
-const applyMiddlewares = (app) => {
+const setMiddlewares = (app) => {
   const auth = authStrategy(app)
-  const clientPath = path.join(__dirname, '../client/dist')
 
   app.set('port', app.config.port)
-  app.use(express.static(clientPath))
   app.use(bodyParser.json())
   app.use(helmet())
   app.use(cors())
@@ -25,6 +21,6 @@ const applyMiddlewares = (app) => {
 }
 
 module.exports = {
-  applyMiddlewares,
+  setMiddlewares,
   cleanCache
 }

@@ -6,7 +6,7 @@ const { configCache } = require('./cache')
 const { configDatabase } = require('./database')
 const { applyDatasource } = require('./datasource')
 
-module.exports.applyConfiguration = (app) => {
+module.exports.setConfiguration = (app) => {
   app.logger = logger
 
   setVariables(app)

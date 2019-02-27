@@ -1,10 +1,10 @@
 const app = require('express')()
-const { applyConfiguration } = require('./config')
-const { applyMiddlewares } = require('./middlewares')
+const { setConfiguration } = require('./config')
+const { setMiddlewares } = require('./middlewares')
 const { setRoutes } = require('./routes')
 
-applyConfiguration(app)
-applyMiddlewares(app)
+setConfiguration(app)
+setMiddlewares(app)
 setRoutes(app)
 
 module.exports = app
