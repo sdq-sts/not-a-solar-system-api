@@ -75,28 +75,30 @@ class PurchasesController {
     try {
       const purchase = await this.Purchases.findOneAndUpdate(queryParams, { $set: modifiedFields })
       const isSameStatus = (purchase.status === modifiedFields.status)
-      const addProducts = (!isSameStatus && modifiedFields.status === 'confirmed') &&
+      const shouldAddProducts = (!isSameStatus && modifiedFields.status === 'confirmed') &&
         (purchase.changeStorage && purchase.isActive)
-      const removeProducts = (!isSameStatus && purchase.status === 'confirmed') &&
+      const shouldRemoveProducts = (!isSameStatus && purchase.status === 'confirmed') &&
         (modifiedFields.status === 'pending' || modifiedFields.status === 'canceled') &&
         (purchase.changeStorage && purchase.isActive)
+      const incProductsMapper = (product) => {
+        const params = { _id: product.product }
+        const amount = product.amount
 
-      if (addProducts) {
-        const promisesList = purchase.products.map((product) => {
-          const params = { _id: product.product }
-          const amount = product.amount
+        return this.Products.updateOne(params, { $inc: { currentStorage: amount } })
+      }
+      const decProductsMapper = (product) => {
+        const params = { _id: product.product }
+        const amount = product.amount * -1
 
-          return this.Products.updateOne(params, { $inc: { currentStorage: amount } })
-        })
+        return this.Products.updateOne(params, { $inc: { currentStorage: amount } })
+      }
+
+      if (shouldAddProducts) {
+        const promisesList = purchase.products.map(incProductsMapper)
 
         await Promise.all(promisesList)
-      } else if (removeProducts) {
-        const promiseList = purchase.products.map((product) => {
-          const params = { _id: product.product }
-          const amount = product.amount * -1
-
-          return this.Products.updateOne(params, { $inc: { currentStorage: amount } })
-        })
+      } else if (shouldRemoveProducts) {
+        const promiseList = purchase.products.map(decProductsMapper)
 
         await Promise.all(promiseList)
       }
