@@ -90,7 +90,7 @@ export default {
     snackbar: false,
     snackbarText: '',
     snackbarColor: '',
-    registerProductBtnText: 'cadastrar',
+    registerProductBtnText: 'Cadastrar Produto',
     successText: 'Produto cadastrado',
     failText: 'Não foi possível cadastrar produto',
     deleteErrorMsg: 'Não foi possível excluir o item',

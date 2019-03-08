@@ -40,12 +40,18 @@
         <v-layout row>
           <v-icon @click="showPurchase(props.item)" v-text="`visibility`" small></v-icon>
           <v-spacer></v-spacer>
-          <v-icon @click="editPurchase(props.item)" v-text="`edit`" small></v-icon>
-          <v-spacer></v-spacer>
           <v-icon
+            v-text="`edit`"
             :class="{ 'hide-icon': props.item.status === 'confirmed' }"
             :disabled="props.item.status === 'confirmed'"
+            @click="editPurchase(props.item)"
+            small
+          ></v-icon>
+          <v-spacer></v-spacer>
+          <v-icon
             v-text="`delete`"
+            :class="{ 'hide-icon': props.item.status === 'confirmed' }"
+            :disabled="props.item.status === 'confirmed'"
             @click="deleteItem(props.item)"
             small
           ></v-icon>

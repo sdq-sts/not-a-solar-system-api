@@ -3,11 +3,11 @@
     <v-flex xs5>
       <v-combobox
         v-model="product"
-        :rules="rules.search"
         :items="items"
         :label="labels.item"
         :search-input.sync="search"
         @change="update"
+        hide-selected
         clearable
         dense
       ></v-combobox>
@@ -55,6 +55,10 @@ import { mapActions } from 'vuex'
 
 export default {
   props: {
+    isEditing: {
+      type: Boolean,
+      default: false
+    },
     value: {
       type: Object
     },
@@ -77,14 +81,18 @@ export default {
       cost: 'Custo unitário',
       total: 'Custo total'
     },
-    rules: {
-      search: [
-        (v) => !!(v && v.text) || 'Campo inválido'
-      ]
-    }
+    // rules: {
+    //   search: [
+    //     (v) => !!(v && v.text) || 'Campo inválido'
+    //   ]
+    // }
   }),
 
   watch: {
+    isEditing: {
+      handler: 'watchIsEditing',
+      immediate: true
+    },
     search: {
       handler: 'watchSearch'
     }
@@ -104,6 +112,17 @@ export default {
         this.items = products.map((product) => ({ text: product.name, item: product }))
       } else {
         this.items = []
+      }
+    },
+    watchIsEditing (isEditing) {
+      const productName = (((this.value || {}).product || {}).name || '')
+      const amount = (this.value || {}).amount || 0
+      const cost = (this.value || {}).cost || 0
+
+      if (isEditing) {
+        this.product = productName
+        this.amount = amount
+        this.cost = cost
       }
     },
     update () {

@@ -1,8 +1,8 @@
 <template>
-  <v-card @keydown.prevent.alt.n="addProduct">
+  <v-card @keydown.alt.n="addProduct">
     <v-form v-model="isValid" ref="form" @submit.prevent="submitForm">
       <v-container grid-list-xl>
-        <h2 class="headline text-xs-center">{{ text.newPurchase }}</h2>
+        <h2 class="headline text-xs-center">{{ purchaseToEdit ? text.editPurchase : text.newPurchase }}</h2>
         <v-layout row wrap>
           <v-flex xs6>
             <v-text-field
@@ -48,7 +48,7 @@
 
           <v-flex xs2>
             <v-combobox
-              v-model="status"
+              v-model="form.status"
               :items="statusItems"
               :label="labels.status"
               hide-selected
@@ -56,14 +56,15 @@
           </v-flex>
         </v-layout>
 
-        <h2 class="subheading text-xs-center">PRODUTOS</h2>
+        <h2 class="subheading text-xs-center">{{ text.products.toUpperCase() }}</h2>
         <v-layout row>
           <v-flex xs12>
             <PurchaseFormProduct
-              v-model="products[i]"
-              v-for="(p, i) in products"
-              :key="i"
-              @removeItem="removeProduct(i)"
+              v-for="(p, k) in form.products"
+              v-model="form.products[k]"
+              :isEditing="!!purchaseToEdit"
+              :key="p._id"
+              @removeItem="removeProduct(k)"
             />
           </v-flex>
         </v-layout>
@@ -80,7 +81,7 @@
           </v-flex>
         </v-layout>
 
-        <h2 class="subheading text-xs-center">TOTAL DOS PRODUTOS</h2>
+        <h2 class="subheading text-xs-center">{{ text.productsTotal.toUpperCase() }}</h2>
         <v-layout row>
           <v-flex xs3>
             <v-text-field
@@ -121,7 +122,7 @@
           </v-flex>
         </v-layout>
 
-        <h2 class="subheading text-xs-center">OBSERVAÇÃO</h2>
+        <h2 class="subheading text-xs-center">{{ text.note.toUpperCase() }}</h2>
         <v-layout row>
           <v-flex xs12>
             <v-textarea
@@ -140,7 +141,7 @@
             type="submit"
             color="primary"
             :loading="loading"
-          >{{ purchaseToEdit ? 'EDITAR' : 'CADASTRAR' }}</v-btn>
+          >{{ purchaseToEdit ? text.edit : text.register }}</v-btn>
         </v-layout>
       </v-container>
     </v-form>
@@ -166,13 +167,8 @@ export default {
 
   data: () => ({
     isValid: false,
-    rules: {},
     product: null,
     dateMenu: false,
-    products: {
-      '1': { product: '', amount: 1, cost: 0 }
-    },
-    status: { text: 'Pendente', value: 'pending' },
     labels: {
       provider: 'Fornecedor',
       nfe: 'NFE',
@@ -188,20 +184,36 @@ export default {
       discount: 'Desconto (R$)'
     },
     text: {
+      products: 'Produtos',
+      productsTotal: 'Total dos produtos',
+      note: 'Observação',
       addProduct: 'Adicionar produto',
-      newPurchase: 'NOVA COMPRA'
+      newPurchase: 'Nova compra',
+      editPurchase: 'Editar compra',
+      edit: 'Editar',
+      register: 'Cadastrar'
     },
     form: {
       provider: '',
-      issueDate: new Date().toISOString().substr(0, 10),
+      issueDate: '',
       nfe: '',
       tax: 0,
       discount: 0,
+      note: '',
+      status: { text: 'Pendente', value: 'pending' },
+      products: {
+        '1': { product: '', amount: 1, cost: 0 }
+      }
+    },
+    normalizedFormData: {
+      provider: '',
+      issueDate: '',
+      nfe: '',
+      tax: 0,
+      discount: 0,
+      note: '',
       status: '',
-      products: [
-        { product: '', amount: 1, cost: 0 }
-      ],
-      note: ''
+      products: []
     },
     statusItems: [
       { text: 'Cancelado', value: 'canceled' },
@@ -214,7 +226,7 @@ export default {
   computed: {
     productsTotal () {
       const reducer = (x, y) => (y.amount * y.cost) + x
-      const productsTotal = Object.values(this.products).reduce(reducer, 0)
+      const productsTotal = Object.values(this.form.products).reduce(reducer, 0)
       return productsTotal
     },
     purchaseTotal () {
@@ -237,41 +249,72 @@ export default {
   methods: {
     submitForm () {
       if (this.$refs.form.validate()) {
-        this.form.tax = parseFloat(this.form.tax) || 0
-        this.form.discount = parseFloat(this.form.discount) || 0
-        this.form.products = Object.values(this.products)
-        this.form.issueDate = new Date(this.form.issueDate).toISOString()
-        this.$emit('submit', JSON.stringify(this.form))
+        const { _id } = (this.purchaseToEdit || {})
+        this.normalizedFormData = this.normalizeFormData(this.form)
+
+        this.purchaseToEdit
+          ? this.$emit('editPurchase', { _id, ...this.normalizedFormData })
+          : this.$emit('createPurchase', this.normalizedFormData)
+      }
+    },
+    normalizeFormData (form) {
+      return {
+        provider: form.provider,
+        issueDate: new Date(form.issueDate),
+        nfe: form.nfe,
+        status: form.status.value,
+        tax: parseFloat(form.tax) || 0,
+        discount: parseFloat(form.discount) || 0,
+        products: Object.values(form.products),
+        note: form.note
       }
     },
     removeProduct (index) {
-      const hasMoreThanOneItem = Object.keys(this.products).length > 1
+      const hasMoreThanOneItem = Object.keys(this.form.products).length > 1
 
       if (hasMoreThanOneItem) {
-        this.$delete(this.products, `${index}`)
+        this.$delete(this.form.products, `${index}`)
       }
+    },
+    setFormDefaults () {
+      this.$set(this.form, 'issueDate', new Date().toISOString().substr(0, 10))
+      this.$set(this.form, 'products', { '1': { product: '', amount: 1, cost: 0 } })
+      this.$set(this.form, 'status', { text: 'Pendente', value: 'pending' })
     },
     cancelBtn () {
       this.$emit('cancel')
       this.$refs.form.reset()
-      this.$set(this.form, 'issueDate', new Date().toISOString().substr(0, 10))
-    },
-    reset () {
-      this.$refs.form.reset()
-      this.$set(this.form, 'issueDate', new Date().toISOString().substr(0, 10))
+      this.setFormDefaults()
     },
     focus () {
       this.$refs.providerInput.focus()
     },
+    reset () {
+      this.$refs.form.reset()
+      this.setFormDefaults()
+    },
     addProduct () {
       const newProduct = { product: '', amount: 1, cost: 0 }
-      const nextIndex = Math.max(...Object.keys(this.products)) + 1
+      const nextIndex = Math.max(...Object.keys(this.form.products)) + 1
 
-      this.products = { ...this.products, [nextIndex]: newProduct }
+      this.form.products = { ...this.form.products, [nextIndex]: newProduct }
+    },
+    productsListToObj (productsList) {
+      const reducer = (obj, p, i) => ({ ...obj, [`${i + 1}`]: p })
+      return productsList.reduce(reducer, {})
     },
     watchPurchaseToEdit (purchase) {
       if (purchase) {
-        this.status = this.transformStatus(purchase.status)
+        this.$set(this.form, 'products', this.productsListToObj(purchase.products))
+        this.$set(this.form, 'issueDate', purchase.issueDate ? purchase.issueDate.substring(0, 10) : '')
+        this.$set(this.form, 'nfe', purchase.nfe)
+        this.$set(this.form, 'tax', purchase.tax)
+        this.$set(this.form, 'discount', purchase.discount)
+        this.$set(this.form, 'provider', purchase.provider)
+        this.$set(this.form, 'note', purchase.note)
+        this.$set(this.form, 'status', this.transformStatus(purchase.status))
+      } else {
+        this.setFormDefaults()
       }
     },
     watchStatus (status) {

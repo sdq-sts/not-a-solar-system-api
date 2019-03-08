@@ -31,6 +31,10 @@ export const actions = {
     }
   },
 
+  async getProduct (ctx, id) {
+    return apiService.get(`/products/${id}`)
+  },
+
   createProduct (ctx, payload) {
     return apiService.post('/products/', payload)
   },

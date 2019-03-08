@@ -2,12 +2,12 @@
   <v-container grid-list-xl>
     <v-layout row wrap>
 
-      <v-dialog width="60%" v-model="formPurchaseDialog" no-click-animation>
+      <v-dialog width="60%" persistent v-model="formPurchaseDialog" no-click-animation>
         <PurchaseForm
           :purchaseToEdit="purchaseToEdit"
           @cancel="closeFormDialog"
-          @submit="createNewPurchase"
-          @edit="modifyPurchase"
+          @createPurchase="createNewPurchase"
+          @editPurchase="modifyPurchase"
           ref="purchaseForm"
         />
       </v-dialog>
@@ -29,6 +29,7 @@
         <v-layout row wrap justify-end>
           <v-btn
             color="primary"
+            class="mr-3"
             @click="openNewPurchaseDialog"
           >{{ text.newPurchase }}</v-btn>
         </v-layout>
@@ -86,7 +87,7 @@ export default {
     page: 1,
     limit: 3,
     text: {
-      newPurchase: 'Nova compra'
+      newPurchase: 'Cadastrar Compra'
     }
   }),
 
@@ -130,13 +131,21 @@ export default {
         this.showSnackbar({ color: 'success', text: `Compra cadastrada` })
         this.$refs.purchaseForm.reset()
         this.$refs.purchaseForm.focus()
+        this.fetchPurchasesMeta()
+        this.fetchPurchases()
       } catch (err) {
         this.showSnackbar({ color: 'danger', text: `Compra não cadastrada` })
       }
     },
     async modifyPurchase (value) {
-      const res = await this.editPurchase(value)
-      console.log('EDIT PURCHASE', res)
+      try {
+        await this.editPurchase(value)
+        this.showSnackbar({ color: 'success', text: `Compra editada com sucesso` })
+        this.$refs.purchaseForm.reset()
+        this.closeFormDialog()
+      } catch (error) {
+        this.showSnackbar({ color: 'danger', text: `Erro ao tentar editar compra` })
+      }
     },
     getPurchases (page) {
       const limit = this.limit

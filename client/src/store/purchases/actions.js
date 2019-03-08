@@ -28,7 +28,7 @@ export const actions = {
   },
 
   createPurchase (ctx, payload) {
-    return apiService.post('/purchases/', JSON.parse(payload))
+    return apiService.post('/purchases/', payload)
   },
 
   editPurchase (ctx, payload) {
