@@ -14,29 +14,29 @@
           </v-flex>
 
           <v-flex xs2>
-          <v-menu
-            :close-on-content-click="false"
-            v-model="dateMenu"
-            lazy
-            transition="scale-transition"
-            offset-y
-            full-width
-            min-width="290px"
-          >
-            <v-text-field
-              slot="activator"
-              v-model="form.issueDate"
-              :label="labels.issueDate"
-              readonly
-            ></v-text-field>
-            <v-date-picker
-              v-model="form.issueDate"
-              color="primary"
-              header-color="primary"
-              locale="pt-BR"
-              @input="dateMenu = false"
-            ></v-date-picker>
-          </v-menu>
+            <v-menu
+              :close-on-content-click="false"
+              v-model="dateMenu"
+              transition="scale-transition"
+              min-width="290px"
+              full-width
+              offset-y
+              lazy
+            >
+              <v-text-field
+                slot="activator"
+                v-model="form.issueDate"
+                :label="labels.issueDate"
+                readonly
+              ></v-text-field>
+              <v-date-picker
+                v-model="form.issueDate"
+                color="primary"
+                header-color="primary"
+                locale="pt-BR"
+                @input="dateMenu = false"
+              ></v-date-picker>
+            </v-menu>
           </v-flex>
 
           <v-flex xs2>

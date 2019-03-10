@@ -1,94 +1,62 @@
 <template>
-  <v-container grid-list-xl @keydown.prevent.alt.n="addProduct">
-    <v-flex xs8 offset-xs2>
-      <v-form v-model="isValid" ref="form" @submit.prevent="submitForm">
-
-          <v-layout row wrap>
-            <v-flex>
-              <SalesFormProduct
-                v-model="products[i]"
-                v-for="(p, i) in products"
-                :key="i"
-                @removeItem="removeProduct(i)"
-              />
+  <v-container grid-list-xl @keydown.alt.n="addProduct">
+    <v-layout row>
+      <v-flex xs8>
+        <v-form v-model="isValid" ref="form" @submit.prevent="submitForm">
+          <v-layout row wrap justify-end>
+            <v-flex xs12 class="text-xs-right">
+              <v-btn
+                tabindex="-1"
+                class="ma-0"
+                color="primary"
+                @click="addProduct"
+              >{{ text.addProduct }}</v-btn>
             </v-flex>
           </v-layout>
 
           <v-layout row wrap>
-            <v-flex>
-              <v-layout row wrap justify-end>
-                <v-btn
-                  tabindex="-1"
-                  color="primary"
-                  @click="addProduct"
-                  small
-                >{{ text.addProduct }}</v-btn>
-              </v-layout>
+            <v-flex xs12>
+              <transition-group name="list">
+                <SalesFormProduct
+                  v-model="products[i]"
+                  v-for="(p, i) in products"
+                  :key="i"
+                  @removeItem="removeProduct(i)"
+                />
+              </transition-group>
             </v-flex>
           </v-layout>
+        </v-form>
+      </v-flex>
 
-          <v-layout row wrap align-content-center justify-space-between>
-            <v-flex xs2>
-              <v-text-field
-                v-model="received"
-                :label="labels.receivedValue"
-                :rules="[ gteProductsTotal ]"
-                type="number"
-                min="0"
-              ></v-text-field>
-            </v-flex>
-
-            <v-flex align-self-center>
-              <p
-                v-if="change > 0"
-                class="headline text-xs-right ma-0"
-              >TROCO {{ change | currencyBRL }}</p>
-            </v-flex>
-          </v-layout>
-
-          <v-layout row wrap justify-space-between>
-            <v-flex>
-              <p class="heading display-2 text-xs-left">TOTAL</p>
-            </v-flex>
-
-            <v-flex grow align-self-center>
-              <p class="heading display-2 text-xs-right">{{ productsTotal | currencyBRL }}</p>
-            </v-flex>
-          </v-layout>
-
-          <v-layout row wrap justify-space-between>
-            <v-btn
-              @click="clearForm"
-              large
-              flat
-            >{{ text.clear }}</v-btn>
-
-            <v-btn
-              color="primary"
-              @click="submitForm"
-              large
-              :loading="loading"
-            >{{ text.confirm }}</v-btn>
-          </v-layout>
-      </v-form>
-    </v-flex>
+      <v-flex xs4>
+        <SalePreview
+          :loading="loading"
+          :total="productsTotal"
+          @clear="clearForm"
+          @submit="submitForm"
+        />
+      </v-flex>
+    </v-layout>
   </v-container>
 </template>
 
 <script>
 import { mapActions } from 'vuex'
 import SalesFormProduct from '@/components/Sales/SalesFormProduct'
+import SalePreview from '@/components/Sales/SalePreview'
 
 export default {
   components: {
-    SalesFormProduct
+    SalesFormProduct,
+    SalePreview
   },
   data: () => ({
     loading: false,
     isValid: false,
     received: 0,
     products: {
-      '1': { product: '', amount: 1, salePrice: 0 }
+      '0': { product: '', amount: 1, salePrice: 0 }
     },
     labels: {
       receivedValue: 'Valor recebido'
@@ -104,6 +72,7 @@ export default {
     productsTotal () {
       const reducer = (x, y) => (y.amount * y.salePrice) + x
       const productsTotal = Object.values(this.products).reduce(reducer, 0)
+
       return productsTotal
     },
     change () {
@@ -135,8 +104,9 @@ export default {
     },
     clearForm () {
       this.$refs.form.reset()
-      this.products = {}
-      this.$set(this.products, `0`, { product: '', amount: 1, salePrice: 0 })
+      this.products = {
+        '0': { product: '', amount: 1, salePrice: 0 }
+      }
     },
     async submitForm () {
       const products = Object.values(this.products)
@@ -163,5 +133,14 @@ export default {
 </script>
 
 <style>
-
+.list-item {
+  display: inline-block;
+}
+.list-enter-active, .list-leave-active {
+  transition: all .4s;
+}
+.list-enter, .list-leave-to {
+  opacity: 0;
+  transform: translateX(-20px);
+}
 </style>

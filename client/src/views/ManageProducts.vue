@@ -1,52 +1,51 @@
 <template>
   <v-container grid-list-xl>
-    <v-layout row wrap>
-      <v-flex xs8 offset-xs2>
-        <v-layout row>
-          <v-flex xs2 offset-xs10>
-            <v-btn
-              @click="registerProduct"
-              class="ma-0"
-              color="primary"
-              dark
-              block
-            >{{ registerProductBtnText }}</v-btn>
-          </v-flex>
-        </v-layout>
+    <v-flex xs8 offset-xs2>
+      <v-dialog width="400" persistent v-model="dialogDelete" no-click-animation>
+        <ProductDelete
+          :product="productToDelete"
+          @cancel="closeDeleteDialog"
+          @confirm="confirmDeletion"
+        />
+      </v-dialog>
 
-        <v-dialog width="400" persistent v-model="dialogDelete" no-click-animation>
-          <ProductDelete
-            :product="productToDelete"
-            @cancel="closeDeleteDialog"
-            @confirm="confirmDeletion"
-          />
-        </v-dialog>
+      <v-dialog width="900" persistent v-model="dialog" no-click-animation lazy>
+        <v-card>
+          <v-container grid-list-lg>
+            <product-form
+              :productToEdit="productToEdit"
+              :clearForm="clearForm"
+              :isLoading="loadingForm"
+              :focusForm="dialog"
+              @cancel="closeDialog"
+              @submitEditForm="submitEditForm"
+              @submitRegisterForm="submitRegisterForm"
+            >
+              <UploadFile
+                slot="img-upload"
+                :clear="clearForm"
+                :imgUrl="productImg"
+                :defaultImgUrl="defaultProductImg"
+                @fileAdded="fileAdded"
+              />
+            </product-form>
+          </v-container>
+        </v-card>
+      </v-dialog>
+    </v-flex>
 
-        <v-dialog width="900" persistent v-model="dialog" no-click-animation lazy>
-          <v-card>
-            <v-container grid-list-lg>
-              <product-form
-                :productToEdit="productToEdit"
-                :clearForm="clearForm"
-                :isLoading="loadingForm"
-                :focusForm="dialog"
-                @cancel="closeDialog"
-                @submitEditForm="submitEditForm"
-                @submitRegisterForm="submitRegisterForm"
-              >
-                <UploadFile
-                  slot="img-upload"
-                  :clear="clearForm"
-                  :imgUrl="productImg"
-                  :defaultImgUrl="defaultProductImg"
-                  @fileAdded="fileAdded"
-                />
-              </product-form>
-            </v-container>
-          </v-card>
-        </v-dialog>
+    <v-layout row>
+      <v-flex class="text-xs-right" xs8 offset-xs2>
+        <v-btn
+          @click="registerProduct"
+          class="ma-0"
+          color="primary"
+          dark
+        >{{ registerProductBtnText }}</v-btn>
       </v-flex>
+    </v-layout>
 
+    <v-layout row>
       <v-flex xs8 offset-xs2>
         <ProductsList
           v-if="hasProducts"
@@ -56,9 +55,10 @@
         />
         <h2 v-else class="headline text-xs-center">{{ noProductMsg }}</h2>
       </v-flex>
+    </v-layout>
 
-      <v-flex xs8 offset-xs2>
-        <v-layout justify-center>
+    <v-layout row>
+      <v-flex class="text-xs-center" xs8 offset-xs2>
           <v-pagination
             v-if="Math.ceil(productsCount / limit)"
             class="mt-2"
@@ -66,7 +66,6 @@
             :length="Math.ceil(productsCount / limit)"
             circle
           ></v-pagination>
-        </v-layout>
       </v-flex>
     </v-layout>
   </v-container>

@@ -1,69 +1,64 @@
 <template>
-  <v-layout row wrap>
-    <v-flex xs5>
-      <v-combobox
-        v-model="product"
-        :rules="rules.search"
-        :items="items"
-        :label="labels.item"
-        :search-input.sync="search"
-        @change="update"
-        :loading="loading"
-        clearable
-        dense
-      ></v-combobox>
-    </v-flex>
+  <v-card class="mb-3">
+    <v-container>
+      <v-layout row wrap>
+        <v-flex xs6>
+          <v-combobox
+            v-model="product"
+            :rules="rules.search"
+            :items="items"
+            :label="labels.item"
+            :search-input.sync="search"
+            @change="update"
+            :loading="loading"
+            clearable
+            dense
+          ></v-combobox>
+        </v-flex>
 
-    <v-flex xs1>
-      <v-text-field
-        v-model="amount"
-        :label="labels.amount"
-        :rules="[ lteStorage ]"
-        type="number"
-        :max="currentStorage"
-        min="1"
-        @input="update"
-      ></v-text-field>
-    </v-flex>
+        <v-flex>
+          <v-text-field
+            v-model="amount"
+            :label="labels.amount"
+            :rules="[ validadeMinAmount, validadeMaxAmount ]"
+            type="number"
+            :max="currentStorage"
+            min="1"
+            @input="update"
+            reverse
+          ></v-text-field>
+        </v-flex>
 
-    <v-flex xs1>
-      <v-text-field
-        :label="labels.storage"
-        :value="currentStorage"
-        type="number"
-        readonly
-      ></v-text-field>
-    </v-flex>
+        <v-flex>
+          <v-layout justify-center align-end fill-height column>
+            <p class="ma-0 mt-2 caption" style="color: #AFAFAF">Em estoque</p>
+            <p class="ma-0 headline">{{ currentStorage }}</p>
+          </v-layout>
+        </v-flex>
 
-    <v-flex xs2>
-      <v-text-field
-        :value="cost | currencyBRL"
-        :label="labels.cost"
-        @input="update"
-        tabindex="-1"
-        readonly
-        reverse
-      ></v-text-field>
-    </v-flex>
+        <v-flex>
+          <v-layout justify-center align-end fill-height column>
+            <p class="ma-0 mt-2 caption" style="color: #AFAFAF">Valor unitário</p>
+            <p class="ma-0 headline">{{ cost | currencyBRL }}</p>
+          </v-layout>
+        </v-flex>
 
-    <v-flex xs2>
-      <v-text-field
-        :value="total | currencyBRL"
-        :label="labels.total"
-        class="text-xs-center"
-        tabindex="-1"
-        readonly
-        reverse
-      ></v-text-field>
-    </v-flex>
+        <v-flex>
+          <v-layout justify-center align-end fill-height column>
+            <p class="ma-0 mt-2 caption" style="color: #AFAFAF">Total</p>
+            <p class="ma-0 headline">{{ total | currencyBRL }}</p>
+          </v-layout>
+        </v-flex>
 
-    <v-flex xs1 align-self-center class="text-xs-center">
-      <v-icon
-        style="cursor: pointer;"
-        @click="removeItem"
-      >close</v-icon>
-    </v-flex>
-  </v-layout>
+        <v-flex align-self-center class="text-xs-right">
+          <v-icon
+            style="cursor: pointer;"
+            @click="removeItem"
+          >close</v-icon>
+        </v-flex>
+      </v-layout>
+    </v-container>
+  </v-card>
 </template>
 
 <script>
@@ -105,6 +100,9 @@ export default {
   watch: {
     search: {
       handler: 'watchSearch'
+    },
+    value: {
+      handler: 'watchValue'
     }
   },
 
@@ -130,6 +128,11 @@ export default {
         this.items = []
       }
     },
+    watchValue (v) {
+      if (v.salePrice <= 0) {
+        this.cost = 0
+      }
+    },
     update (value) {
       const { product, amount } = this
       const productId = ((product || {}).item || {})._id
@@ -148,9 +151,16 @@ export default {
     removeItem (e) {
       this.$emit('removeItem', e)
     },
-    lteStorage (value) {
+    validadeMinAmount (value) {
       if ((this.product || {}).item) {
-        return value <= this.currentStorage || `Máximo ${this.currentStorage}`
+        return (value >= 1) || `Mínimo 1`
+      }
+
+      return true
+    },
+    validadeMaxAmount (value) {
+      if ((this.product || {}).item) {
+        return (value <= this.currentStorage) || `Máximo ${this.currentStorage}`
       }
 
       return true

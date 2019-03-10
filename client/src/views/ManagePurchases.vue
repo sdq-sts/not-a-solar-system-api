@@ -1,7 +1,6 @@
 <template>
   <v-container grid-list-xl>
     <v-layout row wrap>
-
       <v-dialog width="60%" persistent v-model="formPurchaseDialog" no-click-animation>
         <PurchaseForm
           :purchaseToEdit="purchaseToEdit"
@@ -25,17 +24,15 @@
         />
       </v-dialog>
 
-      <v-flex xs6 offset-xs3>
-        <v-layout row wrap justify-end>
-          <v-btn
-            color="primary"
-            class="mr-3"
-            @click="openNewPurchaseDialog"
-          >{{ text.newPurchase }}</v-btn>
-        </v-layout>
+      <v-flex xs8 offset-xs2 class="text-xs-right">
+        <v-btn
+          color="primary"
+          class="ma-0"
+          @click="openNewPurchaseDialog"
+        >{{ text.newPurchase }}</v-btn>
       </v-flex>
 
-      <v-flex xs6 offset-xs3>
+      <v-flex xs8 offset-xs2>
         <PurchaseList
           :purchasesList="purchases"
           @editPurchaseStatus="editPurchaseStatus"
