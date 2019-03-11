@@ -30,7 +30,7 @@
       </v-flex>
 
       <v-flex xs4>
-        <SalePreview
+        <SaleSummary
           :loading="loading"
           :total="productsTotal"
           @clear="clearForm"
@@ -44,12 +44,12 @@
 <script>
 import { mapActions } from 'vuex'
 import SalesFormProduct from '@/components/Sales/SalesFormProduct'
-import SalePreview from '@/components/Sales/SalePreview'
+import SaleSummary from '@/components/Sales/SaleSummary'
 
 export default {
   components: {
     SalesFormProduct,
-    SalePreview
+    SaleSummary
   },
   data: () => ({
     loading: false,

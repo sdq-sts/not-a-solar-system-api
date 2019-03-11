@@ -1,36 +1,44 @@
 <template>
   <v-card ripple style="position: fixed" width="30%">
     <v-container>
-      <v-layout row wrap align-content-center justify-space-between>
+      <h2 class="heading display-1 text-xs-center mb-5">RESUMO DA COMPRA</h2>
+
+      <v-layout row wrap justify-space-between>
+        <v-flex align-self-center>
+          <p class="headline text-xs-left ma-0">VALOR RECEBIDO</p>
+        </v-flex>
+
         <v-flex xs4>
           <v-text-field
             v-model="received"
-            :label="labels.receivedValue"
             :rules="[ gteProductsTotal ]"
             type="number"
             min="0"
           ></v-text-field>
         </v-flex>
+      </v-layout>
 
-        <v-flex align-self-center>
-          <p
-            v-if="change > 0"
-            class="headline text-xs-right ma-0"
-          >TROCO {{ change | currencyBRL }}</p>
+      <v-layout row class="mb-3">
+        <v-flex>
+          <p class="headline text-xs-left ma-0">TROCO</p>
+        </v-flex>
+
+        <v-flex>
+          <p class="headline text-xs-right ma-0">{{ change | currencyBRL }}</p>
         </v-flex>
       </v-layout>
 
       <v-layout row wrap justify-space-between>
         <v-flex>
-          <p class="heading display-2 text-xs-left">TOTAL</p>
+          <p class="headline text-xs-left">TOTAL</p>
         </v-flex>
 
         <v-flex>
-          <p class="heading display-2 text-xs-right">{{ total | currencyBRL }}</p>
+          <p class="headline text-xs-right">{{ total | currencyBRL }}</p>
         </v-flex>
       </v-layout>
 
-      <v-layout row wrap justify-space-between>
+      <v-layout row wrap justify-space-between class="mt-5">
         <v-btn
           class="ma-0"
           @click="$emit('clear')"
@@ -77,7 +85,7 @@ export default {
 
   computed: {
     change () {
-      return this.received - this.total
+      return (this.received - this.total) > 0 ? this.received - this.total : 0
     }
   },
 
