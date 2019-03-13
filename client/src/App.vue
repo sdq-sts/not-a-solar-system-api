@@ -1,7 +1,8 @@
 <template>
   <v-app :dark="darkMode">
     <v-content >
-      <router-view></router-view>
+
+      <router-view/>
 
       <v-snackbar
         v-model="snackbar"
@@ -58,3 +59,7 @@ export default {
   }
 }
 </script>
+
+<style>
+
+</style>

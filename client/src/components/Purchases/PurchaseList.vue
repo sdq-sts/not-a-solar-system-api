@@ -72,7 +72,7 @@ export default {
 
   data: () => ({
     headers: [
-      { text: 'NFE', sortable: false, value: 'nfe' },
+      { text: 'NFE', align: 'center', sortable: false, value: 'nfe' },
       { text: 'Data de emissão', align: 'center', sortable: false, value: 'issueDate' },
       { text: 'Status', align: 'center', sortable: false, value: 'status' },
       { text: 'Valor', align: 'center', sortable: false, value: 'value' },

@@ -37,6 +37,7 @@
     <v-layout row>
       <v-flex class="text-xs-right" xs8 offset-xs2>
         <v-btn
+          ref="addProductBtn"
           @click="registerProduct"
           class="ma-0"
           color="primary"
@@ -48,24 +49,25 @@
     <v-layout row>
       <v-flex xs8 offset-xs2>
         <ProductsList
+          ref="productsList"
           v-if="hasProducts"
           :productsList="products"
           @editItem="editProduct"
           @deleteItem="openDeleteDialog"
         />
-        <h2 v-else class="headline text-xs-center">{{ noProductMsg }}</h2>
       </v-flex>
     </v-layout>
 
     <v-layout row>
       <v-flex class="text-xs-center" xs8 offset-xs2>
-          <v-pagination
-            v-if="Math.ceil(productsCount / limit)"
-            class="mt-2"
-            v-model="page"
-            :length="Math.ceil(productsCount / limit)"
-            circle
-          ></v-pagination>
+        <v-pagination
+          ref="productsPag"
+          v-if="Math.ceil(productsCount / limit)"
+          class="mt-2"
+          v-model="page"
+          :length="Math.ceil(productsCount / limit)"
+          circle
+        ></v-pagination>
       </v-flex>
     </v-layout>
   </v-container>
@@ -205,7 +207,6 @@ export default {
     },
     getProducts (page) {
       const limit = this.limit
-
       this.fetchProducts({ page, limit })
     },
     openDeleteDialog (payload) {
@@ -228,7 +229,62 @@ export default {
     registerProduct () {
       this.productToEdit = null
       this.dialog = true
+    },
+    animLeaveProductsList () {
+      const productsListElm = this.$refs.productsList.$el
+
+      return this.$anime({
+        targets: productsListElm,
+        translateX: 30,
+        opacity: 0,
+        easing: 'linear',
+        duration: 200
+      })
+    },
+    animAddProductBtn () {
+      const addProductBtnElm = this.$refs.addProductBtn.$el
+
+      return this.$anime({
+        targets: addProductBtnElm,
+        translateY: -30,
+        opacity: 0,
+        easing: 'linear',
+        duration: 350
+      })
+    },
+    animProductsPag () {
+      const productsPagElm = this.$refs.productsPag.$el
+
+      return this.$anime({
+        targets: productsPagElm,
+        translateY: 30,
+        opacity: 0,
+        easing: 'linear',
+        duration: 350
+      })
+    },
+    beforeLeaveAnimations () {
+      const animationList = [
+        this.animLeaveProductsList(),
+        this.animAddProductBtn(),
+        this.animProductsPag()
+      ]
+
+      const animDurationList = animationList.map(v => v.duration)
+      const longestAnimDuration = animDurationList.reduce((x, y) => Math.max(x, y))
+      const indexOfLongestAnim = animDurationList.indexOf(longestAnimDuration)
+
+      const promiseHandler = (resolve, reject) => {
+        animationList[indexOfLongestAnim].complete = () => resolve()
+      }
+
+      return new Promise(promiseHandler)
     }
+  },
+
+  async beforeRouteLeave (to, from, next) {
+    await this.beforeLeaveAnimations()
+    next()
   },
 
   beforeCreate () {
@@ -239,5 +295,4 @@ export default {
 </script>
 
 <style>
-
 </style>

@@ -3,10 +3,7 @@ import Vue from 'vue'
 const options = {
   year: 'numeric',
   month: '2-digit',
-  day: 'numeric',
-  hour: '2-digit',
-  minute: '2-digit',
-  second: '2-digit'
+  day: 'numeric'
 }
 
 const formatedDate = (d) => {

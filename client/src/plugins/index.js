@@ -1,2 +1,3 @@
-import './vuetify'
 import './apexCharts'
+import './vuetify'
+import './anime'
