@@ -121,10 +121,10 @@ class PurchasesController {
   }
 
   async getMetadata (req) {
-    const userId = req.user.id
+    const ownerId = req.user.id
 
     try {
-      const purchasesDocs = await this.Purchases.find({ ownerId: userId })
+      const purchasesDocs = await this.Purchases.find({ ownerId })
       const total = roundNumber(purchasesDocs.reduce((x, y) => x + y.total, 0))
       const purchasesCount = purchasesDocs.length
       const purchasesByMonth = getLastMonths().map(d => {

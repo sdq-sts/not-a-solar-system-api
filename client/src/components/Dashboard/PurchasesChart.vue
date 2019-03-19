@@ -1,8 +1,9 @@
 <template>
   <v-card class="pa-3">
     <apexchart
-      width="500"
-      type="area"
+      width="100%"
+      height="450"
+      type="line"
       :options="options"
       :series="series"
     ></apexchart>
@@ -11,6 +12,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import currencyBRL from '@/filters/currencyBRL'
 
 export default {
   props: {
@@ -23,9 +25,16 @@ export default {
   data: () => ({
     options: {
       xaxis: { categories: [] },
+      yaxis: {
+        labels: {
+          formatter: (value) => {
+            return currencyBRL(value)
+          }
+        }
+      },
       tooltip: { theme: 'light' },
       chart: { foreColor: '#373d3f', toolbar: { show: false } },
-      stroke: { width: 2 },
+      stroke: { width: 2, curve: 'smooth' },
       markers: {
         size: 0,
         strokeWidth: 0,
@@ -80,11 +89,10 @@ export default {
     darkThemeOptions () {
       return {
         chart: { foreColor: '#fff', toolbar: { show: false } },
-        stroke: { width: 2 },
+        stroke: { width: 2, curve: 'smooth' },
         tooltip: { theme: 'dark' },
         markers: {
-          size: 0,
-          colors: this.$vuetify.theme.accent,
+          size: 3,
           strokeWidth: 0,
           fillOpacity: 1,
           hover: { sizeOffset: 2 }
@@ -94,11 +102,10 @@ export default {
     lightThemeOptions () {
       return {
         chart: { foreColor: '#373d3f', toolbar: { show: false } },
-        stroke: { width: 2 },
+        stroke: { width: 2, curve: 'smooth' },
         tooltip: { theme: 'light' },
         markers: {
-          size: 0,
-          colors: this.$vuetify.theme.accent,
+          size: 3,
           strokeWidth: 0,
           fillOpacity: 1,
           hover: { sizeOffset: 2 }

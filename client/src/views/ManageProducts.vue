@@ -270,12 +270,12 @@ export default {
         this.animProductsPag()
       ]
 
-      const animDurationList = animationList.map(v => v.duration)
+      const animDurationList = animationList.map(v => v.duration + v.delay)
       const longestAnimDuration = animDurationList.reduce((x, y) => Math.max(x, y))
       const indexOfLongestAnim = animDurationList.indexOf(longestAnimDuration)
 
       const promiseHandler = (resolve, reject) => {
-        animationList[indexOfLongestAnim].complete = () => resolve()
+        animationList[indexOfLongestAnim].complete = resolve
       }
 
       return new Promise(promiseHandler)
@@ -283,7 +283,7 @@ export default {
   },
 
   async beforeRouteLeave (to, from, next) {
-    await this.beforeLeaveAnimations()
+    // await this.beforeLeaveAnimations()
     next()
   },
 

@@ -5,6 +5,7 @@ module.exports = (db) => {
   const saleSchema = new Schema({
     ownerId: {
       type: Schema.Types.ObjectId,
+      index: true,
       ref: 'User'
     },
     status: {

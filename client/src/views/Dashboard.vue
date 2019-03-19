@@ -1,7 +1,7 @@
 <template>
   <v-container grid-list-xl>
     <v-layout row wrap>
-      <v-flex xs8 offset-xs2>
+      <v-flex xs10 offset-xs1>
         <v-layout row>
           <v-flex xs4>
             <v-card color="primary" :dark="true">
@@ -20,7 +20,7 @@
                 <p class="display-1 ma-0" style="width: 100%">{{ salesCount }}</p>
               </v-card-title>
               <v-card-text>
-                <p class="title">Vendas</p>
+                <p class="title">Vendas realizadas</p>
               </v-card-text>
             </v-card>
           </v-flex>
@@ -31,7 +31,7 @@
                 <p class="display-1 ma-0" style="width: 100%">{{ purchasesCount }}</p>
               </v-card-title>
               <v-card-text>
-                <p class="title">Compras</p>
+                <p class="title">Compras realizadas</p>
               </v-card-text>
             </v-card>
           </v-flex>
@@ -49,10 +49,7 @@
         </v-layout>
 
         <v-layout row>
-          <v-flex>
-            <SalesChart :dark="darkMode"/>
-          </v-flex>
-          <v-flex>
+          <v-flex xs12>
             <PurchasesChart :dark="darkMode"/>
           </v-flex>
         </v-layout>
@@ -63,12 +60,10 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import SalesChart from '@/components/Dashboard/SalesChart'
 import PurchasesChart from '@/components/Dashboard/PurchasesChart'
 
 export default {
   components: {
-    SalesChart,
     PurchasesChart
   },
 

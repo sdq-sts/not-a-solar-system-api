@@ -10,3 +10,5 @@ const currencyBRL = (v) => v
   : (0).toLocaleString('pt-BR', options)
 
 Vue.filter('currencyBRL', currencyBRL)
+
+export default currencyBRL

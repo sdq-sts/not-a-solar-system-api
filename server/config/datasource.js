@@ -1,21 +1,20 @@
 const { lstatSync, readdirSync, existsSync } = require('fs')
 const { join } = require('path')
+const modelsFolder = join(__dirname, '../models')
 
 const isDirectory = source => lstatSync(source).isDirectory()
-const getDirectories = source => readdirSync(source)
-  .map(name => join(source, name))
-  .filter(isDirectory)
 
-// load all /api/**/model.js to db models
+// load all /models/*.js to db models
 module.exports.applyDatasource = (app) => {
   const { db } = app
-  const dirs = getDirectories(join(__dirname, '../api'))
 
-  dirs.map(source => {
-    const modelPath = join(source, 'model.js')
+  readdirSync(modelsFolder).forEach(file => {
+    const modelPath = join(modelsFolder, file)
 
-    if (existsSync(modelPath)) {
+    if (!isDirectory(modelPath) && existsSync(modelPath)) {
       require(modelPath)(db)
     }
   })
+
+  app.logger.info('Models successfully added!')
 }
