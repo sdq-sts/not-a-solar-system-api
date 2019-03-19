@@ -49,11 +49,11 @@ module.exports.configCache = async (app) => {
   }
 
   redisClient.on('error', (err) => {
-    app.logger.error('Error:', err)
+    log.error('Error:', err)
   })
 
   redisClient.on('connect', () => {
-    app.logger.info('Connected to cache database!')
+    log.info('Connected to cache database!')
   })
 
   app.redisClient = redisClient

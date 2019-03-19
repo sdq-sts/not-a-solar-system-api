@@ -29,7 +29,7 @@ const options = {
   }
 }
 
-module.exports.logger = createLogger({
+const logger = createLogger({
   exitOnError: false,
   level: 'info',
   transports: [
@@ -37,3 +37,7 @@ module.exports.logger = createLogger({
     new transports.File(options.errorFile)
   ]
 })
+
+global.log = logger
+
+module.exports = { logger }

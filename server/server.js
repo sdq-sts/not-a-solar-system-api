@@ -7,5 +7,5 @@ const server = http.createServer(app)
 
 server.listen(port, async () => {
   await app.connectDatabase(app)
-  app.logger.info(`Server running on port:${port}`)
+  log.info(`Server running on port:${port}`)
 })

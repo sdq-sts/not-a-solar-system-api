@@ -16,5 +16,5 @@ module.exports.applyDatasource = (app) => {
     }
   })
 
-  app.logger.info('Models successfully added!')
+  log.info('Models successfully added!')
 }
