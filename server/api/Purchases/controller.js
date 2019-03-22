@@ -122,9 +122,10 @@ class PurchasesController {
 
   async getMetadata (req) {
     const ownerId = req.user.id
+    const startDate = new Date(new Date().setFullYear(new Date().getFullYear() - 1))
 
     try {
-      const purchasesDocs = await this.Purchases.find({ ownerId })
+      const purchasesDocs = await this.Purchases.find({ ownerId, createdAt: { '$gte': startDate } })
       const total = roundNumber(purchasesDocs.reduce((x, y) => x + y.total, 0))
       const purchasesCount = purchasesDocs.length
       const purchasesByMonth = getLastMonths().map(d => {
