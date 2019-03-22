@@ -95,7 +95,7 @@ class SalesController {
 
   async getMetadata (req) {
     const ownerId = req.user.id
-
+    // query pela data do ultimo ano e não o geral
     try {
       const salesDocs = await this.Sales.find({ ownerId })
       const salesTotal = roundNumber(salesDocs.reduce((x, y) => x + y.total, 0))

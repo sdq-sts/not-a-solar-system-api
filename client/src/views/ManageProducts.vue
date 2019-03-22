@@ -273,7 +273,6 @@ export default {
       const animDurationList = animationList.map(v => v.duration + v.delay)
       const longestAnimDuration = animDurationList.reduce((x, y) => Math.max(x, y))
       const indexOfLongestAnim = animDurationList.indexOf(longestAnimDuration)
-
       const promiseHandler = (resolve, reject) => {
         animationList[indexOfLongestAnim].complete = resolve
       }

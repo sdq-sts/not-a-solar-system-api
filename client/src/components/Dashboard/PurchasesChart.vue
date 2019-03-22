@@ -13,6 +13,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import currencyBRL from '@/filters/currencyBRL'
+import isEqual from 'lodash/isEqual'
 
 export default {
   props: {
@@ -33,7 +34,21 @@ export default {
         }
       },
       tooltip: { theme: 'light' },
-      chart: { foreColor: '#373d3f', toolbar: { show: false } },
+      chart: {
+        foreColor: '#373d3f',
+        toolbar: { show: false },
+        animations: {
+          enabled: true,
+          animateGradually: {
+            enabled: false,
+            delay: 300
+          },
+          dynamicAnimation: {
+            enabled: true,
+            speed: 600
+          }
+        }
+      },
       stroke: { width: 2, curve: 'smooth' },
       markers: {
         size: 0,
@@ -53,11 +68,7 @@ export default {
       handler: 'setThemeColor',
       immediate: true
     },
-    salesByMonth: {
-      handler: 'setChartData',
-      immediate: true
-    },
-    purchasesByMonth: {
+    mainChartData: {
       handler: 'setChartData',
       immediate: true
     }
@@ -66,6 +77,7 @@ export default {
   computed: {
     ...mapGetters('sales', [ 'salesByMonth' ]),
     ...mapGetters('purchases', [ 'purchasesByMonth' ]),
+    ...mapGetters('dashboard', [ 'mainChartData' ]),
     chartSeriesSalesData () {
       return this.salesByMonth.reduce((x, y) => [...x, y.total], []) || []
     },
@@ -78,17 +90,21 @@ export default {
   },
 
   methods: {
-    setChartData () {
+    setChartOptions () {
+      },
+    async setChartData () {
       const xaxis = { xaxis: { categories: this.chartXaxis } }
-      this.options = { ...this.options, ...xaxis }
-      this.series = [
-        { name: 'Compras', data: [...this.chartSeriesPurchasesData] },
-        { name: 'Vendas', data: [...this.chartSeriesSalesData] }
-      ]
+
+      if (this.mainChartData && !(isEqual(this.mainChartData, this.series))) {
+        this.options = { ...this.options, ...xaxis }
+        this.series = this.mainChartData
+      }
     },
     darkThemeOptions () {
+      const optionsChart = this.options.chart
+
       return {
-        chart: { foreColor: '#fff', toolbar: { show: false } },
+        chart: { ...optionsChart, foreColor: '#fff', toolbar: { show: false } },
         stroke: { width: 2, curve: 'smooth' },
         tooltip: { theme: 'dark' },
         markers: {
@@ -100,8 +116,10 @@ export default {
       }
     },
     lightThemeOptions () {
+      const optionsChart = this.options.chart
+
       return {
-        chart: { foreColor: '#373d3f', toolbar: { show: false } },
+        chart: { ...optionsChart, foreColor: '#373d3f', toolbar: { show: false } },
         stroke: { width: 2, curve: 'smooth' },
         tooltip: { theme: 'light' },
         markers: {
@@ -119,10 +137,6 @@ export default {
         this.options = { ...this.options, ...this.lightThemeOptions() }
       }
     }
-  },
-
-  mounted () {
-    this.setChartData()
   }
 }
 </script>

@@ -1,7 +1,6 @@
 <template>
   <v-app :dark="darkMode">
-    <v-content >
-
+    <v-content>
       <router-view/>
 
       <v-snackbar
