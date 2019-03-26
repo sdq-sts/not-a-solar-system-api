@@ -28,7 +28,7 @@
          <v-flex xs2>
             <v-card color="primary" :dark="true">
               <v-card-title>
-                <p class="display-1 ma-0" style="width: 100%">{{ purchasesCount }}</p>
+                <p class="display-1 ma-0" style="width: 100%">{{ confirmedPurchases }}</p>
               </v-card-title>
               <v-card-text>
                 <p class="title">Compras realizadas</p>
@@ -39,7 +39,7 @@
          <v-flex xs4>
             <v-card color="primary" :dark="true">
               <v-card-title>
-                <p class="display-1 ma-0" style="width: 100%">{{ purchasesTotal | currencyBRL }}</p>
+                <p class="display-1 ma-0" style="width: 100%">{{ confirmedTotalValue | currencyBRL }}</p>
               </v-card-title>
               <v-card-text>
                 <p class="title">Total em compras</p>
@@ -70,7 +70,7 @@ export default {
   computed: {
     ...mapGetters([ 'darkMode' ]),
     ...mapGetters('sales', [ 'salesTotal', 'salesCount' ]),
-    ...mapGetters('purchases', [ 'purchasesTotal', 'purchasesCount' ])
+    ...mapGetters('purchases', [ 'purchasesTotalValue', 'confirmedPurchases', 'confirmedTotalValue' ])
   },
 
   beforeCreate () {

@@ -45,11 +45,11 @@
       <v-flex xs6 offset-xs3>
         <v-layout justify-center>
           <v-pagination
-            v-if="Math.ceil(purchasesCount / limit)"
+            v-if="Math.ceil(totalPurchases / limit)"
             class="mt-2"
             color="primary"
             v-model="page"
-            :length="Math.ceil(purchasesCount / limit)"
+            :length="Math.ceil(totalPurchases / limit)"
             circle
           ></v-pagination>
         </v-layout>
@@ -97,7 +97,7 @@ export default {
   computed: {
     ...mapGetters('purchases', [
       'purchases',
-      'purchasesCount'
+      'totalPurchases'
     ])
   },
 

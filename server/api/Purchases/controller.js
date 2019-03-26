@@ -1,5 +1,6 @@
 const HttpStatus = require('http-status')
 const moment = require('moment')
+const { incProducts, decProducts } = require('@/lib/Purchases')
 const { defaultResponse, errorResponse, roundNumber, getLastMonths } = require('@/utils')
 
 class PurchasesController {
@@ -75,30 +76,18 @@ class PurchasesController {
     try {
       const purchase = await this.Purchases.findOneAndUpdate(queryParams, { $set: modifiedFields })
       const isSameStatus = (purchase.status === modifiedFields.status)
-      const shouldAddProducts = (!isSameStatus && modifiedFields.status === 'confirmed') &&
+      const shouldIncProducts = (!isSameStatus && modifiedFields.status === 'confirmed') &&
         (purchase.changeStorage && purchase.isActive)
-      const shouldRemoveProducts = (!isSameStatus && purchase.status === 'confirmed') &&
+      const shouldDecProducts = (!isSameStatus && purchase.status === 'confirmed') &&
         (modifiedFields.status === 'pending' || modifiedFields.status === 'canceled') &&
         (purchase.changeStorage && purchase.isActive)
-      const incProductsMapper = (product) => {
-        const params = { _id: product.product }
-        const amount = product.amount
 
-        return this.Products.updateOne(params, { $inc: { currentStorage: amount } })
-      }
-      const decProductsMapper = (product) => {
-        const params = { _id: product.product }
-        const amount = product.amount * -1
-
-        return this.Products.updateOne(params, { $inc: { currentStorage: amount } })
-      }
-
-      if (shouldAddProducts) {
-        const promisesList = purchase.products.map(incProductsMapper)
+      if (shouldIncProducts) {
+        const promisesList = incProducts(purchase.products)
 
         await Promise.all(promisesList)
-      } else if (shouldRemoveProducts) {
-        const promiseList = purchase.products.map(decProductsMapper)
+      } else if (shouldDecProducts) {
+        const promiseList = decProducts(purchase.products)
 
         await Promise.all(promiseList)
       }
@@ -125,9 +114,14 @@ class PurchasesController {
     const startDate = new Date(new Date().setFullYear(new Date().getFullYear() - 1))
 
     try {
-      const purchasesDocs = await this.Purchases.find({ ownerId, createdAt: { '$gte': startDate } })
-      const total = roundNumber(purchasesDocs.reduce((x, y) => x + y.total, 0))
-      const purchasesCount = purchasesDocs.length
+      const purchasesDocs = await this.Purchases
+        .find({ ownerId, createdAt: { '$gte': startDate } })
+        .cache({ key: req.user.id })
+      const confirmedPurchasesDocs = purchasesDocs.filter(x => x.status === 'confirmed')
+      const confirmedTotalValue = roundNumber(confirmedPurchasesDocs.reduce((x, y) => x + y.total, 0))
+      const totalValue = roundNumber(purchasesDocs.reduce((x, y) => x + y.total, 0))
+      const totalPurchases = purchasesDocs.length
+      const confirmedPurchases = confirmedPurchasesDocs.length
       const purchasesByMonth = getLastMonths().map(d => {
         const date = moment(d.start).format('MM/Y')
         const purchasesInMonth = purchasesDocs.filter(x => x.createdAt >= d.start && x.createdAt <= d.end)
@@ -138,8 +132,10 @@ class PurchasesController {
       }).reverse()
 
       return defaultResponse({
-        total,
-        purchasesCount,
+        totalValue,
+        confirmedTotalValue,
+        totalPurchases,
+        confirmedPurchases,
         purchasesByMonth
       })
     } catch (error) {

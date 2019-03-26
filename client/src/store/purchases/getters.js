@@ -1,6 +1,8 @@
 export const getters = {
   purchases: (state) => state.purchases,
-  purchasesCount: (state) => state.purchasesCount,
-  purchasesTotal: (state) => state.purchasesTotal,
+  totalPurchases: (state) => state.totalPurchases,
+  confirmedPurchases: (state) => state.confirmedPurchases,
+  purchasesTotalValue: (state) => state.purchasesTotalValue,
+  confirmedTotalValue: (state) => state.confirmedTotalValue,
   purchasesByMonth: (state) => state.purchasesByMonth
 }

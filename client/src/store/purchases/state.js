@@ -1,7 +1,9 @@
 export const initialState = () => ({
   purchases: [],
-  purchasesCount: 0,
-  purchasesTotal: 0,
+  confirmedPurchases: 0,
+  totalPurchases: 0,
+  purchasesTotalValue: 0,
+  confirmedTotalValue: 0,
   purchasesByMonth: []
 })
 

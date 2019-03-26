@@ -7,6 +7,7 @@
       :options="options"
       :series="series"
     ></apexchart>
+    {{ mainChartData }}
   </v-card>
 </template>
 
@@ -28,9 +29,7 @@ export default {
       xaxis: { categories: [] },
       yaxis: {
         labels: {
-          formatter: (value) => {
-            return currencyBRL(value)
-          }
+          formatter: (value) => currencyBRL(value)
         }
       },
       tooltip: { theme: 'light' },

@@ -8,8 +8,10 @@ export const actions = {
     try {
       const { data: meta } = await apiService.get('/purchases/meta')
       commit('PURCHASES_BY_MONTH', meta.purchasesByMonth)
-      commit('PURCHASES_COUNT', meta.purchasesCount)
-      commit('PURCHASES_TOTAL', meta.total)
+      commit('CONFIRMED_PURCHASES', meta.confirmedPurchases)
+      commit('TOTAL_PURCHASES', meta.totalPurchases)
+      commit('CONFIRMED_TOTAL_VALUE', meta.confirmedTotalValue)
+      commit('PURCHASES_TOTAL_VALUE', meta.totalValue)
 
       return meta
     } catch (error) {
