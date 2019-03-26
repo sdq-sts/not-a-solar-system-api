@@ -1,6 +1,7 @@
 const HttpStatus = require('http-status')
 const moment = require('moment')
 const { defaultResponse, errorResponse, roundNumber, getLastMonths } = require('@/utils')
+const { calcSoldProductsByMonth } = require('@/lib/Sales')
 
 class SalesController {
   constructor (models) {
@@ -98,16 +99,21 @@ class SalesController {
     const startDate = new Date(new Date().setFullYear(new Date().getFullYear() - 1))
 
     try {
-      const salesDocs = await this.Sales.find({ ownerId, createdAt: { '$gte': startDate } })
+      const salesDocs = await this.Sales
+        .find({ ownerId, status: 'confirmed', createdAt: { '$gte': startDate } })
+        .populate('products.product')
+        .cache({ key: req.user.id })
+
       const salesTotal = roundNumber(salesDocs.reduce((x, y) => x + y.total, 0))
       const salesCount = salesDocs.length
       const salesByMonth = getLastMonths().map(d => {
         const date = moment(d.start).format('MM/Y')
         const salesInMonth = salesDocs.filter(x => x.createdAt >= d.start && x.createdAt <= d.end)
         const total = salesInMonth.reduce((x, y) => x + y.total, 0)
+        const productsSold = calcSoldProductsByMonth(salesInMonth)
         const sales = salesInMonth.length
 
-        return { date, total, sales }
+        return { date, total, sales, productsSold }
       }).reverse()
 
       return defaultResponse({ salesCount, salesTotal, salesByMonth })
