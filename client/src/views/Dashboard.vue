@@ -4,47 +4,31 @@
       <v-flex xs10 offset-xs1>
         <v-layout row>
           <v-flex xs4>
-            <v-card color="primary" :dark="true">
-              <v-card-title>
-                <p class="display-1 ma-0" style="width: 100%">{{ salesTotal | currencyBRL }}</p>
-              </v-card-title>
-              <v-card-text>
-                <p class="title">Total em vendas</p>
-              </v-card-text>
-            </v-card>
+            <DashboardCard
+              :info="salesTotal | currencyBRL"
+              title="Total em vendas"
+            />
           </v-flex>
 
           <v-flex xs2>
-            <v-card color="primary" :dark="true">
-              <v-card-title>
-                <p class="display-1 ma-0" style="width: 100%">{{ salesCount }}</p>
-              </v-card-title>
-              <v-card-text>
-                <p class="title">Vendas realizadas</p>
-              </v-card-text>
-            </v-card>
+            <DashboardCard
+              :info="salesCount"
+              title="Vendas realizadas"
+            />
           </v-flex>
 
          <v-flex xs2>
-            <v-card color="primary" :dark="true">
-              <v-card-title>
-                <p class="display-1 ma-0" style="width: 100%">{{ confirmedPurchases }}</p>
-              </v-card-title>
-              <v-card-text>
-                <p class="title">Compras realizadas</p>
-              </v-card-text>
-            </v-card>
+            <DashboardCard
+              :info="confirmedPurchases"
+              title="Compras realizadas"
+            />
           </v-flex>
 
          <v-flex xs4>
-            <v-card color="primary" :dark="true">
-              <v-card-title>
-                <p class="display-1 ma-0" style="width: 100%">{{ confirmedTotalValue | currencyBRL }}</p>
-              </v-card-title>
-              <v-card-text>
-                <p class="title">Total em compras</p>
-              </v-card-text>
-            </v-card>
+            <DashboardCard
+              :info="confirmedTotalValue | currencyBRL"
+              title="Total em compras"
+            />
           </v-flex>
         </v-layout>
 
@@ -61,10 +45,12 @@
 <script>
 import { mapGetters } from 'vuex'
 import PurchasesChart from '@/components/Dashboard/PurchasesChart'
+import DashboardCard from '@/components/Dashboard/DashboardCard'
 
 export default {
   components: {
-    PurchasesChart
+    PurchasesChart,
+    DashboardCard
   },
 
   computed: {

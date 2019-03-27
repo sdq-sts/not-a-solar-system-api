@@ -6,7 +6,7 @@
 
     <v-toolbar
       clipped-left
-      color="primary"
+      color="secondary"
       dark
       app
       fixed

@@ -33,12 +33,12 @@ export default {
 
   data: () => ({
     headers: [
-      { text: 'Código', sortable: false, value: 'internal_code' },
-      { text: 'Nome', align: 'left', sortable: false, value: 'name' },
-      { text: 'Valor de venda', align: 'center', sortable: false, value: 'sale_price' },
-      { text: 'Estoque', align: 'center', sortable: false, value: 'storage' },
-      { text: 'Cadastrado em', align: 'center', sortable: false, value: 'created_at' },
-      { text: 'Ações', align: 'center', sortable: false, value: 'actions' }
+      { text: 'Código'.toUpperCase(), sortable: false, value: 'internal_code' },
+      { text: 'Nome'.toUpperCase(), align: 'left', sortable: false, value: 'name' },
+      { text: 'Valor de venda'.toUpperCase(), align: 'center', sortable: false, value: 'sale_price' },
+      { text: 'Estoque'.toUpperCase(), align: 'center', sortable: false, value: 'storage' },
+      { text: 'Cadastrado em'.toUpperCase(), align: 'center', sortable: false, value: 'created_at' },
+      { text: 'Ações'.toUpperCase(), align: 'center', sortable: false, value: 'actions' }
     ]
   }),
 

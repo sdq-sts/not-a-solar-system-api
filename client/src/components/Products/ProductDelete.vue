@@ -6,7 +6,7 @@
       <v-layout row>
         <v-btn flat @click="cancel">Cancelar</v-btn>
         <v-spacer></v-spacer>
-        <v-btn color="error" @click="confirmDeletion">Apagar</v-btn>
+        <v-btn color="danger" @click="confirmDeletion">Apagar</v-btn>
       </v-layout>
     </v-container>
   </v-card>

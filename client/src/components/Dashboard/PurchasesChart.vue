@@ -7,7 +7,6 @@
       :options="options"
       :series="series"
     ></apexchart>
-    {{ mainChartData }}
   </v-card>
 </template>
 
