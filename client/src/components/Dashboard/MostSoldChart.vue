@@ -1,9 +1,10 @@
 <template>
   <v-card class="pa-3">
     <apexchart
+      v-if="series.length"
       width="100%"
-      height="298"
-      type="line"
+      height="300"
+      type="pie"
       :options="options"
       :series="series"
     ></apexchart>
@@ -12,7 +13,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import currencyBRL from '@/filters/currencyBRL'
+import isEmpty from 'lodash/isEmpty'
 import isEqual from 'lodash/isEqual'
 
 export default {
@@ -24,41 +25,21 @@ export default {
   },
 
   data: () => ({
+    series: [],
     options: {
-      xaxis: { categories: [] },
-      yaxis: {
-        labels: {
-          formatter: (value) => currencyBRL(value)
-        }
-      },
-      tooltip: { theme: 'light' },
+      labels: [],
+      legend: { show: false },
       chart: {
         foreColor: '#373d3f',
         toolbar: { show: false },
         animations: {
           enabled: true,
-          animateGradually: {
-            enabled: true,
-            delay: 150
-          },
-          dynamicAnimation: {
-            enabled: true,
-            speed: 600
-          }
+          speed: 900,
+          animateGradually: { enabled: true, delay: 1600 },
+          dynamicAnimation: { enabled: true, speed: 1500 }
         }
       },
-      stroke: { width: 2, curve: 'smooth' },
-      markers: {
-        size: 0,
-        strokeWidth: 0,
-        fillOpacity: 1,
-        hover: { sizeOffset: 3 }
-      }
-    },
-    series: [
-      { name: 'Compras', data: [] },
-      { name: 'Vendas', data: [] }
-    ]
+    }
   }),
 
   watch: {
@@ -66,24 +47,24 @@ export default {
       handler: 'setThemeColor',
       immediate: true
     },
-    mainChartData: {
+    mostSoldProducts: {
       handler: 'setChartData',
       immediate: true
     }
   },
 
   computed: {
-    ...mapGetters('dashboard', [ 'mainChartData' ]),
-    ...mapGetters('dashboard', [ 'period' ]),
+    ...mapGetters('dashboard', [ 'mostSoldProducts' ]),
   },
 
   methods: {
     async setChartData () {
-      const xaxis = { xaxis: { categories: this.period } }
+      const labels = Object.values(this.mostSoldProducts).map(x => x.name ? x.name : '')
+      const series = Object.values(this.mostSoldProducts).map(x => x.amount ? x.amount : 0)
 
-      if (this.mainChartData && !(isEqual(this.mainChartData, this.series))) {
-        this.options = { ...this.options, ...xaxis }
-        this.series = this.mainChartData
+      if (!isEmpty(this.mostSoldProducts) && !(isEqual(series, this.series))) {
+        this.options = { ...this.options, labels }
+        this.series = series
       }
     },
     darkThemeOptions () {
@@ -91,7 +72,6 @@ export default {
 
       return {
         chart: { ...optionsChart, foreColor: '#fff', toolbar: { show: false } },
-        stroke: { width: 2, curve: 'smooth' },
         tooltip: { theme: 'dark' },
         markers: {
           size: 3,
@@ -106,7 +86,6 @@ export default {
 
       return {
         chart: { ...optionsChart, foreColor: '#373d3f', toolbar: { show: false } },
-        stroke: { width: 2, curve: 'smooth' },
         tooltip: { theme: 'light' },
         markers: {
           size: 3,

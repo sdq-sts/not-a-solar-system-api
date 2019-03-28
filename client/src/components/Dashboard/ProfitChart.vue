@@ -2,8 +2,8 @@
   <v-card class="pa-3">
     <apexchart
       width="100%"
-      height="298"
-      type="line"
+      height="290"
+      type="bar"
       :options="options"
       :series="series"
     ></apexchart>
@@ -11,10 +11,6 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import currencyBRL from '@/filters/currencyBRL'
-import isEqual from 'lodash/isEqual'
-
 export default {
   props: {
     dark: {
@@ -24,41 +20,29 @@ export default {
   },
 
   data: () => ({
+    series: [{
+      data: [2.3, 3.1, 4.0, 10.1, 4.0, 3.6, 3.2, 2.3, 1.4, 0.8, 0.5, 0.2]
+    }],
     options: {
-      xaxis: { categories: [] },
-      yaxis: {
-        labels: {
-          formatter: (value) => currencyBRL(value)
-        }
-      },
-      tooltip: { theme: 'light' },
+      labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+      dataLabels: { enabled: false },
       chart: {
         foreColor: '#373d3f',
         toolbar: { show: false },
         animations: {
           enabled: true,
+          speed: 900,
           animateGradually: {
-            enabled: true,
-            delay: 150
+            enabled: false,
+            delay: 1600
           },
           dynamicAnimation: {
-            enabled: true,
-            speed: 600
+            enabled: false,
+            speed: 1500
           }
         }
       },
-      stroke: { width: 2, curve: 'smooth' },
-      markers: {
-        size: 0,
-        strokeWidth: 0,
-        fillOpacity: 1,
-        hover: { sizeOffset: 3 }
-      }
-    },
-    series: [
-      { name: 'Compras', data: [] },
-      { name: 'Vendas', data: [] }
-    ]
+    }
   }),
 
   watch: {
@@ -66,26 +50,13 @@ export default {
       handler: 'setThemeColor',
       immediate: true
     },
-    mainChartData: {
-      handler: 'setChartData',
-      immediate: true
-    }
-  },
-
-  computed: {
-    ...mapGetters('dashboard', [ 'mainChartData' ]),
-    ...mapGetters('dashboard', [ 'period' ]),
+    // mainChartData: {
+    //   handler: 'setChartData',
+    //   immediate: true
+    // }
   },
 
   methods: {
-    async setChartData () {
-      const xaxis = { xaxis: { categories: this.period } }
-
-      if (this.mainChartData && !(isEqual(this.mainChartData, this.series))) {
-        this.options = { ...this.options, ...xaxis }
-        this.series = this.mainChartData
-      }
-    },
     darkThemeOptions () {
       const optionsChart = this.options.chart
 

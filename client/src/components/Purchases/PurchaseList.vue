@@ -72,11 +72,11 @@ export default {
 
   data: () => ({
     headers: [
-      { text: 'NFE', align: 'center', sortable: false, value: 'nfe' },
-      { text: 'Data de emissão', align: 'center', sortable: false, value: 'issueDate' },
-      { text: 'Status', align: 'center', sortable: false, value: 'status' },
-      { text: 'Valor', align: 'center', sortable: false, value: 'value' },
-      { text: 'Ações', align: 'center', sortable: false, value: 'actions' }
+      { text: 'NFE'.toUpperCase(), align: 'center', sortable: false, value: 'nfe' },
+      { text: 'Data de emissão'.toUpperCase(), align: 'center', sortable: false, value: 'issueDate' },
+      { text: 'Status'.toUpperCase(), align: 'center', sortable: false, value: 'status' },
+      { text: 'Valor'.toUpperCase(), align: 'center', sortable: false, value: 'value' },
+      { text: 'Ações'.toUpperCase(), align: 'center', sortable: false, value: 'actions' }
     ],
     purchaseStatus: [
       { 'name': 'cancelado', value: 'canceled' },

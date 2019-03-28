@@ -37,6 +37,16 @@
             <PurchasesChart :dark="darkMode"/>
           </v-flex>
         </v-layout>
+
+        <v-layout>
+          <v-flex xs7>
+            <ProfitChart :dark="darkMode"/>
+          </v-flex>
+
+          <v-flex xs5>
+            <MostSoldChart :dark="darkMode"/>
+          </v-flex>
+        </v-layout>
       </v-flex>
     </v-layout>
   </v-container>
@@ -44,13 +54,17 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import PurchasesChart from '@/components/Dashboard/PurchasesChart'
 import DashboardCard from '@/components/Dashboard/DashboardCard'
+import PurchasesChart from '@/components/Dashboard/PurchasesChart'
+import MostSoldChart from '@/components/Dashboard/MostSoldChart'
+import ProfitChart from '@/components/Dashboard/ProfitChart'
 
 export default {
   components: {
     PurchasesChart,
-    DashboardCard
+    MostSoldChart,
+    DashboardCard,
+    ProfitChart
   },
 
   computed: {

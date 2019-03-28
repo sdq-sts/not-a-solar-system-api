@@ -1,10 +1,10 @@
 <template>
-  <v-card color="rounded-card secondary pt-3 pb-3 pl-4 pr-4">
-    <v-card-title>
-      <p class="display-1 ma-0" style="width: 100%">{{ info }}</p>
+  <v-card color="rounded-card pt-2 pb-2 pl-3 pr-3">
+    <v-card-title class="pa-1">
+      <p class="headline ma-0" style="width: 100%">{{ info }}</p>
     </v-card-title>
 
-    <v-card-text>
+    <v-card-text class="pl-0 pr-0">
       <p class="body-2 mb-0">{{ title }}</p>
     </v-card-text>
   </v-card>
