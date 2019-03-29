@@ -5,9 +5,14 @@
       wrap
     >
       <v-flex mb-4>
+
         <h1 class="display-2 font-weight-bold mb-3">
           Welcome to Vuetify
         </h1>
+
+        <router-link to="/login"><a>Login Page</a></router-link>
+        <router-link to="/dashboard"><a>Dashboard Page</a></router-link>
+
         <p class="subheading font-weight-regular">
           For help and collaboration with other Vuetify developers,
           <br>please join our online

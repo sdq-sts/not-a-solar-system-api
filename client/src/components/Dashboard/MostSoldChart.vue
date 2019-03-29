@@ -29,6 +29,7 @@ export default {
     options: {
       labels: [],
       legend: { show: false },
+      title: { text: 'Mais vendidos', align: 'center' },
       chart: {
         foreColor: '#373d3f',
         toolbar: { show: false },
@@ -38,7 +39,7 @@ export default {
           animateGradually: { enabled: true, delay: 1600 },
           dynamicAnimation: { enabled: true, speed: 1500 }
         }
-      },
+      }
     }
   }),
 
@@ -54,7 +55,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters('dashboard', [ 'mostSoldProducts' ]),
+    ...mapGetters('dashboard', [ 'mostSoldProducts' ])
   },
 
   methods: {

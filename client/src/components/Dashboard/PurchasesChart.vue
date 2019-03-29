@@ -74,7 +74,7 @@ export default {
 
   computed: {
     ...mapGetters('dashboard', [ 'mainChartData' ]),
-    ...mapGetters('dashboard', [ 'period' ]),
+    ...mapGetters('dashboard', [ 'period' ])
   },
 
   methods: {

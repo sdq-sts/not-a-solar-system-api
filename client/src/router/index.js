@@ -52,6 +52,11 @@ const router = new Router({
           component: () => import(/* webpackChunkName: "manage.sales" */ '@/views/ManageSales.vue')
         }
       ]
+    },
+    {
+      path: '*',
+      meta: { requiresAuth: false },
+      component: () => import(/* webpackChunkName: "home" */ '@/views/Home.vue')
     }
   ]
 })

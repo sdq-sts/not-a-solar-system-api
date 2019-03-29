@@ -41,7 +41,7 @@ export default {
             speed: 1500
           }
         }
-      },
+      }
     }
   }),
 
@@ -49,7 +49,7 @@ export default {
     dark: {
       handler: 'setThemeColor',
       immediate: true
-    },
+    }
     // mainChartData: {
     //   handler: 'setChartData',
     //   immediate: true
