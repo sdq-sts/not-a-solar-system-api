@@ -1,9 +1,9 @@
 <template>
-  <v-card class="pa-3">
+  <v-card :class="{ 'pa-3': screenSize.xlOnly, 'pa-1': screenSize.lgAndDown }">
     <apexchart
       v-if="series.length"
       width="100%"
-      height="300"
+      :height="screenSize.lgAndDown ? 260 : 300"
       type="pie"
       :options="options"
       :series="series"
@@ -55,7 +55,10 @@ export default {
   },
 
   computed: {
-    ...mapGetters('dashboard', [ 'mostSoldProducts' ])
+    ...mapGetters('dashboard', [ 'mostSoldProducts' ]),
+    screenSize () {
+      return this.$vuetify.breakpoint
+    }
   },
 
   methods: {

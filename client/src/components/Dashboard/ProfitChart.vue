@@ -1,8 +1,8 @@
 <template>
-  <v-card class="pa-3">
+  <v-card :class="{ 'pa-3': screenSize.xlOnly, 'pa-1': screenSize.lgAndDown }">
     <apexchart
       width="100%"
-      height="290"
+      :height="screenSize.lgAndDown ? 250 : 290"
       type="bar"
       :options="options"
       :series="series"
@@ -11,6 +11,11 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+import currencyBRL from '@/filters/currencyBRL'
+import isEmpty from 'lodash/isEmpty'
+import isEqual from 'lodash/isEqual'
+
 export default {
   props: {
     dark: {
@@ -20,12 +25,14 @@ export default {
   },
 
   data: () => ({
-    series: [{
-      data: [2.3, 3.1, 4.0, 10.1, 4.0, 3.6, 3.2, 2.3, 1.4, 0.8, 0.5, 0.2]
-    }],
+    series: [{ name: 'Lucro', data: [] }],
     options: {
-      labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+      labels: [],
       dataLabels: { enabled: false },
+      yaxis: {
+        labels: { formatter: (value) => currencyBRL(value) }
+      },
+      title: { text: 'Lucro no período', align: 'center' },
       chart: {
         foreColor: '#373d3f',
         toolbar: { show: false },
@@ -33,11 +40,11 @@ export default {
           enabled: true,
           speed: 900,
           animateGradually: {
-            enabled: false,
-            delay: 1600
+            enabled: true,
+            delay: 300
           },
           dynamicAnimation: {
-            enabled: false,
+            enabled: true,
             speed: 1500
           }
         }
@@ -49,14 +56,31 @@ export default {
     dark: {
       handler: 'setThemeColor',
       immediate: true
+    },
+    profitInPeriod: {
+      handler: 'setChartData',
+      immediate: true
     }
-    // mainChartData: {
-    //   handler: 'setChartData',
-    //   immediate: true
-    // }
+  },
+
+  computed: {
+    ...mapGetters('dashboard', [ 'period' ]),
+    ...mapGetters('dashboard', [ 'profitInPeriod' ]),
+    screenSize () {
+      return this.$vuetify.breakpoint
+    }
   },
 
   methods: {
+    async setChartData () {
+      const labels = this.period
+      const series = [{ name: 'Lucro', data: this.profitInPeriod }]
+
+      if (!isEmpty(this.profitInPeriod) && !(isEqual(series[0].data, this.series[0].data))) {
+        this.options = { ...this.options, labels }
+        this.series = series
+      }
+    },
     darkThemeOptions () {
       const optionsChart = this.options.chart
 

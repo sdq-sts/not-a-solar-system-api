@@ -1,8 +1,8 @@
 <template>
-  <v-card class="pa-3">
+  <v-card :class="{ 'pa-3': screenSize.xlOnly, 'pa-1': screenSize.lgAndDown }">
     <apexchart
       width="100%"
-      height="298"
+      :height="screenSize.lgAndDown ? 277 : 298"
       type="line"
       :options="options"
       :series="series"
@@ -27,10 +27,9 @@ export default {
     options: {
       xaxis: { categories: [] },
       yaxis: {
-        labels: {
-          formatter: (value) => currencyBRL(value)
-        }
+        labels: { formatter: (value) => currencyBRL(value) }
       },
+      title: { text: 'Histórico', align: 'center' },
       tooltip: { theme: 'light' },
       chart: {
         foreColor: '#373d3f',
@@ -74,7 +73,10 @@ export default {
 
   computed: {
     ...mapGetters('dashboard', [ 'mainChartData' ]),
-    ...mapGetters('dashboard', [ 'period' ])
+    ...mapGetters('dashboard', [ 'period' ]),
+    screenSize () {
+      return this.$vuetify.breakpoint
+    }
   },
 
   methods: {

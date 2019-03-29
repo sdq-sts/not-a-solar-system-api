@@ -1,4 +1,7 @@
 export const getters = {
+  period: (state, getters, rootState, rootGetters) => {
+    return rootGetters['purchases/purchasesByMonth'].reduce((x, y) => [...x, y.date], [])
+  },
   mainChartData: (state, getters, rootState, rootGetters) => {
     const isPurchasesFetched = !!rootGetters['purchases/purchasesByMonth'].length
     const isSalesFetched = !!rootGetters['sales/salesByMonth'].length
@@ -9,9 +12,6 @@ export const getters = {
         { name: 'Vendas', data: [ ...rootGetters['sales/salesByMonth'].reduce((x, y) => [...x, y.total], []) ] }
       ]
     }
-  },
-  period: (state, getters, rootState, rootGetters) => {
-    return rootGetters['purchases/purchasesByMonth'].reduce((x, y) => [...x, y.date], [])
   },
   mostSoldProducts: (state, getters, rootState, rootGetters) => {
     const sales = rootGetters['sales/salesByMonth'].reduce((x, y) => {
@@ -33,5 +33,16 @@ export const getters = {
     }, {})
 
     return sales || []
+  },
+  profitInPeriod: (state, getters, rootState, rootGetters) => {
+    const sales = rootGetters['sales/salesByMonth'].map(x => x.total)
+    const purchases = rootGetters['purchases/purchasesByMonth'].map(x => x.total)
+    const profit = sales.map((_, i) => (sales[i] - purchases[i]) || 0)
+
+    if (sales.length && purchases.length) {
+      return profit
+    }
+
+    return []
   }
 }

@@ -1,11 +1,13 @@
 <template>
-  <v-card color="rounded-card pt-2 pb-2 pl-3 pr-3">
-    <v-card-title class="pa-1">
-      <p class="headline ma-0" style="width: 100%">{{ info }}</p>
+  <v-card class="rounded-card pt-2 pb-2 pl-3 pr-3">
+    <v-card-title class="pa-0 mt-3">
+      <p
+        :class="{ 'headline': screenSize.xlOnly, 'title': screenSize.lgAndDown, 'ma-0': true }"
+      >{{ info }}</p>
     </v-card-title>
 
-    <v-card-text class="pl-0 pr-0">
-      <p class="body-2 mb-0">{{ title }}</p>
+    <v-card-text :class="{ 'pl-0 pr-0': true, 'pb-0': screenSize.lgAndDown }">
+      <p :class="{ 'body-2': screenSize.xlOnly, 'body-1': screenSize.lgAndDown, 'mb-0': true }">{{ title }}</p>
     </v-card-text>
   </v-card>
 </template>
@@ -20,6 +22,11 @@ export default {
     info: {
       type: [String, Number],
       default: ''
+    }
+  },
+  computed: {
+    screenSize () {
+      return this.$vuetify.breakpoint
     }
   }
 }

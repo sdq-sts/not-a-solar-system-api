@@ -1,7 +1,10 @@
 <template>
   <v-container grid-list-xl class="mt-0">
     <v-layout row wrap>
-      <v-flex xs10 offset-xs1>
+      <v-flex
+        xs10 md12 lg12 xl10
+        offset-xs1 offset-md0 offset-lg0 offset-xl1
+      >
         <v-layout row>
           <v-flex xs4>
             <DashboardCard
@@ -39,11 +42,11 @@
         </v-layout>
 
         <v-layout>
-          <v-flex xs7>
+          <v-flex xs7 md8>
             <ProfitChart :dark="darkMode"/>
           </v-flex>
 
-          <v-flex xs5>
+          <v-flex xs5 md4>
             <MostSoldChart :dark="darkMode"/>
           </v-flex>
         </v-layout>
