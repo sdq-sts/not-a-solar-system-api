@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-navigation-drawer v-model="drawer" absolute clipped>
+    <v-navigation-drawer v-model="drawer" absolute temporary>
       <TheWrapperDrawer/>
     </v-navigation-drawer>
 
@@ -39,6 +39,7 @@
       </v-menu>
 
     </v-toolbar>
+
     <slot></slot>
   </div>
 </template>
@@ -86,3 +87,7 @@ export default {
   }
 }
 </script>
+
+<style>
+
+</style>

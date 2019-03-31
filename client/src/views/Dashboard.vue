@@ -1,5 +1,5 @@
 <template>
-  <v-container grid-list-xl class="mt-0">
+  <v-container grid-list-xl class="mt-0 pt-3">
     <v-layout row wrap>
       <v-flex
         xs10 md12 lg12 xl10
@@ -56,6 +56,7 @@
 </template>
 
 <script>
+import store from '@/store'
 import { mapGetters } from 'vuex'
 import DashboardCard from '@/components/Dashboard/DashboardCard'
 import PurchasesChart from '@/components/Dashboard/PurchasesChart'
@@ -76,9 +77,19 @@ export default {
     ...mapGetters('purchases', [ 'purchasesTotalValue', 'confirmedPurchases', 'confirmedTotalValue' ])
   },
 
-  beforeCreate () {
-    this.$store.dispatch('sales/fetchSalesMeta')
-    this.$store.dispatch('purchases/fetchPurchasesMeta')
+  async beforeRouteEnter (to, from, next) {
+    const promises = [
+      store.dispatch('sales/fetchSalesMeta'),
+      store.dispatch('purchases/fetchPurchasesMeta')
+    ]
+
+    try {
+      await Promise.all(promises)
+    } catch (error) {
+      store.dispatch('showSnackbar', { color: 'error', text: `Houve um problema ao acessar a página.` })
+    }
+
+    next()
   }
 }
 </script>

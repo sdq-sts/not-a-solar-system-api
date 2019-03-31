@@ -34,6 +34,8 @@
 import RegisterForm from '@/components/Auth/RegisterForm'
 
 export default {
+  components: { RegisterForm },
+
   data: () => ({
     loginLink: 'login',
     alert: false,
@@ -64,10 +66,6 @@ export default {
     clearFormAlerts () {
       this.alert = false
     }
-  },
-
-  components: {
-    RegisterForm
   }
 }
 </script>

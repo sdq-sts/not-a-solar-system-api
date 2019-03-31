@@ -24,7 +24,11 @@
         />
       </v-dialog>
 
-      <v-flex xs8 offset-xs2 class="text-xs-right">
+      <v-flex
+        class="text-xs-right"
+        xs12 xl10
+        offset-xs0 offset-xl1
+      >
         <v-btn
           color="primary"
           class="ma-0"
@@ -32,7 +36,10 @@
         >{{ text.newPurchase }}</v-btn>
       </v-flex>
 
-      <v-flex xs8 offset-xs2>
+      <v-flex
+        xs12 xl10
+        offset-xs0 offset-xl1
+      >
         <PurchaseList
           :purchasesList="purchases"
           @editPurchaseStatus="editPurchaseStatus"
@@ -59,6 +66,7 @@
 </template>
 
 <script>
+import store from '@/store'
 import { mapGetters, mapActions } from 'vuex'
 import PurchaseList from '@/components/Purchases/PurchaseList'
 import PurchaseShow from '@/components/Purchases/PurchaseShow'
@@ -172,9 +180,19 @@ export default {
     }
   },
 
-  beforeCreate () {
-    this.$store.dispatch('purchases/fetchPurchasesMeta')
-    this.$store.dispatch('purchases/fetchPurchases')
+  async beforeRouteEnter (to, from, next) {
+    const promises = [
+      store.dispatch('purchases/fetchPurchasesMeta'),
+      store.dispatch('purchases/fetchPurchases')
+    ]
+
+    try {
+      await Promise.all(promises)
+    } catch (error) {
+      store.dispatch('showSnackbar', { color: 'error', text: `Houve um problema ao acessar a página.` })
+    }
+
+    next()
   }
 }
 </script>

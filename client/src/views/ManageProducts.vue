@@ -35,7 +35,11 @@
     </v-flex>
 
     <v-layout row>
-      <v-flex class="text-xs-right" xs8 offset-xs2>
+      <v-flex
+        class="text-xs-right"
+        xs12 xl10
+        offset-xs0 offset-xl1
+      >
         <v-btn
           ref="addProductBtn"
           @click="registerProduct"
@@ -47,7 +51,9 @@
     </v-layout>
 
     <v-layout row>
-      <v-flex xs8 offset-xs2>
+      <v-flex
+        xs12 xl10
+        offset-xs0 offset-xl1>
         <ProductsList
           ref="productsList"
           v-if="hasProducts"
@@ -74,6 +80,7 @@
 </template>
 
 <script>
+import store from '@/store'
 import { mapGetters, mapActions } from 'vuex'
 import ProductsList from '@/components/Products/ProductsList'
 import ProductDelete from '@/components/Products/ProductDelete'
@@ -167,7 +174,7 @@ export default {
         this.productToEdit = null
         this.dialog = false
       } catch (error) {
-        this.showSnackbar({ color: 'danger', text: `Erro ao editar o produto` })
+        this.showSnackbar({ color: 'error', text: `Erro ao editar o produto` })
       }
     },
     async submitRegisterForm (payload) {
@@ -202,7 +209,7 @@ export default {
         this.fetchProducts()
         this.dialogDelete = false
       } catch (error) {
-        this.showSnackbar({ text: 'Erro ao excluir produto', color: 'error' })
+        this.showSnackbar({ color: 'error', text: 'Erro ao excluir produto' })
       }
     },
     getProducts (page) {
@@ -281,14 +288,24 @@ export default {
     }
   },
 
-  async beforeRouteLeave (to, from, next) {
-    // await this.beforeLeaveAnimations()
+  async beforeRouteEnter (to, from, next) {
+    const promises = [
+      store.dispatch('products/fetchProductsMeta'),
+      store.dispatch('products/fetchProducts')
+    ]
+
+    try {
+      await Promise.all(promises)
+    } catch (error) {
+      store.dispatch('showSnackbar', { color: 'error', text: `Houve um problema ao acessar a página.` })
+    }
+
     next()
   },
 
-  beforeCreate () {
-    this.$store.dispatch('products/fetchProductsMeta')
-    this.$store.dispatch('products/fetchProducts')
+  async beforeRouteLeave (to, from, next) {
+    // await this.beforeLeaveAnimations()
+    next()
   }
 }
 </script>

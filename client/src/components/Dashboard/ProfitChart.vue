@@ -25,6 +25,7 @@ export default {
   },
 
   data: () => ({
+    totalProfit: 0,
     series: [{ name: 'Lucro', data: [] }],
     options: {
       labels: [],
@@ -32,7 +33,7 @@ export default {
       yaxis: {
         labels: { formatter: (value) => currencyBRL(value) }
       },
-      title: { text: 'Lucro no período', align: 'center' },
+      title: { text: `Lucro no período`, align: 'center' },
       chart: {
         foreColor: '#373d3f',
         toolbar: { show: false },

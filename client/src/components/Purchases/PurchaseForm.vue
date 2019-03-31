@@ -69,13 +69,12 @@
           </v-flex>
         </v-layout>
 
-        <v-layout row wrap justify-end>
-          <v-flex xs2 justify-end>
+        <v-layout row wrap justify-end class="text-xs-right">
+          <v-flex justify-end>
             <v-btn
               tabindex="-1"
               color="primary"
               @click="addProduct"
-              block
               small
             >{{ text.addProduct }}</v-btn>
           </v-flex>
@@ -135,7 +134,7 @@
         </v-layout>
 
         <v-layout row class="mt-3">
-          <v-btn flat @click="cancelBtn">Cancelar</v-btn>
+          <v-btn flat @click="cancelBtn">{{ text.cancelBtn }}</v-btn>
           <v-spacer></v-spacer>
           <v-btn
             type="submit"
@@ -190,6 +189,7 @@ export default {
       addProduct: 'Adicionar produto',
       newPurchase: 'Nova compra',
       editPurchase: 'Editar compra',
+      cancelBtn: 'Cancelar',
       edit: 'Editar',
       register: 'Cadastrar'
     },
