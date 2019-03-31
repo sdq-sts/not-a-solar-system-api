@@ -124,7 +124,7 @@ class PurchasesController {
       const confirmedPurchases = confirmedPurchasesDocs.length
       const purchasesByMonth = getLastMonths().map(d => {
         const date = moment(d.start).format('MM/Y')
-        const purchasesInMonth = purchasesDocs.filter(x => x.createdAt >= d.start && x.createdAt <= d.end)
+        const purchasesInMonth = confirmedPurchasesDocs.filter(x => x.createdAt >= d.start && x.createdAt <= d.end)
         const total = purchasesInMonth.reduce((x, y) => x + y.total, 0)
         const purchases = purchasesInMonth.length
 
