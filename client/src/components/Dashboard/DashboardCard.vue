@@ -1,6 +1,6 @@
 <template>
   <v-card class="rounded-card pt-2 pb-2 pl-3 pr-3">
-    <v-card-title class="pa-0 mt-3">
+    <v-card-title :class="{ 'pa-0': true, 'mt-3': screenSize.xlOnly, 'mt-1': screenSize.lgAndDown }">
       <p
         :class="{ 'headline': screenSize.xlOnly, 'title': screenSize.lgAndDown, 'ma-0': true }"
       >{{ info }}</p>

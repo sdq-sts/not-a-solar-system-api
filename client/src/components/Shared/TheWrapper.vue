@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-navigation-drawer v-model="drawer" absolute temporary>
+    <v-navigation-drawer v-model="drawer" absolute temporary clipped>
       <TheWrapperDrawer/>
     </v-navigation-drawer>
 

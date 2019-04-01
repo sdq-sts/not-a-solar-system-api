@@ -1,5 +1,5 @@
 <template>
-  <v-container grid-list-xl class="mt-0 pt-3">
+  <v-container :grid-list-xl="screenSize.xlOnly" grid-list-lg class="mt-0 pt-3">
     <v-layout row wrap>
       <v-flex
         xs10 md12 lg12 xl10
@@ -74,7 +74,10 @@ export default {
   computed: {
     ...mapGetters([ 'darkMode' ]),
     ...mapGetters('sales', [ 'salesTotal', 'salesCount' ]),
-    ...mapGetters('purchases', [ 'purchasesTotalValue', 'confirmedPurchases', 'confirmedTotalValue' ])
+    ...mapGetters('purchases', [ 'purchasesTotalValue', 'confirmedPurchases', 'confirmedTotalValue' ]),
+    screenSize () {
+      return this.$vuetify.breakpoint
+    }
   },
 
   async beforeRouteEnter (to, from, next) {
