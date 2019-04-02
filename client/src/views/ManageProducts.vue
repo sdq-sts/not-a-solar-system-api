@@ -1,38 +1,38 @@
 <template>
   <v-container grid-list-xl>
-    <v-flex xs8 offset-xs2>
-      <v-dialog width="400" persistent v-model="dialogDelete" no-click-animation>
-        <ProductDelete
-          :product="productToDelete"
-          @cancel="closeDeleteDialog"
-          @confirm="confirmDeletion"
+    <v-dialog
+      width="40%"
+      class="ma-0"
+      v-model="dialog"
+      no-click-animation
+      persistent
+    >
+      <product-form
+        :productToEdit="productToEdit"
+        :clearForm="clearForm"
+        :isOpen="dialog"
+        :isLoading="loadingForm"
+        @cancel="closeDialog"
+        @submitEditForm="submitEditForm"
+        @submitRegisterForm="submitRegisterForm"
+      >
+        <UploadFile
+          slot="img-upload"
+          :clear="clearForm"
+          :imgUrl="productImg"
+          :defaultImgUrl="defaultProductImg"
+          @fileAdded="fileAdded"
         />
-      </v-dialog>
+      </product-form>
+    </v-dialog>
 
-      <v-dialog width="900" persistent v-model="dialog" no-click-animation lazy>
-        <v-card>
-          <v-container grid-list-lg>
-            <product-form
-              :productToEdit="productToEdit"
-              :clearForm="clearForm"
-              :isLoading="loadingForm"
-              :focusForm="dialog"
-              @cancel="closeDialog"
-              @submitEditForm="submitEditForm"
-              @submitRegisterForm="submitRegisterForm"
-            >
-              <UploadFile
-                slot="img-upload"
-                :clear="clearForm"
-                :imgUrl="productImg"
-                :defaultImgUrl="defaultProductImg"
-                @fileAdded="fileAdded"
-              />
-            </product-form>
-          </v-container>
-        </v-card>
-      </v-dialog>
-    </v-flex>
+    <v-dialog width="400" persistent v-model="dialogDelete" no-click-animation>
+      <ProductDelete
+        :product="productToDelete"
+        @cancel="closeDeleteDialog"
+        @confirm="confirmDeletion"
+      />
+    </v-dialog>
 
     <v-layout row>
       <v-flex
@@ -57,6 +57,7 @@
         <ProductsList
           ref="productsList"
           v-if="hasProducts"
+          :loading="loadingProducts"
           :productsList="products"
           @editItem="editProduct"
           @deleteItem="openDeleteDialog"
@@ -93,6 +94,7 @@ export default {
   data: () => ({
     defaultProductImg,
     file: null,
+    loadingProducts: false,
     loadingForm: false,
     clearForm: false,
     snackbar: false,
@@ -158,6 +160,8 @@ export default {
       const file = this.file
       let product = payload
 
+      this.loadingForm = true
+
       if (file) {
         const { data: res } = await this.requestFileUploadUrl({ fileType: file.type, folder: 'products' })
 
@@ -172,14 +176,18 @@ export default {
         this.fetchProductsMeta()
         this.fetchProducts()
         this.productToEdit = null
+        this.loadingForm = false
         this.dialog = false
       } catch (error) {
         this.showSnackbar({ color: 'error', text: `Erro ao editar o produto` })
+        this.loadingForm = false
       }
     },
     async submitRegisterForm (payload) {
       const file = this.file
       let product = payload
+
+      this.loadingForm = true
 
       if (file) {
         const { type: fileType } = file
@@ -197,8 +205,10 @@ export default {
         this.productToEdit = null
         this.$nextTick(() => { this.clearForm = false })
         this.showSnackbar({ color: 'success', text: `Produto cadastrado` })
+        this.loadingForm = false
       } catch (error) {
         this.showSnackbar({ color: 'danger', text: `Erro ao cadastrar produto` })
+        this.loadingForm = false
       }
     },
     async confirmDeletion (payload) {
@@ -212,9 +222,11 @@ export default {
         this.showSnackbar({ color: 'error', text: 'Erro ao excluir produto' })
       }
     },
-    getProducts (page) {
+    async getProducts (page) {
       const limit = this.limit
-      this.fetchProducts({ page, limit })
+      this.loadingProducts = true
+      await this.fetchProducts({ page, limit })
+      this.loadingProducts = false
     },
     openDeleteDialog (payload) {
       this.productToDelete = payload

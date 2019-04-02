@@ -1,29 +1,36 @@
 <template>
   <v-container grid-list-xl>
+    <v-dialog
+      width="50%"
+      class="ma-0"
+      v-model="formPurchaseDialog"
+      no-click-animation
+      persistent
+    >
+      <PurchaseForm
+        ref="purchaseForm"
+        :purchaseToEdit="purchaseToEdit"
+        :isOpen="formPurchaseDialog"
+        @cancel="closeFormDialog"
+        @createPurchase="createNewPurchase"
+        @editPurchase="modifyPurchase"
+      />
+    </v-dialog>
+
+    <v-dialog width="800" v-model="showPurchaseDialog" no-click-animation>
+      <PurchaseShow :purchase="purchaseToShow"/>
+    </v-dialog>
+
+    <v-dialog width="400" persistent v-model="deletePurchaseDialog" no-click-animation>
+      <PurchaseDelete
+        :item="purchaseToDelete"
+        :loading="deleteLoading"
+        @cancelDeletion="closeDeleteDialog"
+        @confirmDeletion="deletePurchase"
+      />
+    </v-dialog>
+
     <v-layout row wrap>
-      <v-dialog width="60%" persistent v-model="formPurchaseDialog" no-click-animation>
-        <PurchaseForm
-          :purchaseToEdit="purchaseToEdit"
-          @cancel="closeFormDialog"
-          @createPurchase="createNewPurchase"
-          @editPurchase="modifyPurchase"
-          ref="purchaseForm"
-        />
-      </v-dialog>
-
-      <v-dialog width="800" v-model="showPurchaseDialog" no-click-animation>
-        <PurchaseShow :purchase="purchaseToShow"/>
-      </v-dialog>
-
-      <v-dialog width="400" persistent v-model="deletePurchaseDialog" no-click-animation>
-        <PurchaseDelete
-          :item="purchaseToDelete"
-          :loading="deleteLoading"
-          @cancelDeletion="closeDeleteDialog"
-          @confirmDeletion="deletePurchase"
-        />
-      </v-dialog>
-
       <v-flex
         class="text-xs-right"
         xs12 xl10
@@ -42,6 +49,7 @@
       >
         <PurchaseList
           :purchasesList="purchases"
+          :loading="loadingPurchases"
           @editPurchaseStatus="editPurchaseStatus"
           @deletePurchase="openDeletePurchaseDialog"
           @showPurchase="openShowPurchaseDialog"
@@ -82,6 +90,7 @@ export default {
   },
 
   data: () => ({
+    loadingPurchases: false,
     formPurchaseDialog: false,
     deletePurchaseDialog: false,
     showPurchaseDialog: false,
@@ -90,7 +99,7 @@ export default {
     purchaseToDelete: {},
     purchaseToEdit: null,
     page: 1,
-    limit: 3,
+    limit: 10,
     text: {
       newPurchase: 'Cadastrar Compra'
     }
@@ -148,13 +157,17 @@ export default {
         this.showSnackbar({ color: 'success', text: `Compra editada com sucesso` })
         this.$refs.purchaseForm.reset()
         this.closeFormDialog()
+        this.fetchPurchasesMeta()
+        this.fetchPurchases()
       } catch (error) {
         this.showSnackbar({ color: 'danger', text: `Erro ao tentar editar compra` })
       }
     },
-    getPurchases (page) {
+    async getPurchases (page) {
       const limit = this.limit
-      this.fetchPurchases({ page, limit })
+      this.loadingPurchases = true
+      await this.fetchPurchases({ page, limit })
+      this.loadingPurchases = false
     },
     openNewPurchaseDialog (purchase) {
       this.purchaseToEdit = null
@@ -177,13 +190,14 @@ export default {
     },
     closeFormDialog () {
       this.formPurchaseDialog = false
+      this.purchaseToEdit = null
     }
   },
 
   async beforeRouteEnter (to, from, next) {
     const promises = [
       store.dispatch('purchases/fetchPurchasesMeta'),
-      store.dispatch('purchases/fetchPurchases')
+      store.dispatch('purchases/fetchPurchases', { page: 1, limit: 10 })
     ]
 
     try {

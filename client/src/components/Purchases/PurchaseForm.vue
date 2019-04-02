@@ -1,5 +1,5 @@
 <template>
-  <v-card @keydown.alt.n="addProduct">
+  <v-card @keydown.alt.n="addProduct" @keydown.esc="cancelBtn">
     <v-form v-model="isValid" ref="form" @submit.prevent="submitForm">
       <v-container grid-list-xl>
         <h2 class="headline text-xs-center">{{ purchaseToEdit ? text.editPurchase : text.newPurchase }}</h2>
@@ -10,6 +10,13 @@
               v-model="form.provider"
               :label="labels.provider"
               autofocus
+            ></v-text-field>
+          </v-flex>
+
+          <v-flex xs2>
+            <v-text-field
+              v-model="form.nfe"
+              :label="labels.nfe"
             ></v-text-field>
           </v-flex>
 
@@ -37,13 +44,6 @@
                 @input="dateMenu = false"
               ></v-date-picker>
             </v-menu>
-          </v-flex>
-
-          <v-flex xs2>
-            <v-text-field
-              v-model="form.nfe"
-              :label="labels.nfe"
-            ></v-text-field>
           </v-flex>
 
           <v-flex xs2>
@@ -161,6 +161,10 @@ export default {
     loading: {
       type: Boolean,
       default: false
+    },
+    isOpen: {
+      type: Boolean,
+      default: false
     }
   },
 
@@ -243,6 +247,10 @@ export default {
     status: {
       handler: 'watchStatus',
       immediate: true
+    },
+    isOpen: {
+      handler: 'watchIsOpen',
+      immediate: true
     }
   },
 
@@ -276,22 +284,17 @@ export default {
         this.$delete(this.form.products, `${index}`)
       }
     },
-    setFormDefaults () {
-      this.$set(this.form, 'issueDate', new Date().toISOString().substr(0, 10))
-      this.$set(this.form, 'products', { '1': { product: '', amount: 1, cost: 0 } })
-      this.$set(this.form, 'status', { text: 'Pendente', value: 'pending' })
-    },
     cancelBtn () {
+      this.reset()
       this.$emit('cancel')
-      this.$refs.form.reset()
-      this.setFormDefaults()
     },
     focus () {
       this.$refs.providerInput.focus()
     },
     reset () {
-      this.$refs.form.reset()
-      this.setFormDefaults()
+      if (this.$refs.form) {
+        this.$refs.form.reset()
+      }
     },
     addProduct () {
       const newProduct = { product: '', amount: 1, cost: 0 }
@@ -303,19 +306,37 @@ export default {
       const reducer = (obj, p, i) => ({ ...obj, [`${i + 1}`]: p })
       return productsList.reduce(reducer, {})
     },
+    transformStatus (status) {
+      switch (status) {
+        case 'confirmed':
+          return { text: 'Aprovado', value: 'confirmed' }
+        case 'pending':
+          return { text: 'Pendente', value: 'pending' }
+        case 'canceled':
+          return { text: 'Cancelado', value: 'canceled' }
+      }
+    },
     watchPurchaseToEdit (purchase) {
       if (purchase) {
-        this.$set(this.form, 'products', this.productsListToObj(purchase.products))
-        this.$set(this.form, 'issueDate', purchase.issueDate ? purchase.issueDate.substring(0, 10) : '')
-        this.$set(this.form, 'nfe', purchase.nfe)
-        this.$set(this.form, 'tax', purchase.tax)
-        this.$set(this.form, 'discount', purchase.discount)
-        this.$set(this.form, 'provider', purchase.provider)
-        this.$set(this.form, 'note', purchase.note)
-        this.$set(this.form, 'status', this.transformStatus(purchase.status))
+        this.setFormFields(purchase)
       } else {
-        this.setFormDefaults()
+        this.reset()
       }
+    },
+    setFormDefaults () {
+      this.$set(this.form, 'issueDate', new Date().toISOString().substr(0, 10))
+      this.$set(this.form, 'products', { '1': { product: '', amount: 1, cost: 0 } })
+      this.$set(this.form, 'status', { text: 'Pendente', value: 'pending' })
+    },
+    setFormFields (purchase) {
+      this.$set(this.form, 'products', this.productsListToObj(purchase.products))
+      this.$set(this.form, 'issueDate', purchase.issueDate ? purchase.issueDate.substring(0, 10) : '')
+      this.$set(this.form, 'nfe', purchase.nfe)
+      this.$set(this.form, 'tax', purchase.tax)
+      this.$set(this.form, 'note', purchase.note)
+      this.$set(this.form, 'discount', purchase.discount)
+      this.$set(this.form, 'provider', purchase.provider)
+      this.$set(this.form, 'status', this.transformStatus(purchase.status))
     },
     watchStatus (status) {
       if (status) {
@@ -332,16 +353,22 @@ export default {
         }
       }
     },
-    transformStatus (status) {
-      switch (status) {
-        case 'confirmed':
-          return { text: 'Aprovado', value: 'confirmed' }
-        case 'pending':
-          return { text: 'Pendente', value: 'pending' }
-        case 'canceled':
-          return { text: 'Cancelado', value: 'canceled' }
+    watchIsOpen (isOpen) {
+      if (isOpen && this.purchaseToEdit) {
+        this.setFormFields(this.purchaseToEdit)
+        this.focus()
+      } else {
+        this.reset()
+        this.$nextTick(() => {
+          this.setFormDefaults()
+          this.focus()
+        })
       }
     }
+  },
+
+  created () {
+    this.setFormDefaults()
   }
 }
 </script>

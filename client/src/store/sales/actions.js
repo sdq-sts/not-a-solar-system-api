@@ -28,7 +28,7 @@ export const actions = {
   },
 
   createSale (ctx, payload) {
-    return apiService.post('/sales/', JSON.parse(payload))
+    return apiService.post('/sales/', payload)
   },
 
   editSale (ctx, payload) {

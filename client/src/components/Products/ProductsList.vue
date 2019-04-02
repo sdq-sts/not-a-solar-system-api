@@ -1,5 +1,6 @@
 <template>
   <v-data-table
+    :loading="loading"
     :headers="headers"
     :items="productsList"
     class="elevation-1"
@@ -28,6 +29,10 @@ export default {
     productsList: {
       type: Array,
       required: true
+    },
+    loading: {
+      type: Boolean,
+      default: false
     }
   },
 

@@ -1,9 +1,10 @@
 <template>
   <v-card>
     <v-container>
-      <v-layout>
+      <v-layout row>
         <v-flex>
           <v-combobox
+            ref="search"
             v-model="product"
             :items="items"
             :search-input.sync="search"
@@ -47,11 +48,18 @@ export default {
 
   methods: {
     emitChange (v) {
-      if (v) this.$emit('change', v)
+      if (v) {
+        this.$emit('change', v)
+        this.$refs.search.reset()
+      }
     },
     watchSearch (v) {
       if (v) this.$emit('search', v)
     }
+  },
+
+  mounted () {
+    this.$refs.search.focus()
   }
 }
 </script>

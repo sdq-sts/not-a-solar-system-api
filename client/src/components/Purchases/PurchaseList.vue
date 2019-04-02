@@ -1,5 +1,6 @@
 <template>
   <v-data-table
+    :loading="loading"
     :headers="headers"
     :items="purchasesList"
     hide-actions
@@ -67,6 +68,10 @@ export default {
     purchasesList: {
       type: Array,
       required: true
+    },
+    loading: {
+      type: Boolean,
+      default: false
     }
   },
 

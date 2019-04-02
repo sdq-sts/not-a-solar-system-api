@@ -80,12 +80,7 @@ export default {
       amount: 'Quantidade',
       cost: 'Custo unitário',
       total: 'Custo total'
-    },
-    // rules: {
-    //   search: [
-    //     (v) => !!(v && v.text) || 'Campo inválido'
-    //   ]
-    // }
+    }
   }),
 
   watch: {
