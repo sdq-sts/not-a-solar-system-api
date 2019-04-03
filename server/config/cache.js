@@ -50,6 +50,7 @@ module.exports.configCache = async (app) => {
 
   redisClient.on('error', (err) => {
     log.error('Error:', err)
+    process.exit(1)
   })
 
   redisClient.on('connect', () => {

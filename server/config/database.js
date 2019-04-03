@@ -8,6 +8,7 @@ const connectDatabase = async (app) => {
     log.info('Connected to the database!')
   } catch (error) {
     log.error(`Error while trying connect to database: ${error}`)
+    process.exit(1)
   }
 }
 
@@ -17,6 +18,7 @@ const disconnectDatabase = async (app) => {
     log.info('Disconnected from the database!')
   } catch (error) {
     log.error(`Error while trying disconnect from database: ${error}`)
+    process.exit(1)
   }
 }
 
