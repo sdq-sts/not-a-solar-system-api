@@ -5,6 +5,7 @@
         <v-layout column>
           <v-flex>
             <SearchProducts
+              ref="search"
               :items="items"
               :loading="loadingSearch"
               @change="onSearchChange"
@@ -26,6 +27,7 @@
         <SalePreview
           :products="products"
           :loading="loadingSale"
+          @remove="removeItem"
           @clear="clearSale"
           @confirm="confirmSale"
         />
@@ -86,16 +88,29 @@ export default {
       const includedInItems = arrText.includes(product.text)
 
       if (includedInItems) {
-        const image = this.getImage(product.item.image)
+        const image = product.item.image
+          ? this.getImage(product.item.image)
+          : ''
         this.product = { ...product.item, image }
       }
     },
     addProductToList (product) {
       this.products = [ ...this.products, product ]
       this.product = null
+      this.focusSearch()
+    },
+    focusSearch () {
+      setTimeout(() => {
+        this.$refs.search.focus()
+      }, 0)
     },
     clearSale () {
       this.products = []
+      this.focusSearch()
+    },
+    removeItem (product) {
+      this.products = this.products.filter((x, y) => y !== product.index)
+      this.showSnackbar({ color: 'primary', text: `${product.item.name} foi removido.` })
     },
     async confirmSale (products) {
       this.loadingSale = true
@@ -104,6 +119,8 @@ export default {
         await this.createSale({ products })
         this.showSnackbar({ color: 'success', text: 'Venda realizada com sucesso' })
         this.loadingSale = false
+        this.products = []
+        this.focusSearch()
       } catch (error) {
         this.showSnackbar({ color: 'error', text: 'Houve um problema ao criar venda' })
         this.loadingSale = false

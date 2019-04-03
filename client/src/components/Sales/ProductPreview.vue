@@ -3,13 +3,26 @@
     <v-container>
       <v-layout row>
         <v-flex>
-          <h2>{{ product ? product.name : '' }}</h2>
+          <h2>{{ product ? product.name : 'Produto' }}</h2>
         </v-flex>
       </v-layout>
 
       <v-layout row>
         <v-flex xs6>
-          <p class="body">{{ product ? product.description : '' }}</p>
+          <div v-if="product">
+            <div>
+              <p class="body-2">VALOR UNITÁRIO: {{ price | currencyBRL }}</p>
+            </div>
+
+            <div>
+              <p class="body-2">EM ESTOQUE: {{ currentStorage }}</p>
+            </div>
+
+            <div>
+              <p class="body-2">DESCRIÇÃO:</p>
+              <p>{{ description }}</p>
+            </div>
+          </div>
         </v-flex>
 
         <v-flex xs6>
@@ -18,8 +31,8 @@
       </v-layout>
 
       <v-form ref="productForm">
-        <v-layout row justify-space-between align-center>
-          <v-flex xs2>
+        <v-layout row justify-space-between>
+          <v-flex xs2 shrink>
             <v-text-field
               v-model="amount"
               label="Quantidade"
@@ -28,11 +41,22 @@
             ></v-text-field>
           </v-flex>
 
-          <v-btn
-            color="primary"
-            :disabled="!product"
-            @click="addProduct"
-          >Adicionar produto</v-btn>
+          <v-flex align-self-center grow>
+            <p class="body-2 ma-0 text-xs-center">{{ productTotal | currencyBRL }}</p>
+          </v-flex>
+
+          <v-flex
+            class="text-xs-right"
+            align-self-center
+            shrink
+          >
+            <v-btn
+              color="primary"
+              class="mr-0"
+              :disabled="!product"
+              @click="addProduct"
+            >{{ text.addProduct }}</v-btn>
+          </v-flex>
         </v-layout>
       </v-form>
     </v-container>
@@ -53,8 +77,26 @@ export default {
   },
 
   data: () => ({
-    amount: 1
+    amount: 1,
+    text: {
+      addProduct: 'Adicionar Produto'
+    }
   }),
+
+  computed: {
+    description () {
+      return this.product ? this.product.description : ''
+    },
+    price () {
+      return this.product ? this.product.salePrice : 0
+    },
+    currentStorage () {
+      return this.product ? this.product.currentStorage : 0
+    },
+    productTotal () {
+      return (this.product || {}).salePrice * this.amount || 0
+    }
+  },
 
   methods: {
     maxAmount (v) {
@@ -76,6 +118,7 @@ export default {
         const amount = Number(this.amount)
         const { _id: product, salePrice, name } = this.product
         this.$emit('addProduct', { product, salePrice, name, amount })
+        this.amount = 1
       }
     }
   }

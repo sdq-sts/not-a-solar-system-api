@@ -7,6 +7,7 @@
             ref="search"
             v-model="product"
             :items="items"
+            :label="label"
             :search-input.sync="search"
             :loading="loading"
             @change="emitChange"
@@ -23,7 +24,7 @@ export default {
   props: {
     label: {
       type: String,
-      default: 'Buscar'
+      default: 'Pesquisar produto'
     },
     items: {
       type: Array,
@@ -55,6 +56,9 @@ export default {
     },
     watchSearch (v) {
       if (v) this.$emit('search', v)
+    },
+    focus () {
+      this.$refs.search.focus()
     }
   },
 
