@@ -174,7 +174,7 @@ export default {
 
         this.showSnackbar({ color: 'success', text: `Produto editado` })
         this.fetchProductsMeta()
-        this.fetchProducts()
+        this.getProducts()
         this.productToEdit = null
         this.loadingForm = false
         this.dialog = false
@@ -200,7 +200,7 @@ export default {
         await this.createProduct(product)
 
         this.fetchProductsMeta()
-        this.fetchProducts()
+        this.getProducts()
         this.clearForm = true
         this.productToEdit = null
         this.$nextTick(() => { this.clearForm = false })
@@ -216,14 +216,15 @@ export default {
         await this.deleteProduct(payload)
 
         this.fetchProductsMeta()
-        this.fetchProducts()
+        this.getProducts()
         this.dialogDelete = false
       } catch (error) {
         this.showSnackbar({ color: 'error', text: 'Erro ao excluir produto' })
       }
     },
-    async getProducts (page) {
+    async getProducts () {
       const limit = this.limit
+      const page = this.page
       this.loadingProducts = true
       await this.fetchProducts({ page, limit })
       this.loadingProducts = false

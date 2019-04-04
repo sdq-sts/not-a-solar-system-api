@@ -130,14 +130,14 @@ export default {
     async editPurchaseStatus (payload) {
       await this.editPurchase(payload)
       this.fetchPurchasesMeta()
-      this.fetchPurchases()
+      this.getPurchases()
     },
     async deletePurchase (item) {
       this.deleteLoading = true
       await this.removePurchase(item)
       this.deleteLoading = false
       this.deletePurchaseDialog = false
-      await this.fetchPurchases()
+      await this.getPurchases()
     },
     async createNewPurchase (purchase) {
       try {
@@ -146,7 +146,7 @@ export default {
         this.$refs.purchaseForm.reset()
         this.$refs.purchaseForm.focus()
         this.fetchPurchasesMeta()
-        this.fetchPurchases()
+        this.getPurchases()
       } catch (err) {
         this.showSnackbar({ color: 'danger', text: `Compra não cadastrada` })
       }
@@ -158,13 +158,14 @@ export default {
         this.$refs.purchaseForm.reset()
         this.closeFormDialog()
         this.fetchPurchasesMeta()
-        this.fetchPurchases()
+        this.getPurchases()
       } catch (error) {
         this.showSnackbar({ color: 'danger', text: `Erro ao tentar editar compra` })
       }
     },
-    async getPurchases (page) {
+    async getPurchases () {
       const limit = this.limit
+      const page = this.page
       this.loadingPurchases = true
       await this.fetchPurchases({ page, limit })
       this.loadingPurchases = false
