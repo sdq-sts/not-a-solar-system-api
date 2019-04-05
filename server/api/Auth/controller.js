@@ -26,10 +26,10 @@ class AuthController {
 
         return defaultResponse({ id, name, email, token })
       } else {
-        return errorResponse(HttpStatus.UNAUTHORIZED)
+        return errorResponse('Não autorizado', HttpStatus.UNAUTHORIZED)
       }
     } else {
-      return errorResponse(HttpStatus.UNAUTHORIZED)
+      return errorResponse('Não autorizado', HttpStatus.UNAUTHORIZED)
     }
   }
 }

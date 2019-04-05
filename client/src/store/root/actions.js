@@ -6,7 +6,7 @@ import { handleAjaxErrors } from '@/utils/handleAjaxErrors'
 
 export const actions = {
   async submitLoginForm (ctx, payload) {
-    const { commit } = ctx
+    const { commit, dispatch } = ctx
 
     try {
       const { data } = await apiService.post('/auth', payload)
@@ -16,6 +16,7 @@ export const actions = {
 
       return true
     } catch (error) {
+      dispatch('showSnackbar', { color: 'error', text: 'Email ou senha inválidos.' })
       handleAjaxErrors(error.response)
       return false
     }
