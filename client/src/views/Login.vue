@@ -19,6 +19,8 @@
 import LoginForm from '@/components/Auth/LoginForm'
 
 export default {
+  components: { LoginForm },
+
   data: () => ({
     registerLink: 'register'
   }),
@@ -30,9 +32,7 @@ export default {
 
       result ? this.$router.push(nextUrl) : this.$router.push('/login')
     }
-  },
-
-  components: { LoginForm }
+  }
 }
 </script>
 

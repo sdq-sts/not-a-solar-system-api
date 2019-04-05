@@ -3,6 +3,8 @@ import store from '@/store/'
 
 export const setAuthCredentials = (data) => {
   const jwt = localStorage.getItem('jwt')
+  const isDarkMode = (localStorage.isDarkMode === 'true')
+  store.commit('SET_DARK_MODE', isDarkMode)
 
   if (data) {
     apiService.setDefaultHeaders({ 'Authorization': `Bearer ${jwt}` })

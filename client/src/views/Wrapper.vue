@@ -10,16 +10,7 @@
 import TheWrapper from '@/components/Shared/TheWrapper'
 
 export default {
-  components: { TheWrapper },
-
-  data: () => ({}),
-
-  methods: {
-    async logout () {
-      await this.$store.dispatch('logout')
-      this.$router.push({ name: 'login' })
-    }
-  }
+  components: { TheWrapper }
 }
 </script>
 

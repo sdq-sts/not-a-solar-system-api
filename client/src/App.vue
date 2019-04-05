@@ -48,13 +48,19 @@ export default {
   },
 
   methods: {
-    watchDarkMode (isDarkmode) {
-      if (isDarkmode) {
+    watchDarkMode (isDarkMode) {
+      if (isDarkMode) {
         Object.assign(this.$vuetify.theme, darkThemeColors)
       } else {
         Object.assign(this.$vuetify.theme, lightThemeColors)
       }
     }
+  },
+
+  mounted () {
+    const isDarkMode = (localStorage.isDarkMode === 'true')
+
+    this.$store.commit('SET_DARK_MODE', isDarkMode)
   }
 }
 </script>
