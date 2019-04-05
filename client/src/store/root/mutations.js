@@ -5,14 +5,14 @@ export const mutations = {
     const IS = initialState()
     Object.keys(IS).forEach(x => { state[x] = IS[x] })
   },
-  set_jwt (state, jwt) { state.jwt = jwt },
-  set_userId: (state, id) => { state.userId = id },
-  set_username: (state, name) => { state.username = name },
-  set_userEmail: (state, email) => { state.userEmail = email },
-  set_userAvatar: (state, url) => { state.userAvatar = url },
-  set_isLoggedIn (state, value) { state.isLoggedIn = value },
-  set_snackbar (state, value) { state.snackbar = value },
-  set_snackbarColor: (state, color) => { state.snackbarColor = color },
-  set_snackbarText (state, text) { state.snackbarText = text },
+  SET_JWT (state, jwt) { state.jwt = jwt },
+  SET_USER_ID (state, id) { state.userId = id },
+  SET_USER_NAME (state, name) { state.username = name },
+  SET_USER_EMAIL (state, email) { state.userEmail = email },
+  SET_USER_AVATAR (state, url) { state.userAvatar = url },
+  SET_LOGGEDIN (state, value) { state.isLoggedIn = value },
+  SET_SNACKBAR (state, value) { state.snackbar = value },
+  SET_SNACKBAR_COLOR (state, color) { state.snackbarColor = color },
+  SET_SNACKBAR_TEXT (state, text) { state.snackbarText = text },
   SET_DARK_MODE (state, bool) { state.darkMode = bool }
 }

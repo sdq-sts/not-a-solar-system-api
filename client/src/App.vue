@@ -35,7 +35,7 @@ export default {
         return this.$store.getters.snackbar
       },
       set (value) {
-        this.$store.commit('set_snackbar', value)
+        this.$store.commit('SET_SNACKBAR', value)
       }
     }
   },

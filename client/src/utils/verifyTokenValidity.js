@@ -6,9 +6,9 @@ export const verifyTokenValidity = async (jwt) => {
 
   try {
     const { data } = await apiService.get('/users/me')
-    store.commit('set_userId', data._id)
-    store.commit('set_username', data.name)
-    store.commit('set_userEmail', data.email)
+    store.commit('SET_USER_ID', data._id)
+    store.commit('SET_USER_NAME', data.name)
+    store.commit('SET_USER_EMAIL', data.email)
     store.commit('SET_DARK_MODE', data.darkMode)
 
     return true

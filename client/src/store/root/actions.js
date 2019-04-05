@@ -12,7 +12,7 @@ export const actions = {
       const { data } = await apiService.post('/auth', payload)
 
       setAuthCredentials(data)
-      commit('set_isLoggedIn', true)
+      commit('SET_LOGGEDIN', true)
 
       return true
     } catch (error) {
@@ -71,9 +71,9 @@ export const actions = {
     const { commit } = ctx
     const { text, color } = payload
 
-    commit('set_snackbarText', text)
-    commit('set_snackbarColor', color)
-    commit('set_snackbar', true)
+    commit('SET_SNACKBAR_TEXT', text)
+    commit('SET_SNACKBAR_COLOR', color)
+    commit('SET_SNACKBAR', true)
   },
 
   logout (ctx) {

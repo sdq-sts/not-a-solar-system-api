@@ -8,12 +8,12 @@ export const setAuthCredentials = (data) => {
     apiService.setDefaultHeaders({ 'Authorization': `Bearer ${jwt}` })
     localStorage.setItem('user', JSON.stringify({ email: data.email, id: data.id }))
     localStorage.setItem('jwt', data.token)
-    store.commit('set_jwt', data.token)
+    store.commit('SET_JWT', data.token)
   } else if (!data && jwt) {
     apiService.setDefaultHeaders({ 'Authorization': `Bearer ${jwt}` })
-    store.commit('set_jwt', jwt)
+    store.commit('SET_JWT', jwt)
   } else {
     apiService.setDefaultHeaders({ 'Authorization': `Bearer` })
-    store.commit('set_jwt', null)
+    store.commit('SET_JWT', null)
   }
 }
