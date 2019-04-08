@@ -12,6 +12,20 @@ module.exports = (db) => {
       required: true,
       unique: true
     },
+    phone: {
+      type: String,
+      required: false,
+      default: ''
+    },
+    avatar: {
+      type: String,
+      default: ''
+    },
+    birthday: {
+      type: Date,
+      required: false,
+      default: ''
+    },
     password: {
       type: String,
       required: true
@@ -26,7 +40,7 @@ module.exports = (db) => {
   })
 
   userSchema.pre('save', userPreSave)
-  userSchema.pre('update', userPreUpdate)
+  userSchema.pre('updateOne', userPreUpdate)
 
   return db.model('User', userSchema)
 }
