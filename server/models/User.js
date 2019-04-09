@@ -1,5 +1,5 @@
 const { Schema } = require('mongoose')
-const { userPreUpdate, userPreSave } = require('@/utils')
+const { userPreUpdateOne, userPreSave } = require('@/utils')
 
 module.exports = (db) => {
   const userSchema = new Schema({
@@ -40,7 +40,7 @@ module.exports = (db) => {
   })
 
   userSchema.pre('save', userPreSave)
-  userSchema.pre('updateOne', userPreUpdate)
+  userSchema.pre('updateOne', userPreUpdateOne)
 
   return db.model('User', userSchema)
 }
