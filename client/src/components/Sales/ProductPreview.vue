@@ -34,7 +34,7 @@
         <v-layout row justify-space-between>
           <v-flex xs2 shrink>
             <v-text-field
-              v-model="amount"
+              v-model.number="amount"
               label="Quantidade"
               :rules="[ minAmount, maxAmount ]"
               type="number"
@@ -115,8 +115,9 @@ export default {
     },
     addProduct () {
       if (this.product && this.$refs.productForm.validate()) {
-        const amount = Number(this.amount)
+        const amount = this.amount
         const { _id: product, salePrice, name } = this.product
+
         this.$emit('addProduct', { product, salePrice, name, amount })
         this.amount = 1
       }

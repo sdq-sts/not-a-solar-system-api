@@ -50,6 +50,11 @@ const router = new Router({
           path: '/vendas',
           name: 'manage.sales',
           component: () => import(/* webpackChunkName: "manage.sales" */ '@/views/ManageSales.vue')
+        },
+        {
+          path: '/config',
+          name: 'settings',
+          component: () => import(/* webpackChunkName: "settings" */ '@/views/Settings.vue')
         }
       ]
     },

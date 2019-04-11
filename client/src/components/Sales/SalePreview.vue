@@ -36,7 +36,7 @@
           <v-flex xs3>
             <v-text-field
               class="ml-2"
-              v-model="received"
+              v-model.number="received"
               type="number"
               :disabled="!products.length"
               label="Valor recebido"
@@ -106,7 +106,7 @@ export default {
         .reduce((x, y) => x + (y.amount * y.salePrice), 0) || 0
     },
     change () {
-      return Number(this.received) - this.total
+      return this.received - this.total
     }
   },
 

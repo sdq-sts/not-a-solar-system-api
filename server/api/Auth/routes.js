@@ -11,5 +11,12 @@ module.exports = (app) => {
     res.json(response.data)
   })
 
+  router.post('/validate', async (req, res) => {
+    const response = await authController.validatePassword(req)
+
+    res.status(response.statusCode)
+    res.json(response.data)
+  })
+
   return router
 }

@@ -10,6 +10,23 @@ class AuthController {
     this.jwtSecret = jwtSecret
   }
 
+  async validatePassword (req) {
+    const { email, password } = req.body
+
+    if (email && password) {
+      const user = await this.Users.findOne({ email })
+      const validPassword = user
+        ? await isValidPassword(password, user.password)
+        : false
+
+      return validPassword
+        ? defaultResponse({})
+        : errorResponse('Não autorizado', HttpStatus.UNAUTHORIZED)
+    }
+
+    return errorResponse('Não autorizado', HttpStatus.UNAUTHORIZED)
+  }
+
   async authenticate (req) {
     const { email, password } = req.body
 

@@ -2,16 +2,16 @@
   <v-card>
     <v-card-title>
       <v-layout row>
-        <v-flex xs7>
+        <v-flex>
           <v-card-title primary-title>
             <div class="headline">{{ username }}</div>
           </v-card-title>
         </v-flex>
 
-        <v-flex xs5 justify-center align-center>
-          <div class="pr-3">
-            <v-img :src="userPictureUrl" height="125px" contain></v-img>
-          </div>
+        <v-flex xs5 class="text-xs-center">
+          <v-avatar size="120px">
+            <v-img :src="userPictureUrl"></v-img>
+          </v-avatar>
         </v-flex>
       </v-layout>
     </v-card-title>
@@ -28,7 +28,7 @@
         </v-flex>
 
         <v-flex xs3>
-          <v-layout row justify-end>
+          <v-layout row justify-content-end>
             <v-switch
               v-model="darkTheme"
               color="primary"

@@ -23,8 +23,8 @@
         bottom
       >
         <v-btn slot="activator" icon large>
-          <v-avatar size="32px" tile>
-            <img :src="defaultAvatar" >
+          <v-avatar size="32px">
+            <v-img :src="avatar"></v-img>
           </v-avatar>
         </v-btn>
 
@@ -48,21 +48,25 @@
 import { mapGetters, mapActions } from 'vuex'
 import TheWrapperDrawer from '@/components/Shared/TheWrapperDrawer'
 import LogoutCard from '@/components/Shared/LogoutCard'
-import defaultAvatar from '@/assets/default_avatar.png'
 
 export default {
   components: { TheWrapperDrawer, LogoutCard },
 
   data: () => ({
     dialog: false,
-    drawer: false,
-    defaultAvatar
+    drawer: false
   }),
 
   computed: {
-    ...mapGetters([ 'company', 'username', 'userAvatar', 'darkMode' ]),
+    ...mapGetters([
+      'company',
+      'username',
+      'userAvatar',
+      'darkMode',
+      'defaultAvatar'
+    ]),
     avatar () {
-      return this.userAvatar || defaultAvatar
+      return this.userAvatar || this.defaultAvatar
     }
   },
 

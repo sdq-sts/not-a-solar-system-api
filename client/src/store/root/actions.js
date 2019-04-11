@@ -34,25 +34,35 @@ export const actions = {
     }
   },
 
-  async submitRegisterProductForm (ctx, payload) {
+  async validatePassword (ctx, payload) {
     try {
-      const result = await apiService.post('/products', payload)
-
+      const result = await apiService.post('/auth/validate', payload)
       return result
     } catch (error) {
       handleAjaxErrors(error)
-
-      return error
+      return false
     }
+  },
+
+  async fetchCurrentUser (ctx) {
+    const { commit } = ctx
+    const { data } = await apiService.get('/users/me')
+    commit('SET_USER', data)
+    commit('SET_USER_ID', data._id)
+    commit('SET_USER_NAME', data.name)
+    commit('SET_USER_EMAIL', data.email)
+    commit('SET_USER_AVATAR', data.avatar)
+    commit('SET_DARK_MODE', data.darkMode)
   },
 
   async editUser (ctx, payload) {
     const id = ctx.getters.userId
+
     try {
-      await apiService.put(`/users/${id}`, payload)
+      const res = await apiService.put(`/users/${id}`, payload)
+      return res
     } catch (error) {
       handleAjaxErrors(error)
-
       return error
     }
   },

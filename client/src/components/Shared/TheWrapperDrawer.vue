@@ -22,7 +22,8 @@ export default {
       { text: 'Dashboard', icon: 'assessment', path: '/dashboard' },
       { text: 'Vendas', icon: 'trending_up', path: '/vendas' },
       { text: 'Compras', icon: 'credit_card', path: '/compras' },
-      { text: 'Produtos', icon: 'view_module', path: '/produtos' }
+      { text: 'Produtos', icon: 'view_module', path: '/produtos' },
+      { text: 'Configurações', icon: 'settings', path: '/config' }
     ]
   })
 }

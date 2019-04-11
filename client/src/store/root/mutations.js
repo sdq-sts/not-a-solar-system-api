@@ -10,6 +10,7 @@ export const mutations = {
     state.darkMode = bool
   },
   SET_JWT (state, jwt) { state.jwt = jwt },
+  SET_USER (state, user) { state.user = user },
   SET_USER_ID (state, id) { state.userId = id },
   SET_USER_NAME (state, name) { state.username = name },
   SET_USER_EMAIL (state, email) { state.userEmail = email },

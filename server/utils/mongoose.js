@@ -20,13 +20,13 @@ module.exports.userPreUpdateOne = async function (next) {
 
   try {
     const hash = await bcrypt.hash(password, 10)
-
     this.getUpdate().$set.password = hash
 
     next()
   } catch (err) {
     return next(err)
   }
+
   next()
 }
 

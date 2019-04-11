@@ -9,7 +9,7 @@
       style="display: none"
     />
     <div class="img-wrapper">
-      <img ref="img" :src="imgUrl || defaultImgUrl" alt="avatar" class="img-wrapper__img">
+      <img ref="img" :src="imgUrl || defaultImgUrl" alt="avatar" class="img-wrapper__product-img">
     </div>
     <v-btn
       tabindex="-1"
@@ -84,9 +84,15 @@ export default {
   bottom: 0;
   left: 0;
 }
-.img-wrapper__img {
+
+.img-wrapper__product-img {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
 }
 </style>

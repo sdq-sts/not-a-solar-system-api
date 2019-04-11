@@ -22,7 +22,7 @@ class ServicesController {
       Expires: 60
     }
 
-    if (!fileExt || folder) {
+    if (!fileExt || !folder) {
       return errorResponse('File extension or folder not specified')
     }
 
