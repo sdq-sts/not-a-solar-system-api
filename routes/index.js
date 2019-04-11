@@ -16,6 +16,7 @@ module.exports.setRoutes = (app) => {
   app.use(`${apiBasePath}/services`, services(app))
   app.use(`${apiBasePath}/purchases`, purchases(app))
   app.use(`${apiBasePath}/docs`, ...swaggerDocs)
+  app.use(`/`, (req, res) => res.send('OK'))
 
   log.info('App routes successfully applied!')
 }
