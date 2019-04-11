@@ -2,7 +2,6 @@ module.exports = {
   apps: [{
     name: 'nass',
     script: 'server.js',
-    exec_mode: 'cluster',
     instances: 1,
     autorestart: true,
     max_memory_restart: '200M',
