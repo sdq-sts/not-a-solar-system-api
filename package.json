@@ -8,7 +8,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "npx nodemon server.js",
-    "start": "npx pm2 start",
+    "start": "node server.js",
     "startup": "npx pm2 startup",
     "restart": "npx pm2 restart all",
     "stop": "npx pm2 stop all",
