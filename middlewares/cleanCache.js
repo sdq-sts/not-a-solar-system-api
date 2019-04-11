@@ -1,7 +1,11 @@
 const { clearHash } = require('@/config/cache')
 
 module.exports.cleanCache = async (req, res, next) => {
+  const userId = ((req || {}).user || {}).id
+
   await next() // this allows the middleware run after the request
 
-  clearHash(req.user.id)
+  if (userId) {
+    clearHash(userId)
+  }
 }
