@@ -19,7 +19,7 @@ class ServicesController {
       Bucket: this.config.awsBucket,
       ContentType: req.query.fileType,
       Key: key,
-      Expires: 60
+      Expires: 60 * 15
     }
 
     if (!fileExt || !folder) {

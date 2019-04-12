@@ -65,7 +65,9 @@ module.exports.configCache = async (app) => {
 }
 
 module.exports.clearHash = (hashKey) => {
-  redisClient.del(JSON.stringify(hashKey))
+  if (redisClient) {
+    redisClient.del(JSON.stringify(hashKey))
+  }
 }
 
 module.exports.redisClient = redisClient
