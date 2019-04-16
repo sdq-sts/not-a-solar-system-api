@@ -1,7 +1,8 @@
 ## NOT A SOLAR SYSTEM
 
-Restful api desenvolvida para o app **Not a solar system**,
-o frontend pode ser encontrado [aqui](https://github.com/sdq-sts/not-a-solar-system-front).
+Restful api desenvolvida para o app [**NOT A SOLAR SYSTEM**](https://not-a-solar-system.netlify.com/).
+
+O código do frontend pode ser encontrado [aqui](https://github.com/sdq-sts/not-a-solar-system-front).
 
 
 ### TECNOLOGIAS
@@ -32,6 +33,7 @@ O bucket para armazenamento de imagens pode ser criado em [AWS S3](https://aws.a
 Depois de criar o arquivo `.env`:
 
 ```bash
+$ git clone git@github.com:sdq-sts/not-a-solar-system-back.git && cd not-a-solar-system-back/
 $ npm install && npm run dev
 ```
 
