@@ -6,9 +6,8 @@
   "main": "index.js",
   "license": "ISC",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "npx nodemon server.js",
-    "start": "node server.js",
+    "start": "node index.js",
     "startup": "npx pm2 startup",
     "restart": "npx pm2 restart all",
     "stop": "npx pm2 stop all",

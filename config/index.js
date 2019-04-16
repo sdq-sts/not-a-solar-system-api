@@ -1,15 +1,13 @@
 require('dotenv').config()
 require('./logger')
 
+const { initServices } = require('@/services')
 const { setVariables } = require('./variables')
-const { configCache } = require('./cache')
-const { configDatabase } = require('./database')
 const { applyDatasource } = require('./datasource')
 
-module.exports.setConfiguration = (app) => {
+module.exports.setAppConfig = (app) => {
   setVariables(app)
-  configCache(app)
-  configDatabase(app)
+  initServices(app)
   applyDatasource(app)
 
   log.info('Configuration successfully applied!')

@@ -1,9 +1,9 @@
 const app = require('express')()
-const { setConfiguration } = require('./config')
+const { setAppConfig } = require('./config')
 const { setMiddlewares } = require('./middlewares')
 const { setRoutes } = require('./routes')
 
-setConfiguration(app)
+setAppConfig(app)
 setMiddlewares(app)
 setRoutes(app)
 
