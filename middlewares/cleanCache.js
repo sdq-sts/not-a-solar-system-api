@@ -1,4 +1,4 @@
-const { clearHash } = require('@/config/cache')
+const { clearHash } = require('@/services/cache')
 
 module.exports.cleanCache = async (req, res, next) => {
   const userId = ((req || {}).user || {}).id

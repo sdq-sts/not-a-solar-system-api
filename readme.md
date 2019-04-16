@@ -1,1 +1,1 @@
-## Not a solar system
+## NOT A SOLAR SYSTEM

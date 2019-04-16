@@ -5,5 +5,5 @@ module.exports.initServices = (app) => {
   configCache(app)
   configDatabase(app)
 
-  log.info('Services successfully initialized!')
+  log.info('Services configured!')
 }

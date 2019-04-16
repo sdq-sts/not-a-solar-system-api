@@ -17,7 +17,7 @@ const setMiddlewares = (app) => {
 
   app.auth = auth
 
-  log.info('Middlewares successfully applied!')
+  log.info('Middlewares applied!')
 }
 
 module.exports = {

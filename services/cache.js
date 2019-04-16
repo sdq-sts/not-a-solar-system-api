@@ -2,10 +2,11 @@ const { promisifyAll } = require('bluebird')
 const redis = require('redis')
 const mongoose = require('mongoose')
 const { stringifyFilter } = require('@/utils')
+let redisUrl = process.env.REDIS_PROD_URL || process.env.REDIS_DEV_URL
 let redisClient
 
-if (process.env.REDIS_URL) {
-  redisClient = redis.createClient(process.env.REDIS_URL)
+if (redisUrl) {
+  redisClient = redis.createClient(redisUrl)
 
   redisClient.on('connect', () => {
     log.info('Connected to cache database!')
@@ -22,12 +23,12 @@ promisifyAll(redis.RedisClient.prototype)
 module.exports.configCache = async (app) => {
   const exec = mongoose.Query.prototype.exec
 
-  if (app.config.redisPass) {
+  if (app.config.redisUrl && app.config.redisPass) {
     redisClient.auth(app.config.redisPass)
   }
 
   mongoose.Query.prototype.cache = function (options = {}) {
-    if (process.env.REDIS_URL) {
+    if (app.config.redisUrl) {
       this.useCache = true
       this.hashKey = JSON.stringify(options.key || '')
       this.cacheExpTime = options.exp || parseInt(app.config.redisExp)
