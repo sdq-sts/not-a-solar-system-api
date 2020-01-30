@@ -6,13 +6,13 @@
   "main": "index.js",
   "license": "ISC",
   "scripts": {
-    "dev": "npx nodemon server.js",
+    "dev": "nodemon server.js",
     "start": "node index.js",
-    "startup": "npx pm2 startup",
-    "restart": "npx pm2 restart all",
-    "stop": "npx pm2 stop all",
-    "lint": "npx eslint ./ ; exit 0",
-    "lint:fix": "npx eslint ./ --fix ; exit 0",
+    "startup": "pm2 startup",
+    "restart": "pm2 restart all",
+    "stop": "pm2 stop all",
+    "lint": "eslint ./ ; exit 0",
+    "lint:fix": "eslint ./ --fix ; exit 0",
     "postinstall": "link-module-alias"
   },
   "devDependencies": {
@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "aws-sdk": "^2.358.0",
-    "bcrypt": "^3.0.3",
+    "bcryptjs": "^2.4.3",
     "bluebird": "^3.5.3",
     "body-parser": "^1.18.3",
     "compression": "^1.7.3",

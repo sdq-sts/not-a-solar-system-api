@@ -27,6 +27,11 @@ O Redis é opcional mas pode ser utilizado localmente ou criado no site [RedisLa
 
 O bucket para armazenamento de imagens pode ser criado em [AWS S3](https://aws.amazon.com/pt/s3/).
 
+É também possível utilizar em modo de desenvolvimento o docker para rodar o mongodb com o comando:
+
+```sh
+$ docker run --name mongodb -p 27017:27017 --restart unless-stopped -d mongo
+```
 
 ### COMO USAR
 
