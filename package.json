@@ -7,6 +7,7 @@
   "license": "ISC",
   "scripts": {
     "dev": "nodemon server.js",
+    "prestart": "npm install",
     "start": "node index.js",
     "startup": "pm2 startup",
     "restart": "pm2 restart all",
