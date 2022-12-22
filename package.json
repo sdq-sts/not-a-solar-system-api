@@ -36,7 +36,7 @@
     "express": "^4.16.4",
     "helmet": "^3.14.0",
     "http-status": "^1.2.0",
-    "jsonwebtoken": "^8.3.0",
+    "jsonwebtoken": "^9.0.0",
     "moment": "^2.23.0",
     "mongoose": "^5.3.4",
     "passport": "^0.4.0",
